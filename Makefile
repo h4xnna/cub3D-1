@@ -23,6 +23,7 @@ CFLAGS	= -Wall -Werror -Wextra -g3
 
 SRCS	=	gnl/get_next_line.c\
 			main.c \
+			utils_cub.c\
 
 
 INCL	= -I. -Ilibft
