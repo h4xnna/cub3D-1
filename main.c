@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:26:45 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/17 14:43:36 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/09/17 19:10:14 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,11 @@ void error_message(char *error)
 int check_cub(char *str)
 {
 	int i= 0;
-	if(ft_strlen(str) < 5)
+	if(ft_strlen(str) < 5 )
 		return(FAILURE);
 	while(str[i + 4] )
 			i++;	
-	if(ft_strncmp(&str[i], ".cub", 4))
+	if(ft_strncmp(&str[i], ".cub", 4) && str)
 		return(FAILURE);
 	return(SUCCESS);
 }
@@ -51,7 +51,7 @@ int check_cub(char *str)
 
 int checks_args(int ac, char **av)
 {
-	if(ac > 2 || ac < 2)
+	if(ac != 2)
 	{
 		error_message("Mauvais nb d'args");
 		return(FAILURE);
@@ -63,57 +63,59 @@ int checks_args(int ac, char **av)
 	}
 	return (SUCCESS);
 }
-int is_direction(char *str)
-{
-	if (!ft_strcmp(str, "NO") || !ft_strcmp(str, "EA") ||
-		!ft_strcmp(str, "SO") || !ft_strcmp(str, "WE"))
-		return (SUCCESS);
-	return (FAILURE);
-}
 
-int check_map(char *line)
+
+int check_map(char *line, t_map_info *infos)
 {
-	char **str2 = NULL;
-	char **str3 = NULL;
+	char **line_split = NULL;
+	char **colors = NULL;
 	int i;
 
 	if (line)
 	{
-		str2 = ft_split(line, ' ');
-		if (!str2 || len_tab(str2) != 2)
-			return ( FAILURE); 
-		if (is_direction(str2[0]))
+		line_split = ft_split(line, ' ');
+		if (!line_split || (len_tab(line_split) != 2 && line_split[0]))
+			return (FAILURE); 
+		if (!line_split[0])
+			return (SUCCESS);
+		if (!is_direction(line_split[0]))
 		{
-			if (str2[1][0] == '.' && str2[1][1] == '/')
-				return ( SUCCESS);
+			if ((!is_fichier(line_split[1])))
+			{
+				fill_struct(infos, line_split[0], line_split[1]);
+				infos->count_info += 1; 
+				return (SUCCESS);
+			}
 			return (FAILURE);
 		}
-		else if (!ft_strcmp(str2[0], "F") || !ft_strcmp(str2[0], "C"))
+		else if (!ft_strcmp(line_split[0], "F") || !ft_strcmp(line_split[0], "C"))
 		{
-			str3 = ft_split(str2[1], ',');
-			if (!str3 || len_tab(str3) != 3)
-				return (FAILURE);
+			colors = ft_split(line_split[1], ',');
+			if (!colors || len_tab(colors) != 3)
+			return (FAILURE);
 			i = 0;
 			while (i < 3)
 			{
-				if (ft_atoi(str3[i]) < 0 || ft_atoi(str3[i]) > 255)
-					return (FAILURE);
+				if (ft_atoi(colors[i]) < 0 || ft_atoi(colors[i]) > 255)
+				return (FAILURE);
 				i++;
 			}
-			return (SUCCESS);
+			infos->count_info += 1; 
+			return(SUCCESS);
 		}
-		
 	}
-	
-	return ( FAILURE);
+	return (FAILURE);
 }
 
 
 int	main(int ac, char **av)
 {
-	int		fd;
-	char	*line;
+	int			fd;
+	char		*line;
+	t_map_info	infos;
 
+
+	ft_bzero(&infos, sizeof(t_map_info));
 	if(checks_args(ac, av))
 		return(FAILURE);
 	fd = open((av[1]), O_RDONLY);
@@ -125,50 +127,17 @@ int	main(int ac, char **av)
 	while ((line = get_next_line(fd)) != NULL)
 	{
 		line = remove_newline(line);
-		if(check_map(line))
+		if(check_map(line, &infos))
 		{
 			error_message("NTM");
 			break;
 		}
-		printf("%s", line);
+		// printf("%s\n", line);
 		free(line);
 	}
+	if(infos.count_info != 6)
+		ft_bzero(&infos, sizeof(t_map_info));
+	print_info(infos);
 	close(fd);
 	return (SUCCESS);
 }
-
-// int	main(int ac, char **av)
-// {
-// 	int		fd;
-// 	char	*line;
-// 	int i = 0;
-// 	int j = 0;
-	
-	
-// 	if(!checks_args(ac))
-// 		return(0);
-// 	fd = open("cub", O_RDONLY);
-// 	if (fd == -1)
-// 	{
-// 		printf("Erreur");
-// 		return (0);
-// 	}
-// 	while ((line = get_next_line(fd)) != NULL )
-// 	{
-// 		if(line[j] != '1')
-// 		{
-// 			printf("%s", line);
-// 			i++;
-// 			free(line);
-// 		}
-// 		else 
-// 			break;
-// 		j++;
-			
-// 	}
-// 	if( i > 6)
-// 		printf("prout");
-// 	close(fd);
-// 	return (0);
-
-// }

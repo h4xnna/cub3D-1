@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_cub.c                                        :+:      :+:    :+:   */
+/*   utils_pars1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 13:25:35 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/17 14:43:59 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/09/17 19:07:01 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,7 @@ int len_tab(char **tab)
 	int i = 0;
 	
 	while(tab[i])
-	{
-		// printf("tableau %d : %s \n", i, tab[i]);		
 		i++;
-	}
 
 	return(i);
 }
@@ -39,4 +36,18 @@ char *remove_newline(char *line)
     if (len > 0 && line[len - 1] == '\n') 
         line[len - 1] = '\0'; 
     return (line);
+}
+int is_fichier(char *path)
+{
+	if ((path[0] == '.' && path[1] == '/') ||
+	 (path[0] == '.' && path[1] == '.'  && path[2] == '/') )
+		 return(SUCCESS);
+	 return(FAILURE);
+}
+int is_direction(char *str)
+{
+	if (!ft_strcmp(str, "NO") || !ft_strcmp(str, "EA") ||
+		!ft_strcmp(str, "SO") || !ft_strcmp(str, "WE"))
+		return (SUCCESS);
+	return (FAILURE);
 }

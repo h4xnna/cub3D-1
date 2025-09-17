@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/17 14:15:56 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/09/17 19:08:41 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,24 @@
 #define SUCCESS 0
 
 
-typedef struct map_s
+typedef struct s_map_info
 {
-	int fd;
-	
-}		map_t;
+	char *SO;
+	char *WE;
+	char *EA;
+	char *NO;
+	int *F;
+	int *C;
+	int count_info;
+}		t_map_info;
 
+//utils_pars1
 int len_tab(char **tab);
-int ft_strcmp(char *str, char *str2);
 char *remove_newline(char *line);
+int ft_strcmp(char *str, char *str2);
+int is_fichier(char *path);
+int is_direction(char *str);
+
+//utils_pars2
+void print_info(t_map_info info);
+void fill_struct(t_map_info *infos, char *direction, char *path);
