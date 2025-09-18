@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/17 19:08:41 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/09/18 15:20:06 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 
 #define FAILURE 1
 #define SUCCESS 0
-
 
 typedef struct s_map_info
 {
@@ -42,3 +41,9 @@ int is_direction(char *str);
 //utils_pars2
 void print_info(t_map_info info);
 void fill_struct(t_map_info *infos, char *direction, char *path);
+void stock_colors(t_map_info *infos, char *colors, int nb, int i);
+void allouer_colors(char *line_split, t_map_info *infos);
+
+//utils_pars3
+void error_message(char *error);
+int check_infos(t_map_info *info);

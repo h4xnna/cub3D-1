@@ -6,35 +6,12 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:26:45 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/17 19:10:14 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/09/18 15:21:35 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void error_message(char *error)
-{
-	write(2, "Error : ", 8);
-	write(2, error, ft_strlen(error));
-	write(2, "\n", 1);
-}
-
-// int check_cub(char *str)
-// {
-// 	int i = 0;
-// 	if (ft_strlen(str) < 5)
-// 		return (FAILURE);
-// 	while(str[i])
-// 		i++;
-// 	if(str[i- 4] == '.' )
-// 	{
-// 		if(str[i - 3] == 'c')
-// 			if(str[i - 2] == 'u')
-// 				if(str[i - 1 == 'b'])
-// 					return(SUCCESS);
-// 	}
-// 	return(FAILURE);
-// }
 
 int check_cub(char *str)
 {
@@ -75,30 +52,31 @@ int check_map(char *line, t_map_info *infos)
 	{
 		line_split = ft_split(line, ' ');
 		if (!line_split || (len_tab(line_split) != 2 && line_split[0]))
-			return (FAILURE); 
+			return (FAILURE);
 		if (!line_split[0])
 			return (SUCCESS);
-		if (!is_direction(line_split[0]))
+		if (!is_direction(line_split[0]) && !is_fichier(line_split[1]))
 		{
-			if ((!is_fichier(line_split[1])))
-			{
-				fill_struct(infos, line_split[0], line_split[1]);
-				infos->count_info += 1; 
-				return (SUCCESS);
-			}
-			return (FAILURE);
+			fill_struct(infos, line_split[0], line_split[1]);
+			infos->count_info += 1; 
+			return (SUCCESS);
 		}
 		else if (!ft_strcmp(line_split[0], "F") || !ft_strcmp(line_split[0], "C"))
 		{
+			allouer_colors(line_split[0], infos);
 			colors = ft_split(line_split[1], ',');
 			if (!colors || len_tab(colors) != 3)
-			return (FAILURE);
+				return (FAILURE);
 			i = 0;
 			while (i < 3)
 			{
-				if (ft_atoi(colors[i]) < 0 || ft_atoi(colors[i]) > 255)
-				return (FAILURE);
-				i++;
+				if (ft_atoi(colors[i]) >= 0 && ft_atoi(colors[i]) <= 255 )
+				{
+					stock_colors(infos, line_split[0], ft_atoi(colors[i]), i);
+					i++;
+				}
+				else 
+					return(FAILURE);
 			}
 			infos->count_info += 1; 
 			return(SUCCESS);
@@ -113,8 +91,7 @@ int	main(int ac, char **av)
 	int			fd;
 	char		*line;
 	t_map_info	infos;
-
-
+	
 	ft_bzero(&infos, sizeof(t_map_info));
 	if(checks_args(ac, av))
 		return(FAILURE);
@@ -132,11 +109,15 @@ int	main(int ac, char **av)
 			error_message("NTM");
 			break;
 		}
+
+		
 		// printf("%s\n", line);
 		free(line);
 	}
 	if(infos.count_info != 6)
-		ft_bzero(&infos, sizeof(t_map_info));
+		return (FAILURE);
+	if (check_infos(&infos))
+		return(FAILURE);
 	print_info(infos);
 	close(fd);
 	return (SUCCESS);

@@ -25,6 +25,8 @@ SRCS	=	gnl/get_next_line.c\
 			main.c \
 			utils_pars1.c\
 			utils_pars2.c\
+			utils_pars3.c\
+
 
 
 INCL	= -I. -Ilibft
@@ -34,6 +36,8 @@ LIBFT_PATH        = libft/
 LIBFT_NAME        = libft.a
 LIBFT            = $(LIBFT_PATH)$(LIBFT_NAME)
 
+HEADERS = cub3d.h
+
 OBJS = ${SRCS:.c=.o}
 
 all: ${NAME}
@@ -42,7 +46,7 @@ all: ${NAME}
 %.o: %.c 
 	@$(CC) $(CFLAGS) -I. -c $< -o $@ $(INCL)
 
-${NAME}: ${OBJS} $(LIBFT)
+${NAME}: ${OBJS} $(LIBFT) $(HEADERS)
 
 	@echo $(LIGHT_GREEN) "Compilation..."$(BOLD)
 	@${CC} ${CFLAGS} ${OBJS} $(LIBFT) -o ${NAME}
