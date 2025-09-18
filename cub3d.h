@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/18 15:20:06 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/09/18 17:03:59 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,10 @@ int is_direction(char *str);
 void print_info(t_map_info info);
 void fill_struct(t_map_info *infos, char *direction, char *path);
 void stock_colors(t_map_info *infos, char *colors, int nb, int i);
-void allouer_colors(char *line_split, t_map_info *infos);
+int allouer_colors(char *line_split, t_map_info *infos);
 
 //utils_pars3
 void error_message(char *error);
 int check_infos(t_map_info *info);
+ // struct pars : line split etc..
+ // struct game : info ...

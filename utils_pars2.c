@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 19:07:05 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/18 15:19:12 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/09/18 16:23:03 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,16 +34,17 @@ void print_info(t_map_info info)
 	print_tab(info.C);
 	printf("\ncount : %d\n", info.count_info);
 }
+
 void fill_struct(t_map_info *infos, char *direction, char *path)
 {
 	if(!ft_strcmp(direction, "NO"))
-		infos->NO = path;
+		infos->NO = ft_strdup(path);
 	else if(!ft_strcmp(direction, "SO"))
-		infos->SO = path;
+		infos->SO = ft_strdup(path);
 	else if(!ft_strcmp(direction, "EA"))
-		infos->EA = path;
+		infos->EA = ft_strdup(path);
 	else if(!ft_strcmp(direction, "WE"))
-		infos->WE = path;
+		infos->WE = ft_strdup(path);
 }
 
 
@@ -54,10 +55,17 @@ void stock_colors(t_map_info *infos, char *colors, int nb, int i)
 	if(!ft_strcmp(colors, "C"))
 		infos->C[i] = nb;
 }
-void allouer_colors(char *line_split, t_map_info *infos)
+int  allouer_colors(char *line_split, t_map_info *infos)
 {
 	if(!ft_strcmp(line_split, "F") && infos->F == NULL)
+	{
 		infos->F = malloc(sizeof(int) * 3); 
+		return(SUCCESS);
+	}
 	else if(!ft_strcmp(line_split, "C") && infos->C == NULL) 
+	{
 		infos->C = malloc(sizeof(int) * 3);
+		return(SUCCESS);
+	}
+	return(FAILURE);
 }
