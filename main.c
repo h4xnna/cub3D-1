@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
+/*   By: hmimouni <hmimouni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:26:45 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/18 17:05:13 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/09/23 21:27:36 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,57 +40,63 @@ int checks_args(int ac, char **av)
 	}
 	return (SUCCESS);
 }
+
+void free_pars(t_pars *pars)
+{
+	if(pars->colors)
+		free_split(pars->colors, len_tab(pars->colors));
+	if(pars->line_split)
+		free_split(pars->line_split, len_tab(pars->line_split));
+}
 void free_all(t_map_info *info)
 {
 	if(info->EA)
-		free(info->EA);
+		free(info->EA), info->EA = NULL;
 	if(info->SO)
-		free(info->SO);
+		free(info->SO), info->SO = NULL;
 	if(info->WE)
-		free(info->WE);
+		free(info->WE), info->WE = NULL;
 	if(info->C)
-		free(info->C);
+		free(info->C), info->C = NULL;
 	if(info->F)
-		free(info->F);
+		free(info->F), info->F = NULL;
 	if(info->NO)
-		free(info->NO);
+		free(info->NO), info->NO = NULL;
 }
 
-int check_map(char **line_split, t_map_info *infos)
+int check_map(t_pars *pars, t_map_info *infos)
 {
-	char **colors = NULL;
 	int i;
 
-	if (!line_split || (len_tab(line_split) != 2 && line_split[0]))
+	if (!pars->line_split || (len_tab(pars->line_split) != 2 && pars->line_split[0]))
 		return (FAILURE);
-	if (!line_split[0])
+	if (!pars->line_split[0])
 		return (SUCCESS);
-	if (!is_direction(line_split[0]) && !is_fichier(line_split[1]))
+	if (!is_direction(pars->line_split[0]) && !is_fichier(pars->line_split[1]))
 	{
-		fill_struct(infos, line_split[0], line_split[1]);
+		fill_struct(infos, pars->line_split[0], pars->line_split[1]);
 		infos->count_info += 1; 
 		return (SUCCESS);
 	}
-	else if (!ft_strcmp(line_split[0], "F") || !ft_strcmp(line_split[0], "C"))
+	else if (!ft_strcmp(pars->line_split[0], "F") || !ft_strcmp(pars->line_split[0], "C"))
 	{
-		if(allouer_colors(line_split[0], infos))
+		if(allouer_colors(pars, infos))
 			return(FAILURE);
-		colors = ft_split(line_split[1], ',');
-		if (!colors || len_tab(colors) != 3)
+		pars->colors = ft_split(pars->line_split[1], ',');
+		if (!pars->colors || len_tab(pars->colors) != 3)
 			return (FAILURE);
 		i = 0;
 		while (i < 3)
 		{
-			if (ft_atoi(colors[i]) >= 0 && ft_atoi(colors[i]) <= 255 )
+			if (ft_atoi(pars->colors[i]) >= 0 && ft_atoi(pars->colors[i]) <= 255 )
 			{
-				stock_colors(infos, line_split[0], ft_atoi(colors[i]), i);
+				stock_colors( infos, pars, ft_atoi(pars->colors[i]), i);
 				i++;
 			}
 			else 
 				return(FAILURE);
 		}
 	}
-	
 	infos->count_info += 1; 
 	return(SUCCESS);
 }
@@ -100,8 +106,11 @@ int	main(int ac, char **av)
 	int			fd;
 	char		*line;
 	t_map_info	infos;
+	t_pars		pars;
 	
 	ft_bzero(&infos, sizeof(t_map_info));
+	ft_bzero(&pars, sizeof(t_pars));
+
 	if(checks_args(ac, av))
 		return(FAILURE);
 	fd = open((av[1]), O_RDONLY);
@@ -118,24 +127,29 @@ int	main(int ac, char **av)
 			error_message("NTM");
 			break;
 		}
-		char **split = ft_split(line, ' ');
-		if(check_map(split, &infos))
+		pars.line_split = ft_split(line, ' ');
+		if(check_map(&pars, &infos))
 		{
 			free(line);
-			free_split(split,len_tab(split));
+			free_pars(&pars);
 			error_message("NTM");
 			break;
 		}
 		// printf("%s\n", line);
 		free(line);
-		free_split(split, len_tab(split));
+		if(pars.line_split)
+			free_split(pars.line_split, len_tab(pars.line_split));
+		pars.line_split = NULL;
+		if(pars.colors)
+			free_split(pars.colors, len_tab(pars.colors));
+		pars.colors = NULL;
+		
 	}
-	if(infos.count_info != 6)
+	if(infos.count_info != 6 || check_infos(&infos))
 		return (FAILURE);
-	if (check_infos(&infos))
-		return(FAILURE);
 	print_info(infos);
 	free_all(&infos);
+	// free_pars(&pars);
 	close(fd);
 	return (SUCCESS);
 }

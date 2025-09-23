@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_pars2.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
+/*   By: hmimouni <hmimouni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 19:07:05 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/18 16:23:03 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/09/23 20:18:05 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,21 +48,21 @@ void fill_struct(t_map_info *infos, char *direction, char *path)
 }
 
 
-void stock_colors(t_map_info *infos, char *colors, int nb, int i)
+void stock_colors(t_map_info *infos, t_pars *pars , int nb, int i)
 {
-	if(!ft_strcmp(colors, "F"))
+	if(!ft_strcmp(pars->line_split[0], "F"))
 		infos->F[i] = nb;
-	if(!ft_strcmp(colors, "C"))
+	if(!ft_strcmp(pars->line_split[0], "C"))
 		infos->C[i] = nb;
 }
-int  allouer_colors(char *line_split, t_map_info *infos)
+int  allouer_colors(t_pars *pars, t_map_info *infos)
 {
-	if(!ft_strcmp(line_split, "F") && infos->F == NULL)
+	if(!ft_strcmp(pars->line_split[0], "F") && infos->F == NULL)
 	{
 		infos->F = malloc(sizeof(int) * 3); 
 		return(SUCCESS);
 	}
-	else if(!ft_strcmp(line_split, "C") && infos->C == NULL) 
+	else if(!ft_strcmp(pars->line_split[0], "C") && infos->C == NULL) 
 	{
 		infos->C = malloc(sizeof(int) * 3);
 		return(SUCCESS);

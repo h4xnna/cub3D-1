@@ -61,6 +61,9 @@ clean:
 	@make clean -C $(LIBFT_PATH)
 	@echo $(BROWN)clean reussi
 
+leak : all
+	valgrind --leak-check=full ./cube map.cub
+
 fclean: clean
 	@rm -f ${NAME}$(LIBFT_PATH)$(LIBFT_NAME)
 	@echo $(BROWN)fclean reussi

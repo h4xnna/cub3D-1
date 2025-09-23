@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
+/*   By: hmimouni <hmimouni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/18 17:03:59 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/09/23 20:22:28 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,14 @@
 
 #define FAILURE 1
 #define SUCCESS 0
+
+
+typedef struct s_pars
+{
+	char **line_split;
+	char **colors;
+	
+}	t_pars;
 
 typedef struct s_map_info
 {
@@ -41,8 +49,8 @@ int is_direction(char *str);
 //utils_pars2
 void print_info(t_map_info info);
 void fill_struct(t_map_info *infos, char *direction, char *path);
-void stock_colors(t_map_info *infos, char *colors, int nb, int i);
-int allouer_colors(char *line_split, t_map_info *infos);
+void stock_colors(t_map_info *infos, t_pars *pars , int nb, int i);
+int  allouer_colors(t_pars *pars, t_map_info *infos);
 
 //utils_pars3
 void error_message(char *error);

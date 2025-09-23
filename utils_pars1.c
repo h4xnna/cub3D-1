@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_pars1.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
+/*   By: hmimouni <hmimouni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 13:25:35 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/17 19:07:01 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/09/23 20:28:13 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ int len_tab(char **tab)
 	
 	while(tab[i])
 		i++;
-
 	return(i);
 }
 int ft_strcmp(char *str, char *str2)
