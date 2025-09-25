@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/23 20:22:28 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/09/25 17:35:05 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,17 +16,27 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "libft/libft.h"
+#include <stdbool.h>
 
 #define FAILURE 1
 #define SUCCESS 0
 
 
-typedef struct s_pars
+typedef struct s_info_pars
 {
 	char **line_split;
 	char **colors;
 	
-}	t_pars;
+}	t_info_pars;
+
+typedef struct s_map_pars
+{
+	char **map;
+	char position;
+	bool close;
+	bool check_pos;
+}		t_map_pars;
+
 
 typedef struct s_map_info
 {
@@ -47,13 +57,22 @@ int is_fichier(char *path);
 int is_direction(char *str);
 
 //utils_pars2
-void print_info(t_map_info info);
+void print_info(t_map_info info, t_map_pars map);
 void fill_struct(t_map_info *infos, char *direction, char *path);
-void stock_colors(t_map_info *infos, t_pars *pars , int nb, int i);
-int  allouer_colors(t_pars *pars, t_map_info *infos);
+void stock_colors(t_map_info *infos, t_info_pars *pars , int nb, int i);
+int  allouer_colors(t_info_pars *pars, t_map_info *infos);
+void print_char(char **str);
 
 //utils_pars3
 void error_message(char *error);
 int check_infos(t_map_info *info);
+int check_cub(char *str);
+int checks_args(int ac, char **av);
+void *ft_realloc(void *ptr, size_t new_size);
+
+//pars_map
+int check_positions(t_map_pars *map, char *line);
+int add_line_to_map(t_map_pars *map, char *line);
+
  // struct pars : line split etc..
  // struct game : info ...

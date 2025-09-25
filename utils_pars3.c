@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_pars3.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
+/*   By: hmimouni <hmimouni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 15:17:32 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/18 15:19:55 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/09/25 17:27:04 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,3 +26,46 @@ int check_infos(t_map_info *info)
         return (FAILURE);
     return (SUCCESS);
 }
+int check_cub(char *str)
+{
+	int i= 0;
+	if(ft_strlen(str) < 5 )
+		return(FAILURE);
+	while(str[i + 4] )
+			i++;	
+	if(ft_strncmp(&str[i], ".cub", 4) && str)
+		return(FAILURE);
+	return(SUCCESS);
+}
+
+int checks_args(int ac, char **av)
+{
+	if(ac != 2)
+	{
+		error_message("Mauvais nb d'args");
+		return(FAILURE);
+	}
+	if(check_cub(av[1]))
+	{
+		error_message("Mauvais extension");
+		return(FAILURE);
+	}
+	return (SUCCESS);
+}
+void *ft_realloc(void *ptr, size_t new_size)
+{
+	void *new_ptr;
+
+	if (!ptr)
+		return malloc(new_size);
+	if (new_size == 0)
+	{
+		free(ptr);
+		return NULL;
+	}
+	new_ptr = malloc(new_size);
+	if (!new_ptr)
+		return NULL;
+    return new_ptr;
+}
+

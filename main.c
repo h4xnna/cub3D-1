@@ -6,47 +6,21 @@
 /*   By: hmimouni <hmimouni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:26:45 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/23 21:27:36 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/09/25 17:42:08 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
 
-int check_cub(char *str)
-{
-	int i= 0;
-	if(ft_strlen(str) < 5 )
-		return(FAILURE);
-	while(str[i + 4] )
-			i++;	
-	if(ft_strncmp(&str[i], ".cub", 4) && str)
-		return(FAILURE);
-	return(SUCCESS);
-}
-
-
-int checks_args(int ac, char **av)
-{
-	if(ac != 2)
-	{
-		error_message("Mauvais nb d'args");
-		return(FAILURE);
-	}
-	if(check_cub(av[1]))
-	{
-		error_message("Mauvais extension");
-		return(FAILURE);
-	}
-	return (SUCCESS);
-}
-
-void free_pars(t_pars *pars)
-{
-	if(pars->colors)
-		free_split(pars->colors, len_tab(pars->colors));
+void free_pars(t_info_pars *pars)
+{	
 	if(pars->line_split)
-		free_split(pars->line_split, len_tab(pars->line_split));
+			free_split(pars->line_split, len_tab(pars->line_split));
+		pars->line_split = NULL;
+		if(pars->colors)
+			free_split(pars->colors, len_tab(pars->colors));
+		pars->colors = NULL;
 }
 void free_all(t_map_info *info)
 {
@@ -64,7 +38,7 @@ void free_all(t_map_info *info)
 		free(info->NO), info->NO = NULL;
 }
 
-int check_map(t_pars *pars, t_map_info *infos)
+int check_map(t_info_pars *pars, t_map_info *infos)
 {
 	int i;
 
@@ -84,7 +58,12 @@ int check_map(t_pars *pars, t_map_info *infos)
 			return(FAILURE);
 		pars->colors = ft_split(pars->line_split[1], ',');
 		if (!pars->colors || len_tab(pars->colors) != 3)
+		{
+			if (pars->colors)
+				free_split(pars->colors, len_tab(pars->colors));
+			pars->colors = NULL;
 			return (FAILURE);
+		}
 		i = 0;
 		while (i < 3)
 		{
@@ -94,25 +73,36 @@ int check_map(t_pars *pars, t_map_info *infos)
 				i++;
 			}
 			else 
+			{
+				free_split(pars->colors, len_tab(pars->colors));
+				pars->colors = NULL;;
 				return(FAILURE);
+			}
 		}
 	}
 	infos->count_info += 1; 
 	return(SUCCESS);
 }
 
+
 int	main(int ac, char **av)
 {
 	int			fd;
 	char		*line;
 	t_map_info	infos;
-	t_pars		pars;
+	t_info_pars		pars;
+	t_map_pars		map;
 	
+	ft_bzero(&map, sizeof(t_map_pars));
 	ft_bzero(&infos, sizeof(t_map_info));
-	ft_bzero(&pars, sizeof(t_pars));
+	ft_bzero(&pars, sizeof(t_info_pars));
 
 	if(checks_args(ac, av))
+	{
+		free_all(&infos);
+		free_pars(&pars);
 		return(FAILURE);
+	}
 	fd = open((av[1]), O_RDONLY);
 	if (fd == -1)
 	{
@@ -125,9 +115,20 @@ int	main(int ac, char **av)
 		if(!line)
 		{
 			error_message("NTM");
+			free(line);
 			break;
 		}
+		 if (add_line_to_map(&map, line) == FAILURE)
+   		{
+			printf("yo bb");
+    	}
 		pars.line_split = ft_split(line, ' ');
+		if (!pars.line_split)
+		{
+		    free(line);
+		    error_message("Erreur split");
+		    break;
+		}
 		if(check_map(&pars, &infos))
 		{
 			free(line);
@@ -137,19 +138,35 @@ int	main(int ac, char **av)
 		}
 		// printf("%s\n", line);
 		free(line);
-		if(pars.line_split)
-			free_split(pars.line_split, len_tab(pars.line_split));
-		pars.line_split = NULL;
-		if(pars.colors)
-			free_split(pars.colors, len_tab(pars.colors));
-		pars.colors = NULL;
+		free_pars(&pars);
 		
 	}
 	if(infos.count_info != 6 || check_infos(&infos))
+	{
+		error_message("Infos pas bon");
+		free_all(&infos);
+		free_pars(&pars);
 		return (FAILURE);
-	print_info(infos);
+	}
+	print_info(infos, map);
 	free_all(&infos);
 	// free_pars(&pars);
 	close(fd);
 	return (SUCCESS);
 }
+//1 = mur
+//0 = sol
+//' ' = vide
+//N , S, E, W =  orientation
+//
+//ignorer lignes vides												OK
+//refuser lignes vides milieu de carte								OK
+//plus d'un jouer ? 													OK
+//check carte ferme (flood_fill) donc tu remplace NSEW par 0 
+//1. Met ta map dans une struct
+//2. pars_map
+//	-> check_caractere
+//	->trouve joueur
+//	-> map ferme ?
+//
+//secure malloc
