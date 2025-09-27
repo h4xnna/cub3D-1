@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:26:45 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/25 17:42:08 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/09/27 16:57:24 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void free_all(t_map_info *info)
 		free(info->NO), info->NO = NULL;
 }
 
-int check_map(t_info_pars *pars, t_map_info *infos)
+int pars_info(t_info_pars *pars, t_map_info *infos)
 {
 	int i;
 
@@ -83,11 +83,20 @@ int check_map(t_info_pars *pars, t_map_info *infos)
 	infos->count_info += 1; 
 	return(SUCCESS);
 }
-
+int check_fd(int *fd, char **av)
+{
+	*fd = open((av[1]), O_RDONLY);
+	if (*fd == -1)
+	{
+		error_message("Aucun fichier a ce nom");
+		return (FAILURE);
+	}
+	return(SUCCESS);
+}
 
 int	main(int ac, char **av)
 {
-	int			fd;
+	int			fd = 0;
 	char		*line;
 	t_map_info	infos;
 	t_info_pars		pars;
@@ -97,49 +106,56 @@ int	main(int ac, char **av)
 	ft_bzero(&infos, sizeof(t_map_info));
 	ft_bzero(&pars, sizeof(t_info_pars));
 
+	map.map = malloc(sizeof(char*) * 1);
+	map.map[0] = NULL;
+
 	if(checks_args(ac, av))
 	{
 		free_all(&infos);
 		free_pars(&pars);
 		return(FAILURE);
 	}
-	fd = open((av[1]), O_RDONLY);
-	if (fd == -1)
-	{
-		error_message("Aucun fichier a ce nom");
-		return (FAILURE);
-	}
+	check_fd(&fd, av);
 	while ((line = get_next_line(fd)) != NULL)
 	{
 		line = remove_newline(line);
 		if(!line)
 		{
-			error_message("NTM");
+			error_message("pas line");
 			free(line);
 			break;
 		}
-		 if (add_line_to_map(&map, line) == FAILURE)
-   		{
-			printf("yo bb");
-    	}
-		pars.line_split = ft_split(line, ' ');
-		if (!pars.line_split)
+		if(infos.count_info < 6)
 		{
-		    free(line);
-		    error_message("Erreur split");
-		    break;
+			pars.line_split = ft_split(line, ' ');
+			if (!pars.line_split)
+			{
+				free(line);
+				error_message("Erreur split");
+				break;
+			}
+			if(pars_info(&pars, &infos))
+			{
+				free(line);
+				free_pars(&pars);
+				error_message("check_map pas bon");
+				break;
+			}
 		}
-		if(check_map(&pars, &infos))
+		else
 		{
-			free(line);
-			free_pars(&pars);
-			error_message("NTM");
-			break;
+			if(!check_positions(&map, line))
+				add_line_to_map(&map,line);
 		}
 		// printf("%s\n", line);
 		free(line);
 		free_pars(&pars);
-		
+	}
+	print_info(infos, map);
+	if (map.check_pos == 0)
+	{
+		error_message("map invalide: aucune position trouve pour le joeur ");
+		return (FAILURE);
 	}
 	if(infos.count_info != 6 || check_infos(&infos))
 	{
@@ -148,7 +164,6 @@ int	main(int ac, char **av)
 		free_pars(&pars);
 		return (FAILURE);
 	}
-	print_info(infos, map);
 	free_all(&infos);
 	// free_pars(&pars);
 	close(fd);

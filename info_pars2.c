@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_pars2.c                                      :+:      :+:    :+:   */
+/*   info_pars2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 19:07:05 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/25 17:36:31 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/09/27 16:58:01 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,13 @@ void print_tab(int *tab)
 
 void print_char(char **str)
 {
-	int i = 0;
 	int j = 0;
 	
+	if (!str)
+		return ;
 	while(str[j])
 	{
-		while(str[j][i])
-		{
-			write(1, &str[j][i], 1);
-			i++;
-		}
-		write(1, "\n", 1);
+		printf("%s\n", str[j]);
 		j++;
 	}
 }
@@ -51,7 +47,7 @@ void print_info(t_map_info info, t_map_pars map)
 	print_tab(info.C);
 	printf("\ncount : %d\n", info.count_info);
 	print_char(map.map);
-	printf("position map: %d\n", map.position);
+	printf("position map: %c\n", map.position);
 }
 
 void fill_struct(t_map_info *infos, char *direction, char *path)
@@ -86,7 +82,7 @@ int  allouer_colors(t_info_pars *pars, t_map_info *infos)
 	else if(!ft_strcmp(pars->line_split[0], "C") && infos->C == NULL) 
 	{
 		infos->C = malloc(sizeof(int) * 3);
-		if(infos->C)
+		if(!infos->C)
 			return FAILURE;
 		return(SUCCESS);
 	}

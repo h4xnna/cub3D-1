@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/25 17:35:05 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/09/27 15:32:11 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,10 @@ typedef struct s_map_pars
 {
 	char **map;
 	char position;
-	bool close;
-	bool check_pos;
+	int close;
+	int check_pos;
+	int hauteur;
+	int largeur;
 }		t_map_pars;
 
 
