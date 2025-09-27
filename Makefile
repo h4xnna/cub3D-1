@@ -23,9 +23,9 @@ CFLAGS	= -Wall -Werror -Wextra -g3
 
 SRCS	=	gnl/get_next_line.c\
 			main.c \
-			utils_pars1.c\
-			utils_pars2.c\
-			utils_pars3.c\
+			info_pars1.c\
+			info_pars2.c\
+			info_pars3.c\
 
 
 
