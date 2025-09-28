@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 23:52:35 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/15 15:29:25 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/09/28 14:01:39 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,11 @@ char	*get_next_line(int fd)
 
 	line = NULL;
 	if (fd < 0 || fd > 1024 || BUFFER_SIZE <= 0)
+	{
+		if(stock_line)
+			free(stock_line), stock_line = NULL;
 		return (NULL);
+	}
 	stock_line = read_line(stock_line, fd);
 	if (!stock_line)
 		return (NULL);

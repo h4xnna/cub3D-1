@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 15:26:04 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/27 16:48:35 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/09/28 14:46:54 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,28 +15,23 @@
 int	check_positions(t_map_pars *map, char *line)
 {
 	int	x;
-	int	y;
 	int	i;
 
 	i = 0;
 	x = 0;
-	y = 0;
 	while (line[i] == ' ')
 		i++;
 	while (line[i])
 	{
-		// if(map->map[x][y] == ' ')
-		// {
-		//    error_message("invalide map : vide dans la map");
-		// 	return(FAILURE);
-		// }
-		if (line[i] == 'N' || line[i] == 'S' || line[i] == 'E'
-			|| line[i] == 'W')
+		if ((line[i] == 'N' || line[i] == 'S' || line[i] == 'E'
+			|| line[i] == 'W') || (line[i] != 48 && line[i] != 49 && line[i] != ' '))
 		{
 			if (map->check_pos == 0)
 			{
 				map->position = line[i];
 				map->check_pos = 1;
+				map->x_start = i;
+				map->y_start = len_tab(map->map);
 			}
 			else
 			{
@@ -49,16 +44,7 @@ int	check_positions(t_map_pars *map, char *line)
 	return (SUCCESS);
 }
 
-void free_tab(char **tab)
-{
-	int i = 0;
-	while(tab[i])
-	{
-		free(tab[i]);
-		i++;	
-	}
-	free(tab);
-}
+
 
 int	add_line_to_map(t_map_pars *map, char *line)
 {

@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/27 15:32:11 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/09/28 14:32:31 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ typedef struct s_map_pars
 	char position;
 	int close;
 	int check_pos;
-	int hauteur;
-	int largeur;
+	int x_start;
+	int y_start;
 }		t_map_pars;
 
 
@@ -75,6 +75,11 @@ void *ft_realloc(void *ptr, size_t new_size);
 //pars_map
 int check_positions(t_map_pars *map, char *line);
 int add_line_to_map(t_map_pars *map, char *line);
+
+//free_pars1
+void free_info(t_map_info *info);
+void free_tab(char **tab);
+void free_pars(t_info_pars *pars);
 
  // struct pars : line split etc..
  // struct game : info ...

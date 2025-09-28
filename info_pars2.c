@@ -6,20 +6,26 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 19:07:05 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/27 16:58:01 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/09/28 14:34:40 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void print_tab(int *tab)
+int print_tab(int *tab)
 {
 	int i = 0;
+	if (!tab)
+	{
+		error_message("error : info");
+		return(1);
+	}
 	while(i < 3)
 	{
 		printf("%i, ", tab[i]);
 		i++;
 	}
+	return(0);
 }
 
 void print_char(char **str)
@@ -42,12 +48,18 @@ void print_info(t_map_info info, t_map_pars map)
 	printf("WEST : %s\n", info.WE);
 	printf("EAST : %s\n", info.EA);
 	printf("F : ");
-	print_tab(info.F);
+	if(info.F)
+		print_tab(info.F);
 	printf("\nC : ");
-	print_tab(info.C);
+	if(info.C)
+		print_tab(info.C);
 	printf("\ncount : %d\n", info.count_info);
 	print_char(map.map);
 	printf("position map: %c\n", map.position);
+	printf("start_x = %i\n", map.x_start);
+	printf("start_y = %i\n", map.y_start);
+
+	
 }
 
 void fill_struct(t_map_info *infos, char *direction, char *path)
