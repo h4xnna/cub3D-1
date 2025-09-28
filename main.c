@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:26:45 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/28 14:44:05 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/09/28 18:13:14 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,16 +58,7 @@ int pars_info(t_info_pars *pars, t_map_info *infos)
 	infos->count_info += 1; 
 	return(SUCCESS);
 }
-int check_fd(int *fd, char **av)
-{
-	*fd = open((av[1]), O_RDONLY);
-	if (*fd == -1)
-	{
-		error_message("Aucun fichier a ce nom");
-		return (FAILURE);
-	}
-	return(SUCCESS);
-}
+
 
 int	main(int ac, char **av)
 {
@@ -117,20 +108,21 @@ int	main(int ac, char **av)
 				break;
 			}
 		}
+		else if ((!line[0] || !is_full_of_spaces(line)) && !map.map_started)
+		{
+
+		}
+		else if(!check_char(line, &map) && !check_positions(&map, line))
+			add_line_to_map(&map,line);
 		else
 		{
-			if(!check_positions(&map, line))
-				add_line_to_map(&map,line);
-			else 
-			{
-				free_tab(map.map);
-				free(line);
-				free_pars(&pars);
-				free_info(&infos);
-				get_next_line(-1);
-				error_message("TMP");
-				return(FAILURE);
-			}
+			free_tab(map.map);
+			free(line);
+			free_pars(&pars);
+			free_info(&infos);
+			get_next_line(-1);
+			error_message("TMP");
+			return(FAILURE);
 		}
 		// printf("%s\n", line);
 		free(line);
@@ -140,10 +132,9 @@ int	main(int ac, char **av)
 	{
 		free(line);
 		free_pars(&pars);
-
 	}
 	print_info(infos, map);
-	if (map.check_pos == 0)
+	if (map.position == 0)
 	{
 		error_message("map invalide: aucune position trouve pour le joeur ");
 		free_info(&infos);
@@ -161,19 +152,7 @@ int	main(int ac, char **av)
 	close(fd);
 	return (SUCCESS);
 }
-//1 = mur
-//0 = sol
-//' ' = vide
-//N , S, E, W =  orientation
-//
-//ignorer lignes vides												OK
-//refuser lignes vides milieu de carte								OK
-//plus d'un jouer ? 													OK
-//check carte ferme (flood_fill) donc tu remplace NSEW par 0 
-//1. Met ta map dans une struct
+
 //2. pars_map
-//	-> check_caractere
-//	->trouve joueur
 //	-> map ferme ?
-//
 //secure malloc

@@ -6,11 +6,31 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 15:26:04 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/28 14:46:54 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/09/28 18:08:39 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+int check_char(char *line, t_map_pars *map)
+{
+	int i = 0;
+	int bouboule = 0;
+
+	while(line[i])
+	{
+		if((line[i] !=  'N' && line[i] != 'S' && line[i] != 'E'
+			&& line[i] != 'W') && (line[i] != 48 && line[i] != 49 && line[i] != ' '))
+			return(FAILURE);
+		if(line[i] == 48 || line[i] == 49)
+			bouboule = 1;
+		map->map_started = 1;
+		i++;
+	}	
+	if(bouboule == 0)
+		return(FAILURE);
+	return(SUCCESS);
+}
 
 int	check_positions(t_map_pars *map, char *line)
 {
@@ -24,12 +44,11 @@ int	check_positions(t_map_pars *map, char *line)
 	while (line[i])
 	{
 		if ((line[i] == 'N' || line[i] == 'S' || line[i] == 'E'
-			|| line[i] == 'W') || (line[i] != 48 && line[i] != 49 && line[i] != ' '))
+			|| line[i] == 'W') )
 		{
-			if (map->check_pos == 0)
+			if (map->position == 0)
 			{
 				map->position = line[i];
-				map->check_pos = 1;
 				map->x_start = i;
 				map->y_start = len_tab(map->map);
 			}
@@ -73,36 +92,24 @@ int	add_line_to_map(t_map_pars *map, char *line)
 	return(SUCCESS);
 	
 }
-// int add_line_to_map(t_map_pars *map, char *line)
-// {
-//     char **new_map;
-//     int count = 0;
-// 	int j = 0;
-// 	int i = 0;
-
-//     if (!map || !line)
-//         return (FAILURE);
-
-//     while (map->map && map->map[count])
-//         count++;
-//     new_map = malloc(sizeof(char *) * (count + 1));
-//     if (!new_map)
-// 		return (FAILURE);
-// 	while(i < count )
-// 	{
-// 		new_map[i] = map->map[i][j];
-// 		i++;
-// 	}
-//     new_map[count] = ft_strdup(line);
-//     if(!new_map[count])
-//     {
-//         free(new_map);
-//         return (FAILURE);
-//     }
-//     new_map[count] = NULL;
-//     if (map->map)
-//         free(map->map);
-//     map->map = new_map;
-
-//     return (SUCCESS);
-// }
+int	is_full_of_spaces(char *line)
+{
+	int i = 0;
+	while (line[i])
+	{
+		if(line[i] != ' ')
+			return (FAILURE);
+		i++;
+	}
+	return (SUCCESS);
+}
+int check_fd(int *fd, char **av)
+{
+	*fd = open((av[1]), O_RDONLY);
+	if (*fd == -1)
+	{
+		error_message("Aucun fichier a ce nom");
+		return (FAILURE);
+	}
+	return(SUCCESS);
+}
