@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 15:26:04 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/28 18:08:39 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/09/28 18:47:56 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ int	check_positions(t_map_pars *map, char *line)
 }
 
 
-
 int	add_line_to_map(t_map_pars *map, char *line)
 {
 	char	**new_map;
@@ -90,7 +89,6 @@ int	add_line_to_map(t_map_pars *map, char *line)
 		return(FAILURE);
 	map->map = new_map;
 	return(SUCCESS);
-	
 }
 int	is_full_of_spaces(char *line)
 {

@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/28 18:08:47 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/09/28 18:53:37 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,11 @@ int check_fd(int *fd, char **av);
 void free_info(t_map_info *info);
 void free_tab(char **tab);
 void free_pars(t_info_pars *pars);
+
+//utils_map_pars
+void	print_char(char **str);
+int	print_tab(int *tab);
+
 
  // struct pars : line split etc..
  // struct game : info ...
