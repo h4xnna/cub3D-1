@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/29 15:07:46 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/09/29 18:16:37 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,6 @@ void		print_char(char **str);
 int			print_tab(int *tab);
 int			skip_space(char *line);
 long long	ft_atoll(const char *nptr);
-
 
 // info_pars4
 int			pars_info(t_info_pars *pars, t_map_info *infos);

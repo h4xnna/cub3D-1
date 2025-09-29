@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 23:52:35 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/29 14:45:34 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/09/29 18:20:12 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ char	*get_next_line(int fd)
 	line = NULL;
 	if (fd < 0 || fd > 1024 || BUFFER_SIZE <= 0)
 	{
-		if(stock_line)
+		if (stock_line)
 		{
 			free(stock_line);
 			stock_line = NULL;
@@ -132,7 +132,6 @@ char	*get_next_line(int fd)
 // 	char	*line;
 // 	int i = 0;
 // 	int j = 0;
-	
 // 	fd = open("cub", O_RDONLY);
 // 	if (fd == -1)
 // 	{
@@ -149,8 +148,7 @@ char	*get_next_line(int fd)
 // 		}
 // 		else 
 // 			break;
-// 		j++;
-			
+// 		j++;		
 // 	}
 // 	if( i > 6)
 // 		printf("prout");

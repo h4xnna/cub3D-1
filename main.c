@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:26:45 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/29 14:55:44 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/09/29 18:25:22 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 int	final_checks(t_map_info *infos, t_map_pars *map)
 {
-	print_info(*infos, *map);
 	if (map->position == 0)
 	{
 		error_message("map invalide: aucune position trouvée pour le joueur");
 		free_info(infos);
+		free_tab(map->map);
 		return (1);
 	}
 	if (infos->count_info != 6 || check_infos(infos))
@@ -113,8 +113,10 @@ int	main(int ac, char **av)
 		return (FAILURE);
 	if (final_checks(&infos, &map))
 		return (FAILURE);
+	print_info(infos, map);
 	free_info(&infos);
 	close(fd);
+	free_tab(map.map);
 	return (SUCCESS);
 }
 
