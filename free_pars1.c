@@ -6,46 +6,77 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 14:11:06 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/28 14:35:38 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/09/29 15:04:27 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void free_info(t_map_info *info)
+static void	free_info_textures(t_map_info *info)
 {
-	if(info->EA)
-		free(info->EA), info->EA = NULL;
-	if(info->SO)
-		free(info->SO), info->SO = NULL;
-	if(info->WE)
-		free(info->WE), info->WE = NULL;
-	if(info->C)
-		free(info->C), info->C = NULL;
-	if(info->F)
-		free(info->F), info->F = NULL;
-	if(info->NO)
-		free(info->NO), info->NO = NULL;
+	if (info->east)
+	{
+		free(info->east);
+		info->east = NULL;
+	}
+	if (info->south)
+	{
+		free(info->south);
+		info->south = NULL;
+	}
+	if (info->west)
+	{
+		free(info->west);
+		info->west = NULL;
+	}
+	if (info->north)
+	{
+		free(info->north);
+		info->north = NULL;
+	}
 }
-void free_tab(char **tab)
+
+static void	free_info_colors(t_map_info *info)
 {
-	int i = 0;
-	if(!tab)
-		return;
-	while(tab[i])
+	if (info->ceiling)
+	{
+		free(info->ceiling);
+		info->ceiling = NULL;
+	}
+	if (info->floor)
+	{
+		free(info->floor);
+		info->floor = NULL;
+	}
+}
+
+void	free_info(t_map_info *info)
+{
+	free_info_textures(info);
+	free_info_colors(info);
+}
+
+void	free_tab(char **tab)
+{
+	int	i;
+
+	i = 0;
+	if (!tab)
+		return ;
+	while (tab[i])
 	{
 		free(tab[i]);
-		i++;	
+		i++;
 	}
 	free(tab);
 }
 
-void free_pars(t_info_pars *pars)
-{	
-	if(pars->line_split)
-			free_tab(pars->line_split);
-		pars->line_split = NULL;
-		if(pars->colors)
-			free_tab(pars->colors);
-		pars->colors = NULL;
+void	free_pars(t_info_pars *pars)
+{
+	if (pars->line_split)
+		free_tab(pars->line_split);
+	pars->line_split = NULL;
+	if (pars->colors)
+		free_tab(pars->colors);
+	pars->colors = NULL;
 }

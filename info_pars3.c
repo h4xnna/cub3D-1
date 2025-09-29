@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 15:17:32 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/28 18:54:22 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/09/29 15:05:04 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ void	error_message(char *error)
 
 int	check_infos(t_map_info *info)
 {
-	if (info->C == NULL || info->EA == NULL || info->F == NULL
-		|| info->NO == NULL || info->SO == NULL || info->WE == NULL)
+	if (info->ceiling == NULL || info->east == NULL || info->floor == NULL
+		|| info->north == NULL || info->south == NULL || info->west == NULL)
 		return (FAILURE);
 	return (SUCCESS);
 }

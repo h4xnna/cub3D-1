@@ -27,8 +27,9 @@ SRCS	=	gnl/get_next_line.c\
 			info_pars2.c\
 			info_pars3.c\
 			pars_map.c \
+			pars_map2.c  \
 			free_pars1.c \
-			utils_map_pars1.c  \
+			info_pars4.c\
 
 
 
