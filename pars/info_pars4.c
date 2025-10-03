@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 12:53:12 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/02 16:44:46 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/03 14:13:39 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,17 +64,6 @@ int	pars_info(t_info_pars *pars, t_map_info *infos)
 	infos->count_info += 1;
 	return (SUCCESS);
 }
-// static int flood_fill_helper(t_map_pars *map,int x, int y)
-// {
-// 	if(x < 0 || y < 0 || !map->map[y] || !map->map[y][x])
-// 		return(1);
-// 	if(x == -1 || )
-// 	flood_fill_helper(map->map, x - 1, y);
-// 	flood_fill_helper(map->map, x + 1, y);
-// 	flood_fill_helper(map->map, x, y + 1);
-// 	flood_fill_helper(map->map, x, y - 1);
-
-// }
 
 int flood_fill_helper(t_map_pars *map, int x, int y)
 {

@@ -23,13 +23,13 @@ CFLAGS	= -Wall -Werror -Wextra -g3
 
 SRCS	=	gnl/get_next_line.c\
 			main.c \
-			info_pars1.c\
-			info_pars2.c\
-			info_pars3.c\
-			pars_map.c \
-			pars_map2.c  \
-			free_pars1.c \
-			info_pars4.c\
+			pars/info_pars1.c\
+			pars/info_pars2.c\
+			pars/info_pars3.c\
+			pars/pars_map.c \
+			pars/pars_map2.c  \
+			pars/free_pars1.c \
+			pars/info_pars4.c\
 
 
 
