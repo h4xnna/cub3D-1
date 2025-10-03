@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   info_pars4.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
+/*   By: hmimouni <hmimouni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 12:53:12 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/29 18:31:57 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/02 16:44:46 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,19 +64,45 @@ int	pars_info(t_info_pars *pars, t_map_info *infos)
 	infos->count_info += 1;
 	return (SUCCESS);
 }
-static int flood_fill_helper(t_map_pars *map,int x, int y)
-{
-	flood_fill_helper(map->map, x - 1, y);
-	flood_fill_helper(map->map, x + 1, y);
-	flood_fill_helper(map->map, x, y + 1);
-	flood_fill_helper(map->map, x, y - 1);
+// static int flood_fill_helper(t_map_pars *map,int x, int y)
+// {
+// 	if(x < 0 || y < 0 || !map->map[y] || !map->map[y][x])
+// 		return(1);
+// 	if(x == -1 || )
+// 	flood_fill_helper(map->map, x - 1, y);
+// 	flood_fill_helper(map->map, x + 1, y);
+// 	flood_fill_helper(map->map, x, y + 1);
+// 	flood_fill_helper(map->map, x, y - 1);
 
+// }
+
+int flood_fill_helper(t_map_pars *map, int x, int y)
+{
+    if (y < 0 || !map->map[y] || x < 0 || map->map[y][x] == '\0')
+        return 0;
+    if (map->map[y][x] == ' ')
+        return 0;
+    if (map->map[y][x] == '1' || map->map[y][x] == 'X')
+        return 1;
+    if (map->map[y][x] == 'N' || map->map[y][x] == 'S' ||
+        map->map[y][x] == 'E' || map->map[y][x] == 'W') {
+        map->map[y][x] = '0';
+    }
+    map->map[y][x] = 'X';
+    if (!flood_fill_helper(map, x + 1, y)) return 0;
+    if (!flood_fill_helper(map, x - 1, y)) return 0;
+    if (!flood_fill_helper(map, x, y + 1)) return 0;
+    if (!flood_fill_helper(map, x, y - 1)) return 0;
+    return 1;
 }
 
-static int flood_fill(t_map_pars *map)
+ int flood_fill(t_map_pars *map)
 {
 	int x = map->x_start;
 	int y = map->y_start;
 	
-	flood_fill_helper(map->map, x, y)
+	if(flood_fill_helper(map, x, y))
+		return(SUCCESS);
+	return(FAILURE);
+	
 }

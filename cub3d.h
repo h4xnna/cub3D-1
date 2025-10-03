@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
+/*   By: hmimouni <hmimouni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/29 18:16:37 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/02 16:41:18 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,7 @@ long long	ft_atoll(const char *nptr);
 
 // info_pars4
 int			pars_info(t_info_pars *pars, t_map_info *infos);
+ int 	flood_fill(t_map_pars *map);
 
 // struct pars : line split etc..
 // struct game : info ...

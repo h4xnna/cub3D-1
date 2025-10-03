@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pars_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
+/*   By: hmimouni <hmimouni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 15:26:04 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/29 17:57:04 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/02 16:41:51 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,9 @@ int	check_char(char *line, t_map_pars *map)
 
 int	check_positions(t_map_pars *map, char *line)
 {
-	int	x;
 	int	i;
 
 	i = 0;
-	x = 0;
 	skip_space(line);
 	while (line[i])
 	{

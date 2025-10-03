@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
+/*   By: hmimouni <hmimouni@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:26:45 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/29 18:25:22 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/02 16:52:43 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +57,7 @@ int	parse_error(t_map_pars *map, t_map_info *infos, t_info_pars *pars,
 int	parse_file(int fd, t_map_pars *map, t_map_info *infos, t_info_pars *pars)
 {
 	char	*line;
-	int		error;
 
-	error = 0;
 	while ((line = get_next_line(fd)) != NULL)
 	{
 		line = remove_newline(line);
@@ -103,17 +101,21 @@ int	main(int ac, char **av)
 	t_map_info	infos;
 	t_info_pars	pars;
 	t_map_pars	map;
-	int			error;
 
 	if (init_structs(&map, &infos, &pars, &fd) || checks_args(ac, av)
 		|| check_fd(&fd, av))
 		return (FAILURE);
-	error = parse_file(fd, &map, &infos, &pars);
-	if (error)
+	if(parse_file(fd, &map, &infos, &pars))
 		return (FAILURE);
 	if (final_checks(&infos, &map))
 		return (FAILURE);
 	print_info(infos, map);
+	if(flood_fill(&map))
+	{
+		error_message("Gros caca");
+		return(FAILURE);
+	}
+	print_char(map.map);
 	free_info(&infos);
 	close(fd);
 	free_tab(map.map);
