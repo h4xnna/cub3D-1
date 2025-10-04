@@ -30,8 +30,17 @@ SRCS	=	gnl/get_next_line.c\
 			pars/pars_map2.c  \
 			pars/free_pars1.c \
 			pars/info_pars4.c\
+			exec/buttons.c\
 
 
+
+# Libraries
+MLX         = minilibx-linux/
+MLX_A       = $(MLX_PATH)libmlx.a
+MLX_PATH    = ./minilibx-linux/
+MLX_FLAGS   = -lm -lbsd -lXext -lX11
+LIBPRINTF   = ft_printf/libftprintf.a
+ 
 
 INCL	= -I. -Ilibft
 
@@ -46,14 +55,21 @@ OBJS = ${SRCS:.c=.o}
 
 all: ${NAME}
 
-
 %.o: %.c 
 	@$(CC) $(CFLAGS) -I. -c $< -o $@ $(INCL)
 
-${NAME}: ${OBJS} $(LIBFT) $(HEADERS)
+$(MLX_PATH) : 
+	@if [ ! -d $(MLX_PATH) ]; then git clone https://github.com/42Paris/minilibx-linux.git; fi;
+
+$(MLX_A) :
+	@echo $(LIGHT_CYAN)$(BOLD)"\nCompiling MiniLibX..."
+	@make -sC minilibx-linux -j
+	@echo $(NEON_GREEN)$(BOLD)"Library Compiled. ✔\n"
+
+${NAME}: $(MLX_PATH) $(MLX_A) ${OBJS} $(LIBFT) $(HEADERS)
 
 	@echo $(LIGHT_GREEN) "Compilation..."$(BOLD)
-	@${CC} ${CFLAGS} ${OBJS} $(LIBFT) -o ${NAME}
+	@${CC} ${CFLAGS} ${OBJS} $(LIBFT) $(MLX_A) $(MLX_FLAGS) -o ${NAME}
 	@echo $(LIGHT_GREEN)"Compilation réussie ✔"$(RESET)
 
 $(LIBFT):
@@ -69,7 +85,9 @@ leak : all
 	valgrind --leak-check=full ./cube map.cub
 
 fclean: clean
-	@rm -f ${NAME}$(LIBFT_PATH)$(LIBFT_NAME)
+	@rm -rf ${NAME}
+	@rm -rf $(LIBFT_NAME)
+	@rm -rf $(MLX_PATH)
 	@echo $(BROWN)fclean reussi
 
 re: fclean all

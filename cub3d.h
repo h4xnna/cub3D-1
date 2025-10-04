@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/02 16:41:18 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/04 18:35:33 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,89 +14,118 @@
 # define CUB3D_H
 # include "gnl/get_next_line.h"
 # include "libft/libft.h"
+# include "minilibx-linux/mlx.h"
+# include <math.h>
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
-
+# define PI 3.1415926535
+# define WIDTH 1280
+# define HEIGHT 720
 # define FAILURE 1
 # define SUCCESS 0
+# define W_KEY 119
+# define A_KEY 97
+# define S_KEY 115
+# define D_KEY 100
+# define LEFT_KEY 65361
+# define RIGHT_KEY 65363
+# define ESC_KEY 65307
 
 typedef struct s_info_pars
 {
-	char	**line_split;
-	char	**colors;
+	char		**line_split;
+	char		**colors;
 
-}			t_info_pars;
+}				t_info_pars;
 
 typedef struct s_map_pars
 {
-	char	**map;
-	char	position;
-	int		close;
-	int		x_start;
-	int		y_start;
-	int		map_started;
-}			t_map_pars;
+	char		**map;
+	char		position;
+	int			close;
+	int			x_start;
+	int			y_start;
+	int			map_started;
+}				t_map_pars;
 
-// typedef struct s_map
-// {
-// 	int x_start;
-// 	int y_start;
-// }	t_map;
+typedef struct s_player
+{
+	int			pa;
+	int			pdx;
+	int			pdy;
+	int			px;
+	int			py;
+	t_map_pars	*map;
+}				t_player;
 
 typedef struct s_map_info
 {
-	char	*south;
-	char	*west;
-	char	*east;
-	char	*north;
-	int		*floor;
-	int		*ceiling;
-	int		count_info;
-}			t_map_info;
+	char		*south;
+	char		*west;
+	char		*east;
+	char		*north;
+	int			*floor;
+	int			*ceiling;
+	int			count_info;
+}				t_map_info;
+
+typedef struct s_data
+{
+	t_map_pars	*map_pars;
+	t_info_pars	*info_pars;
+	t_map_info	*info;
+	t_player	*player;
+
+}				t_data;
 
 // utils_pars1
-int			len_tab(char **tab);
-char		*remove_newline(char *line);
-int			ft_strcmp(char *str, char *str2);
-int			is_fichier(char *path);
-int			is_direction(char *str);
+int				len_tab(char **tab);
+char			*remove_newline(char *line);
+int				ft_strcmp(char *str, char *str2);
+int				is_fichier(char *path);
+int				is_direction(char *str);
 
 // utils_pars2
-void		print_info(t_map_info info, t_map_pars map);
-void		fill_struct(t_map_info *infos, char *direction, char *path);
-void		stock_colors(t_map_info *infos, t_info_pars *pars, int nb, int i);
-int			allouer_colors(t_info_pars *pars, t_map_info *infos);
-void		print_char(char **str);
+void			print_info(t_map_info info, t_map_pars map);
+void			fill_struct(t_map_info *infos, char *direction, char *path);
+void			stock_colors(t_map_info *infos, t_info_pars *pars, int nb,
+					int i);
+int				allouer_colors(t_info_pars *pars, t_map_info *infos);
+void			print_char(char **str);
 
 // utils_pars3
-void		error_message(char *error);
-int			check_infos(t_map_info *info);
-int			check_cub(char *str);
-int			checks_args(int ac, char **av);
-void		*ft_realloc(void *ptr, size_t new_size);
+void			error_message(char *error);
+int				check_infos(t_map_info *info);
+int				check_cub(char *str);
+int				checks_args(int ac, char **av);
+void			*ft_realloc(void *ptr, size_t new_size);
 
 // pars_map
-int			check_positions(t_map_pars *map, char *line);
-int			add_line_to_map(t_map_pars *map, char *line);
-int			check_char(char *line, t_map_pars *map);
-int			is_full_of_spaces(char *line);
-int			check_fd(int *fd, char **av);
+int				check_positions(t_map_pars *map, char *line);
+int				add_line_to_map(t_map_pars *map, char *line);
+int				check_char(char *line, t_map_pars *map);
+int				is_full_of_spaces(char *line);
+int				check_fd(int *fd, char **av);
 
 // free_pars1
-void		free_info(t_map_info *info);
-void		free_tab(char **tab);
-void		free_pars(t_info_pars *pars);
+void			free_info(t_map_info *info);
+void			free_tab(char **tab);
+void			free_pars(t_info_pars *pars);
 
 // pars_map2
-void		print_char(char **str);
-int			print_tab(int *tab);
-int			skip_space(char *line);
-long long	ft_atoll(const char *nptr);
+void			print_char(char **str);
+int				print_tab(int *tab);
+int				skip_space(char *line);
+long long		ft_atoll(const char *nptr);
 
 // info_pars4
-int			pars_info(t_info_pars *pars, t_map_info *infos);
- int 	flood_fill(t_map_pars *map);
+int				pars_info(t_info_pars *pars, t_map_info *infos);
+int				flood_fill(t_map_pars *map);
+
+//buttons
+ void buttons_a( t_player *player);
+
 
 // struct pars : line split etc..
 // struct game : info ...

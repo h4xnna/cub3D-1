@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:26:45 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/02 16:52:43 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/04 18:54:10 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,12 +82,13 @@ int	parse_file(int fd, t_map_pars *map, t_map_info *infos, t_info_pars *pars)
 	return (0);
 }
 
-int	init_structs(t_map_pars *map, t_map_info *infos, t_info_pars *pars, int *fd)
+int	init_structs(t_map_pars *map, t_map_info *infos, t_info_pars *pars, int *fd, t_data *data)
 {
 	*fd = 0;
 	ft_bzero(map, sizeof(t_map_pars));
 	ft_bzero(infos, sizeof(t_map_info));
 	ft_bzero(pars, sizeof(t_info_pars));
+	ft_bzero(data, sizeof(t_data));
 	map->map = malloc(sizeof(char *) * 1);
 	if (!map->map)
 		return (1);
@@ -95,30 +96,63 @@ int	init_structs(t_map_pars *map, t_map_info *infos, t_info_pars *pars, int *fd)
 	return (0);
 }
 
+int key_press(int keycode, t_data *data)
+{
+    if (keycode == 97)         
+        buttons_a(data->player);
+    if (keycode == 65307)      
+        exit(1);
+    return 0;
+}
+
+
 int	main(int ac, char **av)
 {
 	int			fd;
 	t_map_info	infos;
 	t_info_pars	pars;
 	t_map_pars	map;
+	t_data		data;
+	void *mlx_ptr;
+	void *win_ptr;
 
-	if (init_structs(&map, &infos, &pars, &fd) || checks_args(ac, av)
+	if (init_structs(&map, &infos, &pars, &fd, &data) || checks_args(ac, av)
 		|| check_fd(&fd, av))
 		return (FAILURE);
 	if(parse_file(fd, &map, &infos, &pars))
 		return (FAILURE);
 	if (final_checks(&infos, &map))
 		return (FAILURE);
-	print_info(infos, map);
+	// print_info(infos, map);
 	if(flood_fill(&map))
 	{
 		error_message("Gros caca");
 		return(FAILURE);
 	}
-	print_char(map.map);
+	// print_char(map.map);
+	
 	free_info(&infos);
 	close(fd);
 	free_tab(map.map);
+
+
+
+	mlx_ptr = mlx_init();
+	if (!mlx_ptr)
+	{
+		error_message("MLX: error connecting to mlx.");
+		return(1);
+	}
+	win_ptr = mlx_new_window(mlx_ptr, WIDTH, HEIGHT, "Gros ZIZI");
+	if (!win_ptr)
+	{
+		error_message("GROS PIPI");
+		return(1);
+	}
+	mlx_hook(win_ptr, 2, 1L<<0, key_press, &data);
+	mlx_pixel_put(mlx_ptr, win_ptr, 100, 100, 0xFF00FF00);
+	mlx_loop(mlx_ptr);
+	
 	return (SUCCESS);
 }
 
