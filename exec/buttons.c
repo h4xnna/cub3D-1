@@ -1,32 +1,50 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   raycasting.c                                       :+:      :+:    :+:   */
+/*   buttons.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/04 16:43:22 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/04 18:22:54 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/05 17:11:03 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
- #include "cub3d.h"
+#include "../cub3d.h"
 
- void buttons_a( t_player *player)
- {
-	player->pa -= 0.001; 
-	if(player->pa < 0)
-		player->pa +=  2*PI;
-	player->pdx = cos(player->pa) * 5;
-	player->pdy = sin(player->pa) * 5;
- }
-  void buttons_d( t_player *player)
- {
-	player->pa -= 0.001; 
-	if(player->pa < 0)
-		player->pa +=  2*PI;
-	player->pdx = cos(player->pa) * 5;
-	player->pdy = sin(player->pa) * 5;
- }
+void	buttons_a(t_player *player, t_map_pars *map)
+{
+	// player->pa -= 0.001;
+	// if(player->pa < 0)
+	// 	player->pa +=  2*PI;
+	// player->pdx = cos(player->pa) * 5;
+	// player->pdy = sin(player->pa) * 5;
+	if (map->map[(int)player->py][(int)(player->px -0.2)]
+			&& map->map[(int)player->py][(int)(player->px -0.2)] != '1')
+	player->px -=0.2;
+}
 
- 
+void	buttons_d(t_player *player, t_map_pars *map)
+{
+	// player->pa -= 0.001;
+	// if(player->pa < 0)
+	// 	player->pa +=  2*PI;
+	// player->pdx = cos(player->pa) * 5;
+	// player->pdy = sin(player->pa) * 5;
+	if (map->map[(int)player->py][(int)(player->px + 0.2)]
+			&& map->map[(int)player->py][(int)(player->px + 0.2)] != '1')
+		player->px += 0.2;
+}
+void	buttons_w(t_player *player, t_map_pars *map)
+{
+	if (map->map[(int)(player->py - 0.2)][(int)(player->px)]
+			&& map->map[(int)(player->py - 0.2)][(int)(player->px)] != '1')
+		player->py -= 0.2;
+}
+
+void	buttons_s(t_player *player, t_map_pars *map)
+{
+	if (map->map[(int)(player->py + 0.2)][(int)(player->px)]
+			&& map->map[(int)(player->py + 0.2)][(int)(player->px)] != '1')
+		player->py += 0.2;
+}

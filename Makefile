@@ -8,7 +8,7 @@ LIGHT_CYAN      = "\033[96m"
 BROWN           = "\033[38;5;94m"
 
 NEON_GREEN      = "\033[38;5;46m"
-ELECTRIC_BLUE   = "\033[38;5;51m"
+ELECTRIC_BLUE   = "\033[38;5;51mare"
 HOT_PINK        = "\033[38;5;198m"
 BLOOD_RED       = "\033[38;5;196m"
 SUNBURST_YELLOW = "\033[38;5;226m"
@@ -31,6 +31,7 @@ SRCS	=	gnl/get_next_line.c\
 			pars/free_pars1.c \
 			pars/info_pars4.c\
 			exec/buttons.c\
+			exec/draw_map2D.c\
 
 
 

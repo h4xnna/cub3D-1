@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/04 18:35:33 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/05 17:01:41 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,12 @@
 # define LEFT_KEY 65361
 # define RIGHT_KEY 65363
 # define ESC_KEY 65307
+# define SIZE_SQUARE 40
+# define BLANC 0xFFFFFF
+# define NOIR 0x000000
+# define ROUGE 0xFF0000
+# define TEAL 0x008080
+# define VERT 0x006400
 
 typedef struct s_info_pars
 {
@@ -54,8 +60,8 @@ typedef struct s_player
 	int			pa;
 	int			pdx;
 	int			pdy;
-	int			px;
-	int			py;
+	float		px;
+	float		py;
 	t_map_pars	*map;
 }				t_player;
 
@@ -72,10 +78,12 @@ typedef struct s_map_info
 
 typedef struct s_data
 {
-	t_map_pars	*map_pars;
-	t_info_pars	*info_pars;
-	t_map_info	*info;
-	t_player	*player;
+	void		*mlx_ptr;
+	void		*win_ptr;
+	t_map_pars	map_pars;
+	t_info_pars	info_pars;
+	t_map_info	map_info;
+	t_player	player;
 
 }				t_data;
 
@@ -123,9 +131,17 @@ long long		ft_atoll(const char *nptr);
 int				pars_info(t_info_pars *pars, t_map_info *infos);
 int				flood_fill(t_map_pars *map);
 
-//buttons
- void buttons_a( t_player *player);
+// buttons
+void			buttons_a(t_player *player, t_map_pars *map);
+void			buttons_d(t_player *player, t_map_pars *map);
+void			buttons_w(t_player *player, t_map_pars *map);
+void			buttons_s(t_player *player, t_map_pars *map);
 
+// draw_map2D
+void			x_to_0(t_map_pars *map);
+void			draw_square(t_data *data, int x, int y, int color,
+					int square_size);
+void			draw_map(t_data *data);
 
 // struct pars : line split etc..
 // struct game : info ...
