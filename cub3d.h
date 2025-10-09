@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/05 17:01:41 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/08 16:28:51 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,20 +49,22 @@ typedef struct s_map_pars
 {
 	char		**map;
 	char		position;
+	int			width;
+	int			height;
 	int			close;
 	int			x_start;
 	int			y_start;
 	int			map_started;
 }				t_map_pars;
 
-typedef struct s_player
+typedef struct s_player // position
 {
-	int			pa;
-	int			pdx;
-	int			pdy;
-	float		px;
-	float		py;
-	t_map_pars	*map;
+	float pa;
+	float pdx;
+	float pdy;
+	float px;
+	float py;
+	t_map_pars *map;
 }				t_player;
 
 typedef struct s_map_info
@@ -93,6 +95,7 @@ char			*remove_newline(char *line);
 int				ft_strcmp(char *str, char *str2);
 int				is_fichier(char *path);
 int				is_direction(char *str);
+void			drawRays2D(t_data *data);
 
 // utils_pars2
 void			print_info(t_map_info info, t_map_pars map);

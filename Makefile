@@ -32,6 +32,7 @@ SRCS	=	gnl/get_next_line.c\
 			pars/info_pars4.c\
 			exec/buttons.c\
 			exec/draw_map2D.c\
+			exec/raycasting.c
 
 
 

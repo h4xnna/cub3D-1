@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:26:45 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/05 16:59:03 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/08 16:36:25 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,8 +114,21 @@ int	key_press(int keycode, t_data *data)
 		buttons_w(&data->player, &data->map_pars);
 	if (keycode == 65307)
 		exit(1);
+	if (keycode == 65363) // fleche gauche
+	{
+		data->player.pa += 0.05;
+		if (data->player.pa > 2 * PI)
+			data->player.pa += 2 * PI;
+	}
+	if (keycode == 65361) // fleche droite
+	{
+		data->player.pa -= 0.05;
+		if (data->player.pa < 0)
+			data->player.pa += 2 * PI;
+	}
 	draw_map(data);
-	draw_square(data, (data->player.px * SIZE_SQUARE + 10),(data->player.py * SIZE_SQUARE + 10), 0xFF00FF00, SIZE_SQUARE/ 3);
+	draw_square(data, (data->player.px * SIZE_SQUARE),(data->player.py * SIZE_SQUARE), NOIR, SIZE_SQUARE/ 3);
+	drawRays2D(data);
 	return (0);
 }
 
@@ -150,6 +163,7 @@ int	main(int ac, char **av)
 	data.map_info = infos;
 	data.player.px = map.x_start;
 	data.player.py = map.y_start;
+	data.player.pa = PI / 2;
 	// free_info(&infos);
 	// close(fd);
 	// free_tab(map.map);
@@ -166,7 +180,8 @@ int	main(int ac, char **av)
 		return (1);
 	}
 	draw_map(&data);
-	draw_square(&data, (data.map_pars.x_start * SIZE_SQUARE + 10),(data.map_pars.y_start * SIZE_SQUARE + 10), 0xFF00FF00, SIZE_SQUARE/ 3);
+	draw_square(&data, (data.map_pars.x_start * SIZE_SQUARE),(data.map_pars.y_start * SIZE_SQUARE), NOIR, SIZE_SQUARE / 3);
+	drawRays2D(&data);
 	mlx_hook(data.win_ptr, 2, 1L << 0, key_press, &data);
 	mlx_loop_hook(data.mlx_ptr, &render, &data);
 	mlx_loop(data.mlx_ptr);
