@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
+/*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:26:45 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/08 16:36:25 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/16 12:23:50 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+double rotSpeed = 0.05;
 
 int	final_checks(t_map_info *infos, t_map_pars *map)
 {
@@ -97,6 +99,19 @@ int	init_structs(t_map_pars *map, t_map_info *infos, t_info_pars *pars, int *fd,
 	return (0);
 }
 
+
+// Normalisation d'un vecteur 2D
+void normalize_vector(double *x, double *y)
+{
+    double length = sqrt((*x) * (*x) + (*y) * (*y));
+    if (length != 0)
+    {
+        *x /= length;
+        *y /= length;
+    }
+}
+
+
 int render(t_data *data)
 {
 	(void)data;
@@ -114,20 +129,35 @@ int	key_press(int keycode, t_data *data)
 		buttons_w(&data->player, &data->map_pars);
 	if (keycode == 65307)
 		exit(1);
-	if (keycode == 65363) // fleche gauche
+	if (keycode == 65361) // fleche guache
 	{
-		data->player.pa += 0.05;
-		if (data->player.pa > 2 * PI)
-			data->player.pa += 2 * PI;
+		double oldDirX = data->player.pdirx;
+		data->player.pdirx = data->player.pdirx * cos(-rotSpeed) - data->player.pdiry * sin(-rotSpeed);
+		data->player.pdiry = oldDirX * sin(-rotSpeed) + data->player.pdiry * cos(-rotSpeed);
+		double oldPlaneX = data->player.planeX;
+		data->player.planeX = data->player.planeX * cos(-rotSpeed) - data->player.planeY * sin(-rotSpeed);
+		data->player.planeY = oldPlaneX * sin(-rotSpeed) + data->player.planeY * cos(-rotSpeed);
+		normalize_vector(&data->player.pdirx, &data->player.pdiry);
+		normalize_vector(&data->player.planeX, &data->player.planeY);
+
 	}
-	if (keycode == 65361) // fleche droite
+
+	if (keycode == 65363) // fleche droite
 	{
-		data->player.pa -= 0.05;
-		if (data->player.pa < 0)
-			data->player.pa += 2 * PI;
+		double oldDirX = data->player.pdirx;
+		data->player.pdirx = data->player.pdirx * cos(rotSpeed) - data->player.pdiry * sin(rotSpeed);
+		data->player.pdiry = oldDirX * sin(rotSpeed) + data->player.pdiry * cos(rotSpeed);
+		double oldPlaneX = data->player.planeX;
+		data->player.planeX = data->player.planeX * cos(rotSpeed) - data->player.planeY * sin(rotSpeed);
+		data->player.planeY = oldPlaneX * sin(rotSpeed) + data->player.planeY * cos(rotSpeed);
+		normalize_vector(&data->player.pdirx, &data->player.pdiry);
+		normalize_vector(&data->player.planeX, &data->player.planeY);
+
 	}
-	draw_map(data);
-	draw_square(data, (data->player.px * SIZE_SQUARE),(data->player.py * SIZE_SQUARE), NOIR, SIZE_SQUARE/ 3);
+
+	
+
+	mlx_clear_window(data->mlx_ptr, data->win_ptr);
 	drawRays2D(data);
 	return (0);
 }
@@ -164,6 +194,10 @@ int	main(int ac, char **av)
 	data.player.px = map.x_start;
 	data.player.py = map.y_start;
 	data.player.pa = PI / 2;
+	data.player.pdirx = 0;
+	data.player.pdiry = -1;
+	data.player.planeX = 0.66;
+	data.player.planeY = 0;
 	// free_info(&infos);
 	// close(fd);
 	// free_tab(map.map);
@@ -179,9 +213,9 @@ int	main(int ac, char **av)
 		error_message("GROS PIPI");
 		return (1);
 	}
+	drawRays2D(&data);
 	draw_map(&data);
 	draw_square(&data, (data.map_pars.x_start * SIZE_SQUARE),(data.map_pars.y_start * SIZE_SQUARE), NOIR, SIZE_SQUARE / 3);
-	drawRays2D(&data);
 	mlx_hook(data.win_ptr, 2, 1L << 0, key_press, &data);
 	mlx_loop_hook(data.mlx_ptr, &render, &data);
 	mlx_loop(data.mlx_ptr);

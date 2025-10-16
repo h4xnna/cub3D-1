@@ -3,14 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
+/*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/08 13:51:22 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/08 16:33:32 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/16 12:29:38 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+#include <math.h>
 
 // void drawRays2D(t_data *data)
 // {
@@ -67,18 +68,15 @@ int is_wall(t_data *data, float ray_x, float ray_y)
 	return (0);
 }
 
-void draw_line(t_data *data, float angle)
+void draw_line(double rayDirX, double rayDirY, t_data *data)
 {
-	float cosi = cos(angle);
-	float sinu = sin(angle);
-
 	float ray_x = data->player.px * SIZE_SQUARE;
 	float ray_y = data->player.py * SIZE_SQUARE;
 	
 	while (!is_wall(data, ray_x, ray_y))
 	{
-		ray_x += cosi;
-		ray_y += sinu;
+		ray_x += rayDirX;
+		ray_y += rayDirY;
 		mlx_pixel_put(data->mlx_ptr, data->win_ptr, ray_x, ray_y, 0xFF0000);
 	}
 	
@@ -86,13 +84,125 @@ void draw_line(t_data *data, float angle)
 
 void drawRays2D(t_data *data )
 {
-	int i = 0;
-	// player.pa = pi/2
-	float angle = data->player.pa;
-	while(i < 720 / 6)
-	{
-		draw_line(data, angle);
-		angle += 0.0125;
-		i++;
+	double cameraX;
+	double rayDirX;
+	double rayDirY;
+
+	int mapX;
+	int mapY;
+	
+	double sideDistX;
+	double sideDistY;
+
+	double deltaDistX;
+	double deltaDistY;
+
+	double perpWallDist;
+
+	int stepX;
+	int stepY;
+
+	int hit;
+	int side;
+
+	int lineHeight;
+	int drawStart;
+	int drawEnd;
+
+	for(int x = 0; x <= WIDTH; x++)
+    {
+		cameraX = 2 * x / (double)WIDTH - 1;
+		rayDirX = data->player.pdirx + data->player.planeX * cameraX;
+		rayDirY = data->player.pdiry + data->player.planeY * cameraX;
+
+		if (rayDirX == 0)
+			rayDirX = 0.001;
+		if (rayDirY == 0)
+			rayDirY = 0.001;
+		
+		
+		mapX = (int)data->player.px;
+		mapY = (int)data->player.py;
+
+		deltaDistX = fabs(1 / rayDirX);
+		deltaDistY = fabs(1 / rayDirY);
+
+
+		if (rayDirX < 0)
+		{
+			stepX = -1;
+			sideDistX = (data->player.px - mapX) * deltaDistX;
+		}
+		else
+		{
+			stepX = 1;
+			sideDistX = (mapX + 1.0 - data->player.px) * deltaDistX;
+		}
+
+		if (rayDirY < 0)
+		{
+			stepY = -1;
+			sideDistY = (data->player.py - mapY) * deltaDistY;
+		}
+		else
+		{
+			stepY = 1;
+			sideDistY = (mapY + 1.0 - data->player.py) * deltaDistY;
+		}
+
+
+		hit = 0;
+
+		while (hit == 0)
+		{
+			if (sideDistX < sideDistY)
+			{
+				sideDistX += deltaDistX;
+				mapX += stepX;
+				side = 0;
+			}
+			else
+			{
+				sideDistY += deltaDistY;
+				mapY += stepY;
+				side = 1;
+			}
+			if (mapX >= 0 && mapY >= 0 && data->map_pars.map[mapY] && data->map_pars.map[mapY][mapX]
+				&& data->map_pars.map[mapY][mapX] == '1')
+			{	
+				hit = 1;
+			}
+
+		}
+
+		// draw_line(cameraX, rayDirY, data);
+
+		if(side == 0)
+			perpWallDist = (sideDistX - deltaDistX);
+    	else
+			perpWallDist = (sideDistY - deltaDistY);
+
+
+		lineHeight = (int)(HEIGHT / perpWallDist);
+
+		drawStart = -lineHeight / 2 + HEIGHT / 2;
+		if(drawStart < 0)
+			drawStart = 0;
+
+		drawEnd = lineHeight / 2 + HEIGHT / 2;
+		if(drawEnd >= HEIGHT)
+			drawEnd = HEIGHT - 1;
+
+		while(drawStart <= drawEnd)
+		{
+			if (side == 0)
+				mlx_pixel_put(data->mlx_ptr, data->win_ptr, x, drawStart, 0x00FF00);
+			else
+				mlx_pixel_put(data->mlx_ptr, data->win_ptr, x, drawStart, 0x00FF00 / 3);
+			drawStart++;
+		}
 	}
+
+	draw_map(data);
+	draw_square(data, (data->player.px * SIZE_SQUARE),(data->player.py * SIZE_SQUARE), NOIR, SIZE_SQUARE/ 3);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
+/*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/08 16:28:51 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/16 12:20:21 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@
 # define LEFT_KEY 65361
 # define RIGHT_KEY 65363
 # define ESC_KEY 65307
-# define SIZE_SQUARE 40
+# define SIZE_SQUARE 15
 # define BLANC 0xFFFFFF
 # define NOIR 0x000000
 # define ROUGE 0xFF0000
@@ -60,10 +60,12 @@ typedef struct s_map_pars
 typedef struct s_player // position
 {
 	float pa;
-	float pdx;
-	float pdy;
-	float px;
-	float py;
+	double pdirx;
+	double pdiry;
+	double px;
+	double py;
+	double planeX;
+	double planeY;
 	t_map_pars *map;
 }				t_player;
 
