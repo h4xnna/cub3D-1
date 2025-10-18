@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:26:45 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/16 12:23:50 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/10/18 17:00:16 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,23 +112,18 @@ void normalize_vector(double *x, double *y)
 }
 
 
-int render(t_data *data)
-{
-	(void)data;
-	return (0);
-}
 int	key_press(int keycode, t_data *data)
 {
 	if (keycode == A_KEY)
-		buttons_a(&data->player, &data->map_pars);
+	buttons_a(&data->player, &data->map_pars);
 	if (keycode == D_KEY)
-		buttons_d(&data->player, &data->map_pars);
+	buttons_d(&data->player, &data->map_pars);
 	if(keycode == S_KEY)
-		buttons_s(&data->player, &data->map_pars);
+	buttons_s(&data->player, &data->map_pars);
 	if(keycode == W_KEY)
-		buttons_w(&data->player, &data->map_pars);
+	buttons_w(&data->player, &data->map_pars);
 	if (keycode == 65307)
-		exit(1);
+	exit(1);
 	if (keycode == 65361) // fleche guache
 	{
 		double oldDirX = data->player.pdirx;
@@ -139,9 +134,9 @@ int	key_press(int keycode, t_data *data)
 		data->player.planeY = oldPlaneX * sin(-rotSpeed) + data->player.planeY * cos(-rotSpeed);
 		normalize_vector(&data->player.pdirx, &data->player.pdiry);
 		normalize_vector(&data->player.planeX, &data->player.planeY);
-
+		
 	}
-
+	
 	if (keycode == 65363) // fleche droite
 	{
 		double oldDirX = data->player.pdirx;
@@ -152,13 +147,16 @@ int	key_press(int keycode, t_data *data)
 		data->player.planeY = oldPlaneX * sin(rotSpeed) + data->player.planeY * cos(rotSpeed);
 		normalize_vector(&data->player.pdirx, &data->player.pdiry);
 		normalize_vector(&data->player.planeX, &data->player.planeY);
-
+		
 	}
-
-	
-
 	mlx_clear_window(data->mlx_ptr, data->win_ptr);
+	split_win(data);
 	drawRays2D(data);
+	return (0);
+}
+int render(t_data *data)
+{
+	(void)data;
 	return (0);
 }
 
@@ -180,7 +178,7 @@ int	main(int ac, char **av)
 	// print_info(infos, map);
 	if (flood_fill(&map))
 	{
-		error_message("Gros caca");
+		error_message("map pas ferme");
 		return (FAILURE);
 	}
 	print_char(map.map);
@@ -213,9 +211,8 @@ int	main(int ac, char **av)
 		error_message("GROS PIPI");
 		return (1);
 	}
+	set_player_direction(&data.player, map.position);
 	drawRays2D(&data);
-	draw_map(&data);
-	draw_square(&data, (data.map_pars.x_start * SIZE_SQUARE),(data.map_pars.y_start * SIZE_SQUARE), NOIR, SIZE_SQUARE / 3);
 	mlx_hook(data.win_ptr, 2, 1L << 0, key_press, &data);
 	mlx_loop_hook(data.mlx_ptr, &render, &data);
 	mlx_loop(data.mlx_ptr);

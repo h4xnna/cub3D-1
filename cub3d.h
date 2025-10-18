@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/16 12:20:21 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/10/18 17:00:03 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,6 +147,12 @@ void			x_to_0(t_map_pars *map);
 void			draw_square(t_data *data, int x, int y, int color,
 					int square_size);
 void			draw_map(t_data *data);
+
+
+//player_position
+void set_player_direction(t_player *player, char direction);
+void split_win(t_data *data);
+
 
 // struct pars : line split etc..
 // struct game : info ...
