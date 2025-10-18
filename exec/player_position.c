@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/18 16:51:35 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/18 16:59:56 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/18 17:55:35 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,20 @@ void set_player_direction(t_player *player, char direction)
         player->planeY = -0.66;
     }
 }
+
+// int    rgb_to_hex_int(char *color)
+// {
+//     int        rgb[3];
+//     char    **rgb_tab;
+
+//     rgb_tab = ft_split(color, ',');
+//     if (!rgb_tab)
+//         end_game("Memory allocation failed.\n");
+//     rgb[0] = (int)ft_atol(rgb_tab[0]);
+//     rgb[1] = (int)ft_atol(rgb_tab[1]);
+//     rgb[2] = (int)ft_atol(rgb_tab[2]);
+//     return ((rgb[0] << 16) | (rgb[1] << 8) | rgb[2]);
+// }
 void split_win(t_data *data)
 {
 	int x;
@@ -53,7 +67,7 @@ void split_win(t_data *data)
 		x = 0;
 		while (x < WIDTH)
 		{
-			mlx_pixel_put(data->mlx_ptr, data->win_ptr, x, y, ROUGE);
+			mlx_pixel_put(data->mlx_ptr, data->win_ptr, x, y, rgb_to_hex_int(data->map_info->));
 			x++;
 		}
 		y++;

@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:26:45 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/18 17:00:16 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/18 17:48:36 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,6 @@ int	init_structs(t_map_pars *map, t_map_info *infos, t_info_pars *pars, int *fd,
 	return (0);
 }
 
-
 // Normalisation d'un vecteur 2D
 void normalize_vector(double *x, double *y)
 {
@@ -111,19 +110,22 @@ void normalize_vector(double *x, double *y)
     }
 }
 
-
 int	key_press(int keycode, t_data *data)
 {
 	if (keycode == A_KEY)
-	buttons_a(&data->player, &data->map_pars);
+		buttons_a(&data->player, &data->map_pars);
 	if (keycode == D_KEY)
-	buttons_d(&data->player, &data->map_pars);
+		buttons_d(&data->player, &data->map_pars);
 	if(keycode == S_KEY)
-	buttons_s(&data->player, &data->map_pars);
+		buttons_s(&data->player, &data->map_pars);
 	if(keycode == W_KEY)
-	buttons_w(&data->player, &data->map_pars);
+		buttons_w(&data->player, &data->map_pars);
 	if (keycode == 65307)
-	exit(1);
+	{
+		mlx_destroy_window(data->mlx_ptr, data->win_ptr);
+		mlx_clear_window(data->mlx_ptr, data->win_ptr);
+		exit(1);
+	}
 	if (keycode == 65361) // fleche guache
 	{
 		double oldDirX = data->player.pdirx;
