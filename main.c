@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:26:45 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/18 17:48:36 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/18 18:28:36 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -214,6 +214,7 @@ int	main(int ac, char **av)
 		return (1);
 	}
 	set_player_direction(&data.player, map.position);
+	split_win(&data);
 	drawRays2D(&data);
 	mlx_hook(data.win_ptr, 2, 1L << 0, key_press, &data);
 	mlx_loop_hook(data.mlx_ptr, &render, &data);

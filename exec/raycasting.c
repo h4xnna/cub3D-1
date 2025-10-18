@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/08 13:51:22 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/18 14:49:13 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/18 18:28:04 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,9 +195,9 @@ void drawRays2D(t_data *data )
 		while(drawStart <= drawEnd)
 		{
 			if (side == 0)
-				mlx_pixel_put(data->mlx_ptr, data->win_ptr, x, drawStart, 0x00FF00);
+				mlx_pixel_put(data->mlx_ptr, data->win_ptr, x, drawStart, 0xB82010);
 			else
-				mlx_pixel_put(data->mlx_ptr, data->win_ptr, x, drawStart, 0x00FF00 / 3);
+				mlx_pixel_put(data->mlx_ptr, data->win_ptr, x, drawStart, 0x87180C);
 			drawStart++;
 		}
 		x++;

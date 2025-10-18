@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/18 16:51:35 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/18 17:55:35 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/18 18:04:03 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,30 +44,34 @@ void set_player_direction(t_player *player, char direction)
     }
 }
 
-// int    rgb_to_hex_int(char *color)
-// {
-//     int        rgb[3];
-//     char    **rgb_tab;
+int rgb_to_hex_int(int *rgb)
+{
+    if (!rgb)
+        error_message("RGB pointer is NULL.");
 
-//     rgb_tab = ft_split(color, ',');
-//     if (!rgb_tab)
-//         end_game("Memory allocation failed.\n");
-//     rgb[0] = (int)ft_atol(rgb_tab[0]);
-//     rgb[1] = (int)ft_atol(rgb_tab[1]);
-//     rgb[2] = (int)ft_atol(rgb_tab[2]);
-//     return ((rgb[0] << 16) | (rgb[1] << 8) | rgb[2]);
-// }
+    int r = rgb[0];
+    int g = rgb[1];
+    int b = rgb[2];
+
+    if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
+        error_message("Valeur RGB invalide.");
+
+    return ((r << 16) | (g << 8) | b);
+}
+
 void split_win(t_data *data)
 {
 	int x;
 	int y;
+	int colors_ceiling = rgb_to_hex_int(data->map_info.ceiling);
+	int colors_floor = rgb_to_hex_int(data->map_info.floor);
 	y = 0;
 	while (y < HEIGHT / 2)
 	{
 		x = 0;
 		while (x < WIDTH)
 		{
-			mlx_pixel_put(data->mlx_ptr, data->win_ptr, x, y, rgb_to_hex_int(data->map_info->));
+			mlx_pixel_put(data->mlx_ptr, data->win_ptr, x, y, colors_ceiling);
 			x++;
 		}
 		y++;
@@ -77,7 +81,7 @@ void split_win(t_data *data)
 		x = 0;
 		while (x < WIDTH)
 		{
-			mlx_pixel_put(data->mlx_ptr, data->win_ptr, x, y, TEAL);
+			mlx_pixel_put(data->mlx_ptr, data->win_ptr, x, y, colors_floor);
 			x++;
 		}
 		y++;
