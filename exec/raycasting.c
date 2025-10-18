@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/08 13:51:22 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/16 12:29:38 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/10/18 14:49:13 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,12 +104,13 @@ void drawRays2D(t_data *data )
 
 	int hit;
 	int side;
+	int x = 0;
 
 	int lineHeight;
 	int drawStart;
 	int drawEnd;
 
-	for(int x = 0; x <= WIDTH; x++)
+	while( x <= WIDTH)
     {
 		cameraX = 2 * x / (double)WIDTH - 1;
 		rayDirX = data->player.pdirx + data->player.planeX * cameraX;
@@ -168,10 +169,8 @@ void drawRays2D(t_data *data )
 				side = 1;
 			}
 			if (mapX >= 0 && mapY >= 0 && data->map_pars.map[mapY] && data->map_pars.map[mapY][mapX]
-				&& data->map_pars.map[mapY][mapX] == '1')
-			{	
+				&& data->map_pars.map[mapY][mapX] == '1')	
 				hit = 1;
-			}
 
 		}
 
@@ -201,8 +200,8 @@ void drawRays2D(t_data *data )
 				mlx_pixel_put(data->mlx_ptr, data->win_ptr, x, drawStart, 0x00FF00 / 3);
 			drawStart++;
 		}
+		x++;
 	}
-
 	draw_map(data);
 	draw_square(data, (data->player.px * SIZE_SQUARE),(data->player.py * SIZE_SQUARE), NOIR, SIZE_SQUARE/ 3);
 }
