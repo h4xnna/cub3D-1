@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:26:45 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/19 14:39:39 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/10/19 15:54:53 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,7 +236,7 @@ int	main(int ac, char **av)
 	data.win = *win; // copie la structure
 	free(win);       // libère le pointeur temporaire alloué dans init_win()
 	ft_bzero(&skybox, sizeof(skybox));
-	skybox.img = mlx_xpm_file_to_image(data.win.mlx, "./textures/1.xpm", &skybox.width, &skybox.height);
+	skybox.img = mlx_xpm_file_to_image(data.win.mlx, "./textures/3.xpm", &skybox.width, &skybox.height);
 	if (!skybox.img)
 	{
 		printf("ntm\n");
@@ -265,7 +265,7 @@ int	main(int ac, char **av)
 	// 	return (1);
 	// }
 	set_player_direction(&data.player, map.position);
-	mlx_hook(data.win.win, 2, 1L << 0, key_press, &data);
+	mlx_hook(data.win.win, 3, 1L<<0, key_press, &data);
 	mlx_loop_hook(data.win.mlx, &render, &data);
 	mlx_loop(data.win.mlx);
 	return (SUCCESS);
