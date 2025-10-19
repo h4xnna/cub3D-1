@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 15:19:33 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/05 16:58:04 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/19 12:41:44 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	draw_square(t_data *data, int x, int y, int color, int square_size)
 		j = 0;
 		while (j < square_size)
 		{
-			mlx_pixel_put(data->mlx_ptr, data->win_ptr, x + j, y + i, color);
+			my_mlx_pixel_put(&data->win, x + j, y + i, color);
 			j++;
 		}
 		i++;

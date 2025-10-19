@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:26:45 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/18 18:28:36 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/19 14:11:51 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,8 +122,8 @@ int	key_press(int keycode, t_data *data)
 		buttons_w(&data->player, &data->map_pars);
 	if (keycode == 65307)
 	{
-		mlx_destroy_window(data->mlx_ptr, data->win_ptr);
-		mlx_clear_window(data->mlx_ptr, data->win_ptr);
+		mlx_destroy_window(data->win.mlx, data->win.win);
+		mlx_clear_window(data->win.mlx, data->win.win);
 		exit(1);
 	}
 	if (keycode == 65361) // fleche guache
@@ -151,15 +151,44 @@ int	key_press(int keycode, t_data *data)
 		normalize_vector(&data->player.planeX, &data->player.planeY);
 		
 	}
-	mlx_clear_window(data->mlx_ptr, data->win_ptr);
-	split_win(data);
-	drawRays2D(data);
+
 	return (0);
 }
 int render(t_data *data)
 {
+	clear_window(&data->win);
+	split_win(data);
+	drawRays2D(data);
 	(void)data;
 	return (0);
+}
+t_win    *init_win(void)
+{
+    t_win    *win;
+
+    win = (t_win *)ft_calloc(1, sizeof(t_win));
+    if (!win)
+        return (NULL);
+    win->mlx = NULL;
+    win->win = NULL;
+    win->img = NULL;
+    win->addr = NULL;
+    win->bits_per_pixel = 0;
+    win->line_length = 0;
+    win->endian = 0;
+    win->mlx = mlx_init();
+    if (!win->mlx)
+        return (NULL);
+    win->win = mlx_new_window(win->mlx, WIDTH, HEIGHT, "damn");
+    if (!win->win)
+        return (NULL);
+    win->img = mlx_new_image(win->mlx, WIDTH, HEIGHT);
+    if (!win->img)
+        return (NULL);
+    win->addr = mlx_get_data_addr(win->img, &win->bits_per_pixel,
+            &win->line_length, &win->endian);
+    mlx_put_image_to_window(win->mlx, win->win, win->img, 0, 0);
+    return (win);
 }
 
 int	main(int ac, char **av)
@@ -198,26 +227,32 @@ int	main(int ac, char **av)
 	data.player.pdiry = -1;
 	data.player.planeX = 0.66;
 	data.player.planeY = 0;
+	t_win *win = init_win();
+	if (!win)
+	{
+		error_message("Erreur initialisation fenêtre");
+		return (FAILURE);
+	}
+	data.win = *win; // copie la structure
+	free(win);       // libère le pointeur temporaire alloué dans init_win()
 	// free_info(&infos);
 	// close(fd);
 	// free_tab(map.map);
-	data.mlx_ptr = mlx_init();
-	if (!data.mlx_ptr)
-	{
-		error_message("MLX: error connecting to mlx.");
-		return (1);
-	}
-	data.win_ptr = mlx_new_window(data.mlx_ptr, WIDTH, HEIGHT, "Gros ZIZI");
-	if (!data.win_ptr)
-	{
-		error_message("GROS PIPI");
-		return (1);
-	}
+	// data.mlx_ptr = mlx_init();
+	// if (!data.mlx_ptr)
+	// {
+	// 	error_message("MLX: error connecting to mlx.");
+	// 	return (1);
+	// }
+	// data.win_ptr = mlx_new_window(data.mlx_ptr, WIDTH, HEIGHT, "Gros ZIZI");
+	// if (!data.win_ptr)
+	// {
+	// 	error_message("GROS PIPI");
+	// 	return (1);
+	// }
 	set_player_direction(&data.player, map.position);
-	split_win(&data);
-	drawRays2D(&data);
-	mlx_hook(data.win_ptr, 2, 1L << 0, key_press, &data);
-	mlx_loop_hook(data.mlx_ptr, &render, &data);
-	mlx_loop(data.mlx_ptr);
+	mlx_hook(data.win.win, 2, 1L << 0, key_press, &data);
+	mlx_loop_hook(data.win.mlx, &render, &data);
+	mlx_loop(data.win.mlx);
 	return (SUCCESS);
 }

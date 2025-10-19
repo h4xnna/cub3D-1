@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/18 16:51:35 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/18 18:04:03 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/19 14:09:05 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,13 +65,14 @@ void split_win(t_data *data)
 	int y;
 	int colors_ceiling = rgb_to_hex_int(data->map_info.ceiling);
 	int colors_floor = rgb_to_hex_int(data->map_info.floor);
+
 	y = 0;
 	while (y < HEIGHT / 2)
 	{
 		x = 0;
 		while (x < WIDTH)
 		{
-			mlx_pixel_put(data->mlx_ptr, data->win_ptr, x, y, colors_ceiling);
+			my_mlx_pixel_put(&data->win, x, y, colors_ceiling);
 			x++;
 		}
 		y++;
@@ -81,9 +82,29 @@ void split_win(t_data *data)
 		x = 0;
 		while (x < WIDTH)
 		{
-			mlx_pixel_put(data->mlx_ptr, data->win_ptr, x, y, colors_floor);
+			my_mlx_pixel_put(&data->win, x, y, colors_floor);
 			x++;
 		}
 		y++;
 	}
+    mlx_put_image_to_window(data->win.mlx, data->win.win, data->win.img, 0, 0);
+
+}
+
+void	my_mlx_pixel_put(t_win *win, int x, int y, int color)
+{
+	char	*dst;
+
+	if (!win || !win->addr)
+		return ; 
+
+	if (x < 0 || y < 0 || x >= WIDTH || y >= HEIGHT)
+		return ; 
+
+	dst = win->addr + (y * win->line_length + x * (win->bits_per_pixel / 8));
+	*(unsigned int *)dst = color;
+}
+void    clear_window(t_win *win)
+{
+    ft_bzero(win->addr, WIDTH * HEIGHT * (win->bits_per_pixel / 8));
 }

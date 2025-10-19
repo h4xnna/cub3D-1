@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/18 17:00:03 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/19 14:15:12 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,14 +80,49 @@ typedef struct s_map_info
 	int			count_info;
 }				t_map_info;
 
+typedef struct s_win
+{
+	void *mlx;
+	void *win;
+	void *img;
+	char *addr;
+	int bits_per_pixel;
+	int line_length;
+	int endian;
+
+}	t_win;
+
+
+typedef struct s_raycast
+{
+	
+	double cameraX;
+	double rayDirX;
+	double rayDirY;
+	int mapX;
+	int mapY;
+	double sideDistX;
+	double sideDistY;
+	double deltaDistX;
+	double deltaDistY;
+	double perpWallDist;
+	int stepX;
+	int stepY;
+	int hit;
+	int side;
+	int lineHeight;
+	int drawStart;
+	int drawEnd;
+}	t_raycast;
+
 typedef struct s_data
 {
-	void		*mlx_ptr;
-	void		*win_ptr;
 	t_map_pars	map_pars;
 	t_info_pars	info_pars;
 	t_map_info	map_info;
 	t_player	player;
+	t_win		win;
+	t_raycast	raycast;
 
 }				t_data;
 
@@ -152,6 +187,8 @@ void			draw_map(t_data *data);
 //player_position
 void set_player_direction(t_player *player, char direction);
 void split_win(t_data *data);
+void    my_mlx_pixel_put(t_win *win, int x, int y, int color);
+void    clear_window(t_win *win);
 
 
 // struct pars : line split etc..
