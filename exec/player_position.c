@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   player_position.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
+/*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/18 16:51:35 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/19 14:09:05 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/19 14:42:37 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,8 @@ int rgb_to_hex_int(int *rgb)
 
 void split_win(t_data *data)
 {
-	int x;
-	int y;
-	int colors_ceiling = rgb_to_hex_int(data->map_info.ceiling);
-	int colors_floor = rgb_to_hex_int(data->map_info.floor);
+    int x;
+    int y;
 
 	y = 0;
 	while (y < HEIGHT / 2)
@@ -72,7 +70,7 @@ void split_win(t_data *data)
 		x = 0;
 		while (x < WIDTH)
 		{
-			my_mlx_pixel_put(&data->win, x, y, colors_ceiling);
+			my_mlx_pixel_put(&data->win, x, y, data->ceiling);
 			x++;
 		}
 		y++;
@@ -82,7 +80,7 @@ void split_win(t_data *data)
 		x = 0;
 		while (x < WIDTH)
 		{
-			my_mlx_pixel_put(&data->win, x, y, colors_floor);
+			my_mlx_pixel_put(&data->win, x, y, data->floor);
 			x++;
 		}
 		y++;

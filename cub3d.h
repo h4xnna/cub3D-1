@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
+/*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/19 14:15:12 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/19 14:41:18 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,16 @@ typedef struct s_win
 
 }	t_win;
 
+typedef struct s_texture
+{
+	void *img;
+	void *addr;
+	int bits_per_pixel;
+	int line_length;
+	int endian;
+	int width;
+	int height;
+}	t_texture;
 
 typedef struct s_raycast
 {
@@ -123,6 +133,9 @@ typedef struct s_data
 	t_player	player;
 	t_win		win;
 	t_raycast	raycast;
+	t_texture	skybox;
+	int ceiling;
+	int floor;
 
 }				t_data;
 
@@ -189,6 +202,8 @@ void set_player_direction(t_player *player, char direction);
 void split_win(t_data *data);
 void    my_mlx_pixel_put(t_win *win, int x, int y, int color);
 void    clear_window(t_win *win);
+void drawSkybox(t_data *data);
+int rgb_to_hex_int(int *rgb);
 
 
 // struct pars : line split etc..

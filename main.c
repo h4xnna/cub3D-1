@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
+/*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:26:45 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/19 14:11:51 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/19 14:39:39 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,6 @@ int	init_structs(t_map_pars *map, t_map_info *infos, t_info_pars *pars, int *fd,
 	return (0);
 }
 
-// Normalisation d'un vecteur 2D
 void normalize_vector(double *x, double *y)
 {
     double length = sqrt((*x) * (*x) + (*y) * (*y));
@@ -157,7 +156,7 @@ int	key_press(int keycode, t_data *data)
 int render(t_data *data)
 {
 	clear_window(&data->win);
-	split_win(data);
+	drawSkybox(data);
 	drawRays2D(data);
 	(void)data;
 	return (0);
@@ -198,6 +197,7 @@ int	main(int ac, char **av)
 	t_info_pars	pars;
 	t_map_pars	map;
 	t_data		data;
+	t_texture   skybox;
 
 	if (init_structs(&map, &infos, &pars, &fd, &data) || checks_args(ac, av)
 		|| check_fd(&fd, av))
@@ -235,6 +235,20 @@ int	main(int ac, char **av)
 	}
 	data.win = *win; // copie la structure
 	free(win);       // libère le pointeur temporaire alloué dans init_win()
+	ft_bzero(&skybox, sizeof(skybox));
+	skybox.img = mlx_xpm_file_to_image(data.win.mlx, "./textures/1.xpm", &skybox.width, &skybox.height);
+	if (!skybox.img)
+	{
+		printf("ntm\n");
+		return (1);
+	}
+	skybox.addr = mlx_get_data_addr(skybox.img, &skybox.bits_per_pixel,
+			&skybox.line_length, &skybox.endian);
+	data.skybox = skybox;
+
+	data.ceiling = rgb_to_hex_int(data.map_info.ceiling);
+	data.floor = rgb_to_hex_int(data.map_info.floor);
+
 	// free_info(&infos);
 	// close(fd);
 	// free_tab(map.map);
