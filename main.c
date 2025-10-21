@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:26:45 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/19 15:54:53 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/10/21 22:08:57 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,30 @@ void normalize_vector(double *x, double *y)
     }
 }
 
+void move_camera_left(t_data *data)
+{
+	double oldDirX = data->player.pdirx;
+	data->player.pdirx = data->player.pdirx * cos(-rotSpeed) - data->player.pdiry * sin(-rotSpeed);
+	data->player.pdiry = oldDirX * sin(-rotSpeed) + data->player.pdiry * cos(-rotSpeed);
+	double oldPlaneX = data->player.planeX;
+	data->player.planeX = data->player.planeX * cos(-rotSpeed) - data->player.planeY * sin(-rotSpeed);
+	data->player.planeY = oldPlaneX * sin(-rotSpeed) + data->player.planeY * cos(-rotSpeed);
+	normalize_vector(&data->player.pdirx, &data->player.pdiry);
+	normalize_vector(&data->player.planeX, &data->player.planeY);
+}
+
+void move_camera_right(t_data *data)
+{
+	double oldDirX = data->player.pdirx;
+	data->player.pdirx = data->player.pdirx * cos(rotSpeed) - data->player.pdiry * sin(rotSpeed);
+	data->player.pdiry = oldDirX * sin(rotSpeed) + data->player.pdiry * cos(rotSpeed);
+	double oldPlaneX = data->player.planeX;
+	data->player.planeX = data->player.planeX * cos(rotSpeed) - data->player.planeY * sin(rotSpeed);
+	data->player.planeY = oldPlaneX * sin(rotSpeed) + data->player.planeY * cos(rotSpeed);
+	normalize_vector(&data->player.pdirx, &data->player.pdiry);
+	normalize_vector(&data->player.planeX, &data->player.planeY);
+}
+
 int	key_press(int keycode, t_data *data)
 {
 	if (keycode == A_KEY)
@@ -126,30 +150,9 @@ int	key_press(int keycode, t_data *data)
 		exit(1);
 	}
 	if (keycode == 65361) // fleche guache
-	{
-		double oldDirX = data->player.pdirx;
-		data->player.pdirx = data->player.pdirx * cos(-rotSpeed) - data->player.pdiry * sin(-rotSpeed);
-		data->player.pdiry = oldDirX * sin(-rotSpeed) + data->player.pdiry * cos(-rotSpeed);
-		double oldPlaneX = data->player.planeX;
-		data->player.planeX = data->player.planeX * cos(-rotSpeed) - data->player.planeY * sin(-rotSpeed);
-		data->player.planeY = oldPlaneX * sin(-rotSpeed) + data->player.planeY * cos(-rotSpeed);
-		normalize_vector(&data->player.pdirx, &data->player.pdiry);
-		normalize_vector(&data->player.planeX, &data->player.planeY);
-		
-	}
-	
+		move_camera_left(data);
 	if (keycode == 65363) // fleche droite
-	{
-		double oldDirX = data->player.pdirx;
-		data->player.pdirx = data->player.pdirx * cos(rotSpeed) - data->player.pdiry * sin(rotSpeed);
-		data->player.pdiry = oldDirX * sin(rotSpeed) + data->player.pdiry * cos(rotSpeed);
-		double oldPlaneX = data->player.planeX;
-		data->player.planeX = data->player.planeX * cos(rotSpeed) - data->player.planeY * sin(rotSpeed);
-		data->player.planeY = oldPlaneX * sin(rotSpeed) + data->player.planeY * cos(rotSpeed);
-		normalize_vector(&data->player.pdirx, &data->player.pdiry);
-		normalize_vector(&data->player.planeX, &data->player.planeY);
-		
-	}
+		move_camera_right(data);
 
 	return (0);
 }
@@ -158,7 +161,7 @@ int render(t_data *data)
 	clear_window(&data->win);
 	drawSkybox(data);
 	drawRays2D(data);
-	(void)data;
+	mlx_mouse_move(data->win.mlx, data->win.win, WIDTH / 2, HEIGHT / 2);
 	return (0);
 }
 t_win    *init_win(void)
@@ -188,6 +191,16 @@ t_win    *init_win(void)
             &win->line_length, &win->endian);
     mlx_put_image_to_window(win->mlx, win->win, win->img, 0, 0);
     return (win);
+}
+
+int mouse_info(int x, int y, t_data *data)
+{
+	(void)y;
+	if (x > WIDTH / 2)
+		move_camera_right(data);
+	else if (x < WIDTH / 2)
+		move_camera_left(data);
+	return (0);
 }
 
 int	main(int ac, char **av)
@@ -265,7 +278,10 @@ int	main(int ac, char **av)
 	// 	return (1);
 	// }
 	set_player_direction(&data.player, map.position);
-	mlx_hook(data.win.win, 3, 1L<<0, key_press, &data);
+	mlx_mouse_hide(data.win.mlx, data.win.win);
+	mlx_mouse_move(data.win.mlx, data.win.win, WIDTH / 2, HEIGHT / 2);
+	mlx_hook(data.win.win, 2, 1L<<0, key_press, &data);
+	mlx_hook(data.win.win, 6, 1L << 6, &mouse_info, &data);
 	mlx_loop_hook(data.win.mlx, &render, &data);
 	mlx_loop(data.win.mlx);
 	return (SUCCESS);

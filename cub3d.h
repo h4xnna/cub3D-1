@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/19 15:39:17 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/10/21 21:33:34 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@
 # define ROUGE 0xFF0000
 # define TEAL 0x008080
 # define VERT 0x006400
+# define MINIMAP_RADIUS 3
 
 typedef struct s_info_pars
 {
