@@ -163,6 +163,33 @@ void drawRays2D(t_data *data )
 				// my_mlx_pixel_put(&data->win, x, data->raycast.drawStart, 0xB82010);
 			data->raycast.drawStart++;
 		}
+		data->raycast.drawEnd += data->raycast.lineHeight;
+		if(data->raycast.drawEnd >= HEIGHT)
+			data->raycast.drawEnd = HEIGHT - 1;
+		while(data->raycast.drawStart <= data->raycast.drawEnd)
+		{
+			int color;
+			if (data->raycast.side == 0)
+				color = apply_shading(data->raycast.sideDistX / 3, 0xD42613);
+			else
+				color = apply_shading(data->raycast.sideDistY / 3, 0xF02B16);
+
+			int color_r = (color >> 16) & 0xFF;
+			int color_g = (color >> 8) & 0xFF;
+			int color_b = color & 0xFF;
+
+			double opacity = 0.6;
+			// Darkened floor color
+			int floor_r_d = (int)(data->map_info.floor[0] * (1.0 - opacity) + color_r * opacity);
+			int floor_g_d = (int)(data->map_info.floor[1] * (1.0 - opacity) + color_g * opacity);
+			int floor_b_d = (int)(data->map_info.floor[2] * (1.0 - opacity) + color_b * opacity);
+
+			int final_color = (floor_r_d << 16) | (floor_g_d << 8) | floor_b_d;
+			(void)final_color;
+
+			my_mlx_pixel_put(&data->win, x, data->raycast.drawStart, final_color);
+			data->raycast.drawStart++;
+		}
 		x++;
 	}
 	draw_map(data);

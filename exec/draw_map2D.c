@@ -67,7 +67,8 @@ void draw_map(t_data *data)
                 int map_y = py + yCases;
                 int map_x = px + xCases;
 
-                if (map_y >= 0 && map_x >= 0 &&
+                if ((map_y >= 0 && map_y < data->map_pars.height) &&
+                    map_x >= 0 &&
                     data->map_pars.map[map_y] &&
                     data->map_pars.map[map_y][map_x])
                 {
@@ -79,7 +80,7 @@ void draw_map(t_data *data)
                     else if (tile == '0')
                         color = BLANC;
                     else
-                        color = 0x444444;
+                        color = 0x000000;
 
                     int draw_x = (xCases + MINIMAP_RADIUS) * SIZE_SQUARE;
                     int draw_y = (yCases + MINIMAP_RADIUS) * SIZE_SQUARE;

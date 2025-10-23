@@ -43,26 +43,48 @@ void drawSkybox(t_data *data)
 			my_mlx_pixel_put(&data->win, x, y, get_texture_pixel(&data->skybox, tex_x, tex_y));
 		}
 	}
-	while (y < HEIGHT)
-	{
-		double factor = (double)(y - start_y) / (HEIGHT - start_y);
-		if (factor > 1.0) factor = 1.0;
-		if (factor < 0.0) factor = 0.0;
-	
-		int r = (data->floor >> 16) & 0xFF;
-		int g = (data->floor >> 8) & 0xFF;
-		int b = data->floor & 0xFF;
+	int floor_r = (data->floor >> 16) & 0xFF;
+	int floor_g = (data->floor >> 8) & 0xFF;
+	int floor_b = data->floor & 0xFF;
 
-		int shaded_r = (int)(r * factor);
-		int shaded_g = (int)(g * factor);
-		int shaded_b = (int)(b * factor);
+while (y < HEIGHT)
+{
+	tex_y = (y * skybox_height) / HEIGHT;
 
-		int shaded_color = (shaded_r << 16) | (shaded_g << 8) | shaded_b;
+    double dark_factor = 0.0;
+    if (y >= HEIGHT / 2)
+        dark_factor = (double)(HEIGHT - y) / (HEIGHT / 2);
+    if (dark_factor > 1.0) dark_factor = 1.0;
 
-		for (x = 0; x < WIDTH; x++)
-		{		
-			my_mlx_pixel_put(&data->win, x, y, shaded_color);
-		}
-		y++;
-	}
+    // Darkened floor color
+    int floor_r_d = (int)(floor_r * (1.0 - dark_factor));
+    int floor_g_d = (int)(floor_g * (1.0 - dark_factor));
+    int floor_b_d = (int)(floor_b * (1.0 - dark_factor));
+
+    for (x = 0; x < WIDTH; x++)
+    {
+        // Get texture color at this pixel
+
+		tex_x = (offset_x + x) % skybox_width;
+
+        int tex_color = get_texture_pixel(&data->skybox, tex_x, tex_y); // implement this
+        int tex_r = (tex_color >> 16) & 0xFF;
+        int tex_g = (tex_color >> 8) & 0xFF;
+        int tex_b = tex_color & 0xFF;
+
+        // Texture opacity (0.0 = fully transparent, 1.0 = fully opaque)
+        double tex_opacity = 0.2; // 30% texture
+
+        // Blend texture over floor
+        int final_r = (int)(floor_r_d * (1.0 - tex_opacity) + tex_r * tex_opacity);
+        int final_g = (int)(floor_g_d * (1.0 - tex_opacity) + tex_g * tex_opacity);
+        int final_b = (int)(floor_b_d * (1.0 - tex_opacity) + tex_b * tex_opacity);
+
+        int final_color = (final_r << 16) | (final_g << 8) | final_b;
+
+        my_mlx_pixel_put(&data->win, x, y, final_color);
+    }
+
+    y++;
+}
 }

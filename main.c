@@ -272,6 +272,7 @@ int	main(int ac, char **av)
 	write(1, "\n", 1);
 	x_to_0(&map);
 	print_char(map.map);
+	map.height = len_tab(map.map);
 	data.map_pars = map;
 	data.info_pars = pars;
 	data.map_info = infos;
@@ -291,7 +292,7 @@ int	main(int ac, char **av)
 	data.win = *win; // copie la structure
 	free(win);       // libère le pointeur temporaire alloué dans init_win()
 	ft_bzero(&skybox, sizeof(skybox));
-	skybox.img = mlx_xpm_file_to_image(data.win.mlx, "./textures/2.xpm", &skybox.width, &skybox.height);
+	skybox.img = mlx_xpm_file_to_image(data.win.mlx, "./textures/3.xpm", &skybox.width, &skybox.height);
 	if (!skybox.img)
 	{
 		printf("ntm\n");
@@ -304,8 +305,10 @@ int	main(int ac, char **av)
 	data.ceiling = rgb_to_hex_int(data.map_info.ceiling);
 	data.floor = rgb_to_hex_int(data.map_info.floor);
 
+
 	data.moving_left = false;
 	data.moving_right = false;
+
 
 	// free_info(&infos);
 	// close(fd);
@@ -325,10 +328,10 @@ int	main(int ac, char **av)
 	set_player_direction(&data.player, map.position);
 	mlx_mouse_hide(data.win.mlx, data.win.win);
 	mlx_mouse_move(data.win.mlx, data.win.win, WIDTH / 2, HEIGHT / 2);
-	mlx_hook(data.win.win, 2, 1L<<0, key_press, &data);
-	mlx_hook(data.win.win, 3, 1L<<1, key_release, &data);
-	mlx_hook(data.win.win, 6, 1L << 6, &mouse_info, &data);
-	mlx_loop_hook(data.win.mlx, &render, &data);
+	mlx_hook(data.win.win, 2, 1L<<0, (int (*)())key_press, &data);
+	mlx_hook(data.win.win, 3, 1L<<1, (int (*)())key_release, &data);
+	mlx_hook(data.win.win, 6, 1L << 6, (int (*)())mouse_info, &data);
+	mlx_loop_hook(data.win.mlx, (int (*)())render, &data);
 	mlx_loop(data.win.mlx);
 	return (SUCCESS);
 }

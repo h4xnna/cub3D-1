@@ -19,7 +19,7 @@ CYAN_SHOCK      = "\033[38;5;51m"
 
 NAME	= cube
 CC		= cc 
-CFLAGS	= -Wall -Werror -Wextra -g3
+CFLAGS	= -Wall -Werror -Wextra -Wno-error=cast-function-type -g3
 
 SRCS	=	gnl/get_next_line.c\
 			main.c \
@@ -62,15 +62,7 @@ all: ${NAME}
 %.o: %.c 
 	@$(CC) $(CFLAGS) -I. -c $< -o $@ $(INCL)
 
-$(MLX_PATH) : 
-	@if [ ! -d $(MLX_PATH) ]; then git clone https://github.com/42Paris/minilibx-linux.git; fi;
-
-$(MLX_A) :
-	@echo $(LIGHT_CYAN)$(BOLD)"\nCompiling MiniLibX..."
-	@make -sC minilibx-linux -j
-	@echo $(NEON_GREEN)$(BOLD)"Library Compiled. ✔\n"
-
-${NAME}: $(MLX_PATH) $(MLX_A) ${OBJS} $(LIBFT) $(HEADERS)
+${NAME}: ${OBJS} $(LIBFT) $(HEADERS)
 
 	@echo $(LIGHT_GREEN) "Compilation..."$(BOLD)
 	@${CC} ${CFLAGS} ${OBJS} $(LIBFT) $(MLX_A) $(MLX_FLAGS) -o ${NAME}
@@ -91,7 +83,6 @@ leak : all
 fclean: clean
 	@rm -rf ${NAME}
 	@rm -rf $(LIBFT_NAME)
-	@rm -rf $(MLX_PATH)
 	@echo $(BROWN)fclean reussi
 
 re: fclean all
