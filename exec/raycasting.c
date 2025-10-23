@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/08 13:51:22 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/21 21:35:01 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/10/23 13:43:54 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,10 +156,10 @@ void drawRays2D(t_data *data )
 		while(data->raycast.drawStart <= data->raycast.drawEnd)
 		{
 			if (data->raycast.side == 0)
-				my_mlx_pixel_put(&data->win, x, data->raycast.drawStart, apply_shading(data->raycast.sideDistX / 2, 0xD42613));
+				my_mlx_pixel_put(&data->win, x, data->raycast.drawStart, apply_shading(data->raycast.sideDistX / 3, 0xD42613));
 				// my_mlx_pixel_put(&data->win, x, data->raycast.drawStart, 0xF02B16);
 			else
-				my_mlx_pixel_put(&data->win, x, data->raycast.drawStart, apply_shading(data->raycast.sideDistY / 2, 0xF02B16));
+				my_mlx_pixel_put(&data->win, x, data->raycast.drawStart, apply_shading(data->raycast.sideDistY / 3, 0xF02B16));
 				// my_mlx_pixel_put(&data->win, x, data->raycast.drawStart, 0xB82010);
 			data->raycast.drawStart++;
 		}

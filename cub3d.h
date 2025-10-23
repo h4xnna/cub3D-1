@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/21 21:33:34 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/10/23 14:31:01 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,12 @@ typedef struct s_data
 	t_texture	skybox;
 	int ceiling;
 	int floor;
+	bool moving_right;
+	bool moving_left;
+	bool up;
+	bool down;
+	bool left;
+	bool right;
 
 }				t_data;
 

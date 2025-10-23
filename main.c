@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:26:45 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/21 22:08:57 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/10/23 14:21:00 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,27 +133,44 @@ void move_camera_right(t_data *data)
 	normalize_vector(&data->player.planeX, &data->player.planeY);
 }
 
+int	key_release(int keycode, t_data *data)
+{
+	if (keycode == 65363)
+		data->moving_right = false;
+	if (keycode == 65361)
+		data->moving_left = false;
+	if (keycode == A_KEY)
+		data->left = false;
+	if (keycode == D_KEY)
+		data->right = false;
+	if(keycode == S_KEY)
+		data->down = false;
+	if(keycode == W_KEY)
+		data->up = false;
+
+	return(SUCCESS);
+}
+
 int	key_press(int keycode, t_data *data)
 {
 	if (keycode == A_KEY)
-		buttons_a(&data->player, &data->map_pars);
+		data->left = true;
 	if (keycode == D_KEY)
-		buttons_d(&data->player, &data->map_pars);
+		data->right = true;
 	if(keycode == S_KEY)
-		buttons_s(&data->player, &data->map_pars);
+		data->down = true;
 	if(keycode == W_KEY)
-		buttons_w(&data->player, &data->map_pars);
+		data->up = true;
 	if (keycode == 65307)
 	{
 		mlx_destroy_window(data->win.mlx, data->win.win);
 		mlx_clear_window(data->win.mlx, data->win.win);
 		exit(1);
 	}
-	if (keycode == 65361) // fleche guache
-		move_camera_left(data);
-	if (keycode == 65363) // fleche droite
-		move_camera_right(data);
-
+	if (keycode == 65363)
+		data->moving_right = true;
+	if (keycode == 65361)
+		data->moving_left = true;
 	return (0);
 }
 int render(t_data *data)
@@ -161,6 +178,18 @@ int render(t_data *data)
 	clear_window(&data->win);
 	drawSkybox(data);
 	drawRays2D(data);
+	if (data->moving_left) // fleche guache
+		move_camera_left(data);
+	else if (data->moving_right) // fleche droite
+		move_camera_right(data);
+	if (data->left)
+		buttons_a(&data->player, &data->map_pars);
+	if (data->right)
+		buttons_d(&data->player, &data->map_pars);
+	if(data->down)
+		buttons_s(&data->player, &data->map_pars);
+	if(data->up)
+		buttons_w(&data->player, &data->map_pars);
 	mlx_mouse_move(data->win.mlx, data->win.win, WIDTH / 2, HEIGHT / 2);
 	return (0);
 }
@@ -197,9 +226,22 @@ int mouse_info(int x, int y, t_data *data)
 {
 	(void)y;
 	if (x > WIDTH / 2)
-		move_camera_right(data);
+	{
+		data->moving_right = true;
+		if (data->moving_left)
+			data->moving_left = false;
+	}
 	else if (x < WIDTH / 2)
-		move_camera_left(data);
+	{
+		data->moving_left = true;
+		if (data->moving_right)
+			data->moving_right = false;
+	}
+	else
+	{
+		data->moving_left = false;
+		data->moving_right = false;
+	}
 	return (0);
 }
 
@@ -249,7 +291,7 @@ int	main(int ac, char **av)
 	data.win = *win; // copie la structure
 	free(win);       // libère le pointeur temporaire alloué dans init_win()
 	ft_bzero(&skybox, sizeof(skybox));
-	skybox.img = mlx_xpm_file_to_image(data.win.mlx, "./textures/3.xpm", &skybox.width, &skybox.height);
+	skybox.img = mlx_xpm_file_to_image(data.win.mlx, "./textures/2.xpm", &skybox.width, &skybox.height);
 	if (!skybox.img)
 	{
 		printf("ntm\n");
@@ -261,6 +303,9 @@ int	main(int ac, char **av)
 
 	data.ceiling = rgb_to_hex_int(data.map_info.ceiling);
 	data.floor = rgb_to_hex_int(data.map_info.floor);
+
+	data.moving_left = false;
+	data.moving_right = false;
 
 	// free_info(&infos);
 	// close(fd);
@@ -281,6 +326,7 @@ int	main(int ac, char **av)
 	mlx_mouse_hide(data.win.mlx, data.win.win);
 	mlx_mouse_move(data.win.mlx, data.win.win, WIDTH / 2, HEIGHT / 2);
 	mlx_hook(data.win.win, 2, 1L<<0, key_press, &data);
+	mlx_hook(data.win.win, 3, 1L<<1, key_release, &data);
 	mlx_hook(data.win.win, 6, 1L << 6, &mouse_info, &data);
 	mlx_loop_hook(data.win.mlx, &render, &data);
 	mlx_loop(data.win.mlx);
