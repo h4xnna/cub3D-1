@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/25 14:25:34 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/25 15:41:18 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,13 @@ typedef struct s_map_pars
 
 typedef struct s_player // position
 {
-	float pa;
-	double pdirx;
-	double pdiry;
-	double px;
-	double py;
-	double planeX;
-	double planeY;
-	t_map_pars *map;
+	float	pa;
+	double	pdirx;
+	double	pdiry;
+	double	px;
+	double	py;
+	double	planex;
+	double	planey;
 }				t_player;
 
 typedef struct s_map_info
@@ -94,23 +93,23 @@ typedef struct s_win
 
 typedef struct s_raycast
 {
-	double		cameraX;
-	double		rayDirX;
-	double		rayDirY;
-	int			mapX;
-	int			mapY;
-	double		sideDistX;
-	double		sideDistY;
-	double		deltaDistX;
-	double		deltaDistY;
-	double		perpWallDist;
-	int			stepX;
-	int			stepY;
+	double		camerax;
+	double		raydirx;
+	double		raydiry;
+	int			mapx;
+	int			mapy;
+	double		sidedistx;
+	double		side_dist_y;
+	double		delta_dist_x;
+	double		delta_dist_y;
+	double		perpwall_dist;
+	int			stepx;
+	int			stepy;
 	int			hit;
 	int			side;
-	int			lineHeight;
-	int			drawStart;
-	int			drawEnd;
+	int			line_height;
+	int			draw_start;
+	int			draw_end;
 }				t_raycast;
 
 typedef struct s_img

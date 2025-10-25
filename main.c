@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:26:45 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/25 14:20:57 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/25 15:34:53 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,11 +149,11 @@ int	key_press(int keycode, t_data *data)
 		double oldDirX = data->player.pdirx;
 		data->player.pdirx = data->player.pdirx * cos(-rotSpeed) - data->player.pdiry * sin(-rotSpeed);
 		data->player.pdiry = oldDirX * sin(-rotSpeed) + data->player.pdiry * cos(-rotSpeed);
-		double oldPlaneX = data->player.planeX;
-		data->player.planeX = data->player.planeX * cos(-rotSpeed) - data->player.planeY * sin(-rotSpeed);
-		data->player.planeY = oldPlaneX * sin(-rotSpeed) + data->player.planeY * cos(-rotSpeed);
+		double oldplanex = data->player.planex;
+		data->player.planex = data->player.planex * cos(-rotSpeed) - data->player.planey * sin(-rotSpeed);
+		data->player.planey = oldplanex * sin(-rotSpeed) + data->player.planey * cos(-rotSpeed);
 		normalize_vector(&data->player.pdirx, &data->player.pdiry);
-		normalize_vector(&data->player.planeX, &data->player.planeY);
+		normalize_vector(&data->player.planex, &data->player.planey);
 		
 	}
 	
@@ -162,11 +162,11 @@ int	key_press(int keycode, t_data *data)
 		double oldDirX = data->player.pdirx;
 		data->player.pdirx = data->player.pdirx * cos(rotSpeed) - data->player.pdiry * sin(rotSpeed);
 		data->player.pdiry = oldDirX * sin(rotSpeed) + data->player.pdiry * cos(rotSpeed);
-		double oldPlaneX = data->player.planeX;
-		data->player.planeX = data->player.planeX * cos(rotSpeed) - data->player.planeY * sin(rotSpeed);
-		data->player.planeY = oldPlaneX * sin(rotSpeed) + data->player.planeY * cos(rotSpeed);
+		double oldplanex = data->player.planex;
+		data->player.planex = data->player.planex * cos(rotSpeed) - data->player.planey * sin(rotSpeed);
+		data->player.planey = oldplanex * sin(rotSpeed) + data->player.planey * cos(rotSpeed);
 		normalize_vector(&data->player.pdirx, &data->player.pdiry);
-		normalize_vector(&data->player.planeX, &data->player.planeY);
+		normalize_vector(&data->player.planex, &data->player.planey);
 		
 	}
 	return (0);
@@ -244,8 +244,8 @@ int	main(int ac, char **av)
 	data.player.pa = PI / 2;
 	data.player.pdirx = 0;
 	data.player.pdiry = -1;
-	data.player.planeX = 0.66;
-	data.player.planeY = 0;
+	data.player.planex = 0.66;
+	data.player.planey = 0;
 	t_win *win = init_win();
 	if (!win)
 	{
