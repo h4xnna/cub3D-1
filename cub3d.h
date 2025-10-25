@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/19 14:15:12 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/25 14:25:34 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,38 +82,56 @@ typedef struct s_map_info
 
 typedef struct s_win
 {
-	void *mlx;
-	void *win;
-	void *img;
-	char *addr;
-	int bits_per_pixel;
-	int line_length;
-	int endian;
+	void		*mlx;
+	void		*win;
+	void		*img;
+	char		*addr;
+	int			bits_per_pixel;
+	int			line_length;
+	int			endian;
 
-}	t_win;
-
+}				t_win;
 
 typedef struct s_raycast
 {
-	
-	double cameraX;
-	double rayDirX;
-	double rayDirY;
-	int mapX;
-	int mapY;
-	double sideDistX;
-	double sideDistY;
-	double deltaDistX;
-	double deltaDistY;
-	double perpWallDist;
-	int stepX;
-	int stepY;
-	int hit;
-	int side;
-	int lineHeight;
-	int drawStart;
-	int drawEnd;
-}	t_raycast;
+	double		cameraX;
+	double		rayDirX;
+	double		rayDirY;
+	int			mapX;
+	int			mapY;
+	double		sideDistX;
+	double		sideDistY;
+	double		deltaDistX;
+	double		deltaDistY;
+	double		perpWallDist;
+	int			stepX;
+	int			stepY;
+	int			hit;
+	int			side;
+	int			lineHeight;
+	int			drawStart;
+	int			drawEnd;
+}				t_raycast;
+
+typedef struct s_img
+{
+	void		*img;
+	char		*addr;
+	int			width;
+	int			height;
+	int			bits_per_pixel;
+	int			line_length;
+	int			endian;
+	void		*mlx;
+}				t_img;
+
+typedef struct s_texture
+{
+	t_img		text_South;
+	t_img		text_North;
+	t_img		text_West;
+	t_img		text_East;
+}				t_texture;
 
 typedef struct s_data
 {
@@ -123,6 +141,8 @@ typedef struct s_data
 	t_player	player;
 	t_win		win;
 	t_raycast	raycast;
+	t_texture	texture;
+	t_img		img;
 
 }				t_data;
 
@@ -183,13 +203,15 @@ void			draw_square(t_data *data, int x, int y, int color,
 					int square_size);
 void			draw_map(t_data *data);
 
+// player_position
+void			set_player_direction(t_player *player, char direction);
+void			split_win(t_data *data);
+void			my_mlx_pixel_put(t_win *win, int x, int y, int color);
+void			clear_window(t_win *win);
 
-//player_position
-void set_player_direction(t_player *player, char direction);
-void split_win(t_data *data);
-void    my_mlx_pixel_put(t_win *win, int x, int y, int color);
-void    clear_window(t_win *win);
-
+// exec../texture
+void			load_all_textures(t_data *data);
+void			load_text(t_data *data);
 
 // struct pars : line split etc..
 // struct game : info ...

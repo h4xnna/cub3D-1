@@ -1,7 +1,8 @@
- NO          ./path_to_the_north_texture
-WE ./path_to_the_south_texture 
-SO ./path_to_the_west_texture
-EA ./path_to_the_east_texture
+NO ./texture/Grass.xpm
+SO ./texture/Grass.xpm
+WE ./texture/beach.xpm
+EA ./texture/Grass.xpm
+
 F    11,22,22
 C 	169,234,254
 

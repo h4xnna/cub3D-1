@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/18 16:51:35 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/19 14:09:05 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/25 10:14:42 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,3 +108,4 @@ void    clear_window(t_win *win)
 {
     ft_bzero(win->addr, WIDTH * HEIGHT * (win->bits_per_pixel / 8));
 }
+

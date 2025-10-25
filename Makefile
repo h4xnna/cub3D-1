@@ -33,6 +33,7 @@ SRCS	=	gnl/get_next_line.c\
 			exec/buttons.c\
 			exec/draw_map2D.c\
 			exec/raycasting.c\
+			exec/texture.c\
 			exec/player_position.c
 
 
