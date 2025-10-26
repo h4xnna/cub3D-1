@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 15:17:32 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/29 15:05:04 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/26 15:09:13 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,12 @@
 
 void	error_message(char *error)
 {
-	write(2, "Error : ", 8);
-	write(2, error, ft_strlen(error));
+	write(2, RED, sizeof(RED) - 1);
+	write(2, "🚨 ERROR : ", 12);
+	while (*error)
+		write(2, error++, 1);
 	write(2, "\n", 1);
+	write(2, RESET, sizeof(RESET) - 1);
 }
 
 int	check_infos(t_map_info *info)

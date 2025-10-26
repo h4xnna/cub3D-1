@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   info_pars4.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 12:53:12 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/03 14:13:39 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/26 17:53:11 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,26 @@ int	remplir_colors(t_info_pars *pars, t_map_info *infos)
 	}
 	return (SUCCESS);
 }
+int count_coma(char *line)
+{
+	int i = 0;
+	int j = 0;
+	int len = ft_strlen(line);
+	while(i < len)
+	{
+		if(line[i] == ',')
+			j++;
+		i++;
+	}
+	if(j != 2)	
+		return(FAILURE);
+	return(SUCCESS);
+}
+
 
 int	pars_info(t_info_pars *pars, t_map_info *infos)
-{
+{ 
+	
 	if (!pars->line_split || (len_tab(pars->line_split) != 2
 			&& pars->line_split[0]))
 		return (FAILURE);
@@ -52,6 +69,8 @@ int	pars_info(t_info_pars *pars, t_map_info *infos)
 	{
 		if (allouer_colors(pars, infos))
 			return (FAILURE);
+		if(count_coma(pars->line_split[1]))
+			return(FAILURE);
 		pars->colors = ft_split(pars->line_split[1], ',');
 		if (!pars->colors || len_tab(pars->colors) != 3)
 		{

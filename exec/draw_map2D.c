@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 15:19:33 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/19 12:41:44 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/26 14:34:39 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,3 +70,24 @@ void draw_map(t_data *data)
 	}
 }
 
+int is_wall(t_data *data, float ray_x, float ray_y)
+{
+	if (data->map_pars.map[(int)(ray_y / SIZE_SQUARE)][(int)(ray_x / SIZE_SQUARE)]
+			&& data->map_pars.map[(int)(ray_y / SIZE_SQUARE)][(int)(ray_x / SIZE_SQUARE)] == '1')
+			return (1);
+	return (0);
+}
+
+void draw_line(t_data *data)
+{
+	float ray_x = data->player.px * SIZE_SQUARE;
+	float ray_y = data->player.py * SIZE_SQUARE;
+	
+	while (!is_wall(data, ray_x, ray_y))
+	{
+		ray_x += data->raycast.raydirx;
+		ray_y += data->raycast.raydiry;
+		my_mlx_pixel_put(&data->win, ray_x, ray_y, 0xFF0000);
+	}
+	
+}

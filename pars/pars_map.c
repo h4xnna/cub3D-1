@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pars_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 15:26:04 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/02 16:41:51 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/26 16:34:10 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,16 @@ int	check_char(char *line, t_map_pars *map)
 	if (bouboule == 0)
 		return (FAILURE);
 	return (SUCCESS);
+}
+
+static void	free_splif(char **out, int i)
+{
+	while (i > 0)
+	{
+		free(out[i]);
+		i--;
+	}
+	free(out);
 }
 
 int	check_positions(t_map_pars *map, char *line)
@@ -82,7 +92,7 @@ int	add_line_to_map(t_map_pars *map, char *line)
 	new_map[i + 1] = NULL;
 	free_tab(map->map);
 	if (!new_map[i])
-		return (FAILURE);
+		return (free_splif(new_map, i), FAILURE);
 	map->map = new_map;
 	return (SUCCESS);
 }

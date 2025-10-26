@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 18:07:44 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/29 15:09:04 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/26 15:07:45 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	print_tab(int *tab)
 	i = 0;
 	if (!tab)
 	{
-		error_message("error : info");
+		error_message(" info");
 		return (1);
 	}
 	while (i < 3)

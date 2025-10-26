@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/18 16:51:35 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/25 15:34:53 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/26 16:30:15 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,67 +44,26 @@ void	set_player_direction(t_player *player, char direction)
 	}
 }
 
-int	rgb_to_hex_int(int *rgb)
+int	rgb_to_hex_int(t_data *data, int *rgb)
 {
 	int	r;
 	int	g;
 	int	b;
 
 	if (!rgb)
-		error_message("RGB pointer is NULL.");
+	{
+		error_message(" RGB pointer is NULL.");
+		clean_exit(data);
+	}
 	r = rgb[0];
 	g = rgb[1];
 	b = rgb[2];
 	if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
+	{
 		error_message("Valeur RGB invalide.");
+		clean_exit(data);
+	}
 	return ((r << 16) | (g << 8) | b);
 }
 
-void	split_win(t_data *data)
-{
-	int	x;
-	int	y;
-	int	colors_ceiling;
-	int	colors_floor;
 
-	colors_ceiling = rgb_to_hex_int(data->map_info.ceiling);
-	colors_floor = rgb_to_hex_int(data->map_info.floor);
-	y = 0;
-	while (y < HEIGHT / 2)
-	{
-		x = 0;
-		while (x < WIDTH)
-		{
-			my_mlx_pixel_put(&data->win, x, y, colors_ceiling);
-			x++;
-		}
-		y++;
-	}
-	while (y < HEIGHT)
-	{
-		x = 0;
-		while (x < WIDTH)
-		{
-			my_mlx_pixel_put(&data->win, x, y, colors_floor);
-			x++;
-		}
-		y++;
-	}
-	mlx_put_image_to_window(data->win.mlx, data->win.win, data->win.img, 0, 0);
-}
-
-void	my_mlx_pixel_put(t_win *win, int x, int y, int color)
-{
-	char	*dst;
-
-	if (!win || !win->addr)
-		return ;
-	if (x < 0 || y < 0 || x >= WIDTH || y >= HEIGHT)
-		return ;
-	dst = win->addr + (y * win->line_length + x * (win->bits_per_pixel / 8));
-	*(unsigned int *)dst = color;
-}
-void	clear_window(t_win *win)
-{
-	ft_bzero(win->addr, WIDTH * HEIGHT * (win->bits_per_pixel / 8));
-}

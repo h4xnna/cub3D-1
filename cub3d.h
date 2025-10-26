@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/25 15:41:18 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/26 17:05:06 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,10 @@
 # define NOIR 0x000000
 # define ROUGE 0xFF0000
 # define TEAL 0x008080
+# define ROTSPEED 0.05
 # define VERT 0x006400
+# define RED "\033[1;31m"
+# define RESET "\033[0m"
 
 typedef struct s_info_pars
 {
@@ -59,13 +62,13 @@ typedef struct s_map_pars
 
 typedef struct s_player // position
 {
-	float	pa;
-	double	pdirx;
-	double	pdiry;
-	double	px;
-	double	py;
-	double	planex;
-	double	planey;
+	float pa;
+	double pdirx;
+	double pdiry;
+	double px;
+	double py;
+	double planex;
+	double planey;
 }				t_player;
 
 typedef struct s_map_info
@@ -141,8 +144,6 @@ typedef struct s_data
 	t_win		win;
 	t_raycast	raycast;
 	t_texture	texture;
-	t_img		img;
-
 }				t_data;
 
 // utils_pars1
@@ -201,16 +202,44 @@ void			x_to_0(t_map_pars *map);
 void			draw_square(t_data *data, int x, int y, int color,
 					int square_size);
 void			draw_map(t_data *data);
+int				is_wall(t_data *data, float ray_x, float ray_y);
+void			draw_line(t_data *data);
 
 // player_position
 void			set_player_direction(t_player *player, char direction);
-void			split_win(t_data *data);
-void			my_mlx_pixel_put(t_win *win, int x, int y, int color);
-void			clear_window(t_win *win);
+int				rgb_to_hex_int(t_data *data, int *rgb);
 
 // exec../texture
 void			load_all_textures(t_data *data);
 void			load_text(t_data *data);
+
+// exec../ util_win
+void			split_win(t_data *data);
+void			my_mlx_pixel_put(t_win *win, int x, int y, int color);
+void			clear_window(t_win *win);
+t_win			*init_win(void);
+void			free_win(t_win *win);
+
+// utils_main
+int				init_structs(t_map_pars *map, t_map_info *infos,
+					t_info_pars *pars, int *fd, t_data *data);
+int				parse_info_line(char *line, t_info_pars *pars,
+					t_map_info *infos);
+int				parse_error(t_map_pars *map, t_map_info *infos,
+					t_info_pars *pars, char *msg);
+int				final_checks(t_map_info *infos, t_map_pars *map);
+int				parse_file(int fd, t_map_pars *map, t_map_info *infos,
+					t_info_pars *pars);
+
+// utils_main2
+int				render(t_data *data);
+void			clean_exit(t_data *data);
+
+// animation
+int				key_press(int keycode, t_data *data);
+void			normalize_vector(double *x, double *y);
+void			left_key(t_data *data);
+void			right_key(t_data *data);
 
 // struct pars : line split etc..
 // struct game : info ...

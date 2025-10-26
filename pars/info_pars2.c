@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 19:07:05 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/29 14:55:08 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/26 17:21:26 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,13 @@ void	print_info(t_map_info info, t_map_pars map)
 
 void	fill_struct(t_map_info *infos, char *direction, char *path)
 {
-	if (!ft_strcmp(direction, "NO"))
+	if (!ft_strcmp(direction, "NO") && !infos->north)
 		infos->north = ft_strdup(path);
-	else if (!ft_strcmp(direction, "SO"))
+	else if (!ft_strcmp(direction, "SO") && !infos->south)
 		infos->south = ft_strdup(path);
-	else if (!ft_strcmp(direction, "EA"))
+	else if (!ft_strcmp(direction, "EA") && !infos->east)
 		infos->east = ft_strdup(path);
-	else if (!ft_strcmp(direction, "WE"))
+	else if (!ft_strcmp(direction, "WE") && !infos->west)
 		infos->west = ft_strdup(path);
 }
 

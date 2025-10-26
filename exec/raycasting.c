@@ -6,34 +6,11 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/08 13:51:22 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/25 15:41:18 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/26 17:28:13 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-#include <math.h>
-
-int is_wall(t_data *data, float ray_x, float ray_y)
-{
-	if (data->map_pars.map[(int)(ray_y / SIZE_SQUARE)][(int)(ray_x / SIZE_SQUARE)]
-			&& data->map_pars.map[(int)(ray_y / SIZE_SQUARE)][(int)(ray_x / SIZE_SQUARE)] == '1')
-			return (1);
-	return (0);
-}
-
-void draw_line(t_data *data)
-{
-	float ray_x = data->player.px * SIZE_SQUARE;
-	float ray_y = data->player.py * SIZE_SQUARE;
-	
-	while (!is_wall(data, ray_x, ray_y))
-	{
-		ray_x += data->raycast.raydirx;
-		ray_y += data->raycast.raydiry;
-		my_mlx_pixel_put(&data->win, ray_x, ray_y, 0xFF0000);
-	}
-	
-}
 
 // void drawRays2D(t_data *data )
 // {
@@ -135,8 +112,6 @@ void draw_line(t_data *data)
 // 	draw_square(data, (data->player.px * SIZE_SQUARE),(data->player.py * SIZE_SQUARE), NOIR, SIZE_SQUARE/ 3);
 // 	mlx_put_image_to_window(data->win.mlx, data->win.win, data->win.img, 0, 0);
 // }
-
-
 
 
 void drawRays2D(t_data *data)
