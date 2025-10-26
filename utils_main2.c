@@ -15,7 +15,7 @@
 int render(t_data *data)
 {
 	clear_window(&data->win);
-	split_win(data);
+	drawSkybox(data);
 	drawRays2D(data);
 	(void)data;
 	return (0);

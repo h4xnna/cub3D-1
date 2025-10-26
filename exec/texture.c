@@ -42,6 +42,7 @@ static void	load_one_texture(t_data *data, t_img *tex, char *path)
 
 void	load_all_textures(t_data *data)
 {
+    load_one_texture(data, &data->texture.skybox, "./texture/3.xpm");
 	load_one_texture(data, &data->texture.text_South, data->map_info.south);
 	load_one_texture(data, &data->texture.text_North, data->map_info.north);
 	load_one_texture(data, &data->texture.text_West, data->map_info.west);

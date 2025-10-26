@@ -19,6 +19,7 @@
 # include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <stdint.h>
 # define PI 3.1415926535
 # define WIDTH 1280
 # define HEIGHT 720
@@ -38,8 +39,16 @@
 # define TEAL 0x008080
 # define ROTSPEED 0.05
 # define VERT 0x006400
+# define MINIMAP_RADIUS 5
 # define RED "\033[1;31m"
 # define RESET "\033[0m"
+
+typedef struct s_color
+{
+	uint8_t r;
+	uint8_t g;
+	uint8_t b;
+}	t_color;
 
 typedef struct s_info_pars
 {
@@ -129,6 +138,7 @@ typedef struct s_img
 
 typedef struct s_texture
 {
+	t_img		skybox;
 	t_img		text_South;
 	t_img		text_North;
 	t_img		text_West;
@@ -240,6 +250,7 @@ int				key_press(int keycode, t_data *data);
 void			normalize_vector(double *x, double *y);
 void			left_key(t_data *data);
 void			right_key(t_data *data);
+void			drawSkybox(t_data *data);
 
 // struct pars : line split etc..
 // struct game : info ...

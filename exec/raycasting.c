@@ -113,6 +113,37 @@
 // 	mlx_put_image_to_window(data->win.mlx, data->win.win, data->win.img, 0, 0);
 // }
 
+int apply_shading(double distance, int color) // apply shading based on distance
+{
+    int r, g, b;
+    double factor;
+    int new_r, new_g, new_b;
+    int new_color;
+
+    if (distance < 1.0)
+        distance = 1.0;
+
+    factor = 1.0 / distance;
+    if (factor < 0.1)
+        factor = 0.1;
+
+    r = (color >> 16) & 0xFF;
+    g = (color >> 8) & 0xFF;
+    b = color & 0xFF;
+
+    new_r = (int)(r * factor);
+    new_g = (int)(g * factor);
+    new_b = (int)(b * factor);
+
+    if (new_r > 255) new_r = 255;
+    if (new_g > 255) new_g = 255;
+    if (new_b > 255) new_b = 255;
+
+    new_color = (new_r << 16) | (new_g << 8) | new_b;
+
+    return new_color;
+}
+
 
 void drawRays2D(t_data *data)
 {
@@ -228,7 +259,22 @@ void drawRays2D(t_data *data)
              texY = ((d * texture.height) / data->raycast.line_height) / 256;
 
             color = ((int *)texture.addr)[texture.height * texY + texX];
+            color = apply_shading(data->raycast.perpwall_dist / 2, color);
             my_mlx_pixel_put(&data->win, x, y, color);
+            if ((y + (data->raycast.draw_end - y) * 2) < HEIGHT)
+            {
+                int color_r = (color >> 16) & 0xFF;
+                int color_g = (color >> 8) & 0xFF;
+                int color_b = color & 0xFF;
+
+                double opacity = 0.3;
+                int floor_r_d = (int)(data->map_info.floor[0] * (1.0 - opacity) + color_r * opacity);
+                int floor_g_d = (int)(data->map_info.floor[1] * (1.0 - opacity) + color_g * opacity);
+                int floor_b_d = (int)(data->map_info.floor[2] * (1.0 - opacity) + color_b * opacity);
+
+                int final_color = (floor_r_d << 16) | (floor_g_d << 8) | floor_b_d;
+                my_mlx_pixel_put(&data->win, x, y + (data->raycast.draw_end - y) * 2, final_color);
+            }
 			y++;
         }
         x++;
