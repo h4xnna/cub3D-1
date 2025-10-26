@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:26:45 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/26 17:29:17 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/26 17:59:18 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ int	main(int ac, char **av)
 	load_all_textures(&data);
 	set_player_direction(&data.player, map.position);
 	mlx_hook(data.win.win, 2, 1L << 0, key_press, &data);
+	mlx_hook(data.win.win, 17, 0L, (int (*)())clean_exit, &data);
 	mlx_loop_hook(data.win.mlx, &render, &data);
 	mlx_loop(data.win.mlx);
 	free_win(&data.win);
