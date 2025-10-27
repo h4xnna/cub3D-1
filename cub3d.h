@@ -157,6 +157,7 @@ typedef struct s_data
 }				t_data;
 
 // utils_pars1
+int				get_texture_pixel(t_img *img, int x, int y);
 int				len_tab(char **tab);
 char			*remove_newline(char *line);
 int				ft_strcmp(char *str, char *str2);

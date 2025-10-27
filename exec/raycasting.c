@@ -113,6 +113,18 @@
 // 	mlx_put_image_to_window(data->win.mlx, data->win.win, data->win.img, 0, 0);
 // }
 
+int	get_window_pixel(t_win win, int x, int y)
+{
+	char	*dst;
+
+	if (!win.addr)
+		return (0);
+	if (x < 0 || y < 0 || x >= WIDTH || y >= HEIGHT)
+		return (0);
+	dst = win.addr + (y * win.line_length + x * (win.bits_per_pixel / 8));
+	return (*(unsigned int *)dst);
+}
+
 int apply_shading(double distance, int color) // apply shading based on distance
 {
     int r, g, b;
@@ -268,10 +280,16 @@ void drawRays2D(t_data *data)
                 int color_b = color & 0xFF;
 
                 double opacity = 0.3;
-                int floor_r_d = (int)(data->map_info.floor[0] * (1.0 - opacity) + color_r * opacity);
-                int floor_g_d = (int)(data->map_info.floor[1] * (1.0 - opacity) + color_g * opacity);
-                int floor_b_d = (int)(data->map_info.floor[2] * (1.0 - opacity) + color_b * opacity);
+                int floor_color = get_window_pixel(data->win, x, y + (data->raycast.draw_end - y) * 2);
 
+                uint8_t floor_r = (floor_color >> 16) & 0xFF;
+                uint8_t floor_g = (floor_color >> 8) & 0xFF;
+                uint8_t floor_b = floor_color & 0xFF;
+
+                int floor_r_d = (int)(floor_r * (1.0 - opacity) + color_r * opacity);
+                int floor_g_d = (int)(floor_g * (1.0 - opacity) + color_g * opacity);
+                int floor_b_d = (int)(floor_b * (1.0 - opacity) + color_b * opacity);
+                
                 int final_color = (floor_r_d << 16) | (floor_g_d << 8) | floor_b_d;
                 my_mlx_pixel_put(&data->win, x, y + (data->raycast.draw_end - y) * 2, final_color);
             }
