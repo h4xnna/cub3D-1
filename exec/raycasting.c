@@ -279,7 +279,7 @@ void drawRays2D(t_data *data)
                 int color_g = (color >> 8) & 0xFF;
                 int color_b = color & 0xFF;
 
-                double opacity = 0.3;
+                double opacity = 0.15;
                 int floor_color = get_window_pixel(data->win, x, y + (data->raycast.draw_end - y) * 2);
 
                 uint8_t floor_r = (floor_color >> 16) & 0xFF;

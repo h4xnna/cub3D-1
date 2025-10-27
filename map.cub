@@ -3,7 +3,7 @@ SO ./texture/Grass.xpm
 WE ./texture/Grass.xpm
 EA  ./texture/Grass.xpm
 
-F   111,78,55
+F   255,255,255
 C 	169,234,254
 
             11111111111111

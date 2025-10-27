@@ -56,7 +56,7 @@ void drawSkybox(t_data *data)
 			int tex_g = (tex_color >> 8) & 0xFF;
 			int tex_b = tex_color & 0xFF;
 
-			double tex_opacity = 0.3;
+			double tex_opacity = 0.15;
 
 			int final_r = (int)(floor_r_d * (1.0 - tex_opacity) + tex_r * tex_opacity);
 			int final_g = (int)(floor_g_d * (1.0 - tex_opacity) + tex_g * tex_opacity);
