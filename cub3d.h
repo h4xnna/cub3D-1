@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
+/*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/26 17:05:06 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/28 16:01:03 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,12 @@ typedef struct s_player // position
 	double py;
 	double planex;
 	double planey;
+	bool	moving_right;
+	bool	moving_left;
+	bool	moving_up;
+	bool	moving_down;
+	bool	rotate_right;
+	bool	rotate_left;
 }				t_player;
 
 typedef struct s_map_info
@@ -139,6 +145,7 @@ typedef struct s_img
 typedef struct s_texture
 {
 	t_img		skybox;
+	t_img		floor;
 	t_img		text_South;
 	t_img		text_North;
 	t_img		text_West;
@@ -245,15 +252,13 @@ int				parse_file(int fd, t_map_pars *map, t_map_info *infos,
 // utils_main2
 int				render(t_data *data);
 void			clean_exit(t_data *data);
+int				mouse_info(int x, int y, t_data *data);
+int				key_press(int keycode, t_data *data);
+int				key_release(int keycode, t_data *data);
 
 // animation
-int				key_press(int keycode, t_data *data);
 void			normalize_vector(double *x, double *y);
-void			left_key(t_data *data);
-void			right_key(t_data *data);
 void			drawSkybox(t_data *data);
 
-// struct pars : line split etc..
-// struct game : info ...
 
 #endif

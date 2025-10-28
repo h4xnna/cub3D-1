@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
+/*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/08 13:51:22 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/26 17:28:13 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/28 15:56:45 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -265,39 +265,89 @@ void drawRays2D(t_data *data)
             texX = texture.width - texX - 1;
 
 		y = data->raycast.draw_start;
-        while ( y <= data->raycast.draw_end)
+        while (y <= data->raycast.draw_end)
         {
-             d = y * 256 - HEIGHT * 128 + data->raycast.line_height * 128;
-             texY = ((d * texture.height) / data->raycast.line_height) / 256;
+			d = y * 256 - HEIGHT * 128 + data->raycast.line_height * 128;
+			texY = ((d * texture.height) / data->raycast.line_height) / 256;
+			if (texY < 0)
+				texY = 0;
 
             color = ((int *)texture.addr)[texture.height * texY + texX];
             color = apply_shading(data->raycast.perpwall_dist / 2, color);
             my_mlx_pixel_put(&data->win, x, y, color);
             if ((y + (data->raycast.draw_end - y) * 2) < HEIGHT)
             {
-                int color_r = (color >> 16) & 0xFF;
-                int color_g = (color >> 8) & 0xFF;
-                int color_b = color & 0xFF;
-
-                double opacity = 0.15;
-                int floor_color = get_window_pixel(data->win, x, y + (data->raycast.draw_end - y) * 2);
-
-                uint8_t floor_r = (floor_color >> 16) & 0xFF;
-                uint8_t floor_g = (floor_color >> 8) & 0xFF;
-                uint8_t floor_b = floor_color & 0xFF;
-
-                int floor_r_d = (int)(floor_r * (1.0 - opacity) + color_r * opacity);
-                int floor_g_d = (int)(floor_g * (1.0 - opacity) + color_g * opacity);
-                int floor_b_d = (int)(floor_b * (1.0 - opacity) + color_b * opacity);
-                
-                int final_color = (floor_r_d << 16) | (floor_g_d << 8) | floor_b_d;
-                my_mlx_pixel_put(&data->win, x, y + (data->raycast.draw_end - y) * 2, final_color);
+                my_mlx_pixel_put(&data->win, x, y + (data->raycast.draw_end - y) * 2, color);
             }
 			y++;
         }
+		double floorXWall, floorYWall;
+
+		if (data->raycast.side == 0 && data->raycast.raydirx > 0)
+		{
+			floorXWall = data->raycast.mapx;
+			floorYWall = data->raycast.mapy + wallX;
+		}
+		else if (data->raycast.side == 0 && data->raycast.raydirx < 0)
+		{
+			floorXWall = data->raycast.mapx + 1.0;
+			floorYWall = data->raycast.mapy + wallX;
+		}
+		else if (data->raycast.side == 1 && data->raycast.raydiry > 0)
+		{
+			floorXWall = data->raycast.mapx + wallX;
+			floorYWall = data->raycast.mapy;
+		}
+		else
+		{
+			floorXWall = data->raycast.mapx + wallX;
+			floorYWall = data->raycast.mapy + 1.0;
+		}
+
+		int p = data->raycast.draw_end;
+		while (p < HEIGHT)
+		{
+			double currentDist = HEIGHT / (2.0 * p - HEIGHT);
+			double weight = currentDist / data->raycast.perpwall_dist;
+
+			double currentFloorX = weight * floorXWall + (1.0 - weight) * data->player.px;
+			double currentFloorY = weight * floorYWall + (1.0 - weight) * data->player.py;
+
+			int floorTexX = (int)(currentFloorX * data->texture.floor.width) % data->texture.floor.width;
+			int floorTexY = (int)(currentFloorY * data->texture.floor.height) % data->texture.floor.height;
+
+			int floorColor = ((int *)data->texture.floor.addr)[data->texture.floor.width * floorTexY + floorTexX];
+			floorColor = apply_shading(currentDist, floorColor);
+
+			int reflectedY = HEIGHT - p;
+			int reflectedColor = get_window_pixel(data->win, x, reflectedY);
+			int wallColor = get_window_pixel(data->win, x, p);
+
+			double reflectionStrength = 0.125;
+
+			uint8_t r1 = (floorColor >> 16) & 0xFF;
+			uint8_t g1 = (floorColor >> 8) & 0xFF;
+			uint8_t b1 = floorColor & 0xFF;
+
+			uint8_t r2 = (reflectedColor >> 16) & 0xFF;
+			uint8_t g2 = (reflectedColor >> 8) & 0xFF;
+			uint8_t b2 = reflectedColor & 0xFF;
+
+			uint8_t r3 = (wallColor >> 16) & 0xFF;
+			uint8_t g3 = (wallColor >> 8) & 0xFF;
+			uint8_t b3 = wallColor & 0xFF;
+
+			uint8_t finalR = (uint8_t)((r1 * (1.0) + r2 * reflectionStrength + r3 * reflectionStrength * 2));
+			uint8_t finalG = (uint8_t)((g1 * (1.0) + g2 * reflectionStrength + g3 * reflectionStrength * 2));
+			uint8_t finalB = (uint8_t)((b1 * (1.0) + b2 * reflectionStrength + b3 * reflectionStrength * 2));
+
+			int finalColor = (finalR << 16) | (finalG << 8) | finalB;
+			my_mlx_pixel_put(&data->win, x, p, finalColor);
+
+			p++;
+		}
         x++;
     }
     draw_map(data);
-    draw_square(data, (data->player.px * SIZE_SQUARE), (data->player.py * SIZE_SQUARE), NOIR, SIZE_SQUARE / 3);
     mlx_put_image_to_window(data->win.mlx, data->win.win, data->win.img, 0, 0);
 }

@@ -19,7 +19,7 @@ CYAN_SHOCK      = "\033[38;5;51m"
 
 NAME	= cube
 CC		= cc 
-CFLAGS	= -Wall -Werror -Wextra -Wno-error=cast-function-type -g3
+CFLAGS	= -Wall -Werror -Wextra -g3
 
 SRCS	=	gnl/get_next_line.c\
 			main.c \
@@ -51,7 +51,7 @@ MLX_FLAGS   = -lm -lbsd -lXext -lX11
 LIBPRINTF   = ft_printf/libftprintf.a
  
 
-INCL	= -I. -Ilibft
+INCL	= -I. -Ilibft 
 
 
 LIBFT_PATH        = libft/
@@ -75,7 +75,7 @@ $(MLX_A) :
 	@make -sC minilibx-linux -j
 	@echo $(NEON_GREEN)$(BOLD)"Library Compiled. ✔\n"
 
-${NAME}:  ${OBJS} $(LIBFT) $(HEADERS)
+${NAME}:  $(HEADERS) ${OBJS} $(LIBFT)
 
 	@echo $(LIGHT_GREEN) "Compilation..."$(BOLD)
 	@${CC} ${CFLAGS} ${OBJS} $(LIBFT) $(MLX_A) $(MLX_FLAGS) -o ${NAME}

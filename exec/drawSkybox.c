@@ -33,40 +33,16 @@ void drawSkybox(t_data *data)
 		}
 	}
 
-	while (y < HEIGHT)
-	{
-		tex_y = (y * skybox_height) / HEIGHT;
+	// while (y < HEIGHT)
+	// {
+	// 	tex_y = (y * skybox_height) / HEIGHT;
 
-		double dark_factor = 0.0;
-		if (y >= HEIGHT / 2)
-			dark_factor = (double)(HEIGHT - y) / (HEIGHT / 2);
-		if (dark_factor > 1.0) dark_factor = 1.0;
-
-		int floor_r_d = (int)(data->map_info.floor[0] * (1.0 - dark_factor));
-		int floor_g_d = (int)(data->map_info.floor[1] * (1.0 - dark_factor));
-		int floor_b_d = (int)(data->map_info.floor[2] * (1.0 - dark_factor));
-
-		for (x = 0; x < WIDTH; x++)
-		{
-
-			tex_x = (offset_x + x) % skybox_width;
-
-			int tex_color = get_texture_pixel(&data->texture.skybox, tex_x, tex_y); // implement this
-			int tex_r = (tex_color >> 16) & 0xFF;
-			int tex_g = (tex_color >> 8) & 0xFF;
-			int tex_b = tex_color & 0xFF;
-
-			double tex_opacity = 0.15;
-
-			int final_r = (int)(floor_r_d * (1.0 - tex_opacity) + tex_r * tex_opacity);
-			int final_g = (int)(floor_g_d * (1.0 - tex_opacity) + tex_g * tex_opacity);
-			int final_b = (int)(floor_b_d * (1.0 - tex_opacity) + tex_b * tex_opacity);
-
-			int final_color = (final_r << 16) | (final_g << 8) | final_b;
-
-			my_mlx_pixel_put(&data->win, x, y, final_color);
-		}
-
-		y++;
-	}
+	// 	for (x = 0; x < WIDTH; x++)
+	// 	{
+	// 		tex_x = (offset_x + x) % skybox_width;
+	// 		int tex_color = get_texture_pixel(&data->texture.skybox, tex_x, tex_y);
+	// 		my_mlx_pixel_put(&data->win, x, y, tex_color);
+	// 	}
+	// 	y++;
+	// }
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
+/*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:26:45 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/26 17:59:18 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/28 12:36:55 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	main(int ac, char **av)
 	// print_info(infos, map);
 	if (flood_fill(&map))
 	{
-		error_message(" map pas  ferme");
+		error_message("map pas ferme");
 		clean_exit(&data);
 		return (FAILURE);
 	}
@@ -53,6 +53,7 @@ int	main(int ac, char **av)
 	data.player.pdiry = -1;
 	data.player.planex = 0.66;
 	data.player.planey = 0;
+	data.map_pars.height = len_tab(data.map_pars.map);
 	win = init_win();
 	if (!win)
 	{
@@ -63,7 +64,11 @@ int	main(int ac, char **av)
 	free(win);
 	load_all_textures(&data);
 	set_player_direction(&data.player, map.position);
+	mlx_mouse_hide(data.win.mlx, data.win.win);
+	mlx_mouse_move(data.win.mlx, data.win.win, WIDTH / 2, HEIGHT / 2);
 	mlx_hook(data.win.win, 2, 1L << 0, (int (*)())key_press, &data);
+	mlx_hook(data.win.win, 3, 1L << 1, (int (*)())key_release, &data);
+	mlx_hook(data.win.win, 6, 1L << 6, (int (*)())mouse_info, &data);
 	mlx_hook(data.win.win, 17, 0L, (int (*)())clean_exit, &data);
 	mlx_loop_hook(data.win.mlx, (int (*)())render, &data);
 	mlx_loop(data.win.mlx);

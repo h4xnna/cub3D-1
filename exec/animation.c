@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   animation.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
+/*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 14:46:58 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/26 14:51:19 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/28 12:33:56 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-// Normalisation d'un vecteur 2D
 void normalize_vector(double *x, double *y)
 {
     double length = sqrt((*x) * (*x) + (*y) * (*y));
@@ -23,44 +22,67 @@ void normalize_vector(double *x, double *y)
     }
 }
 
-void left_key(t_data *data)
+
+int	key_release(int keycode, t_data *data)
 {
-	double oldDirX = data->player.pdirx;
-		data->player.pdirx = data->player.pdirx * cos(-ROTSPEED) - data->player.pdiry * sin(-ROTSPEED);
-		data->player.pdiry = oldDirX * sin(-ROTSPEED) + data->player.pdiry * cos(-ROTSPEED);
-		double oldplanex = data->player.planex;
-		data->player.planex = data->player.planex * cos(-ROTSPEED) - data->player.planey * sin(-ROTSPEED);
-		data->player.planey = oldplanex * sin(-ROTSPEED) + data->player.planey * cos(-ROTSPEED);
-		normalize_vector(&data->player.pdirx, &data->player.pdiry);
-		normalize_vector(&data->player.planex, &data->player.planey);
-}
-void right_key(t_data *data)
-{
-	double oldDirX = data->player.pdirx;
-		data->player.pdirx = data->player.pdirx * cos(ROTSPEED) - data->player.pdiry * sin(ROTSPEED);
-		data->player.pdiry = oldDirX * sin(ROTSPEED) + data->player.pdiry * cos(ROTSPEED);
-		double oldplanex = data->player.planex;
-		data->player.planex = data->player.planex * cos(ROTSPEED) - data->player.planey * sin(ROTSPEED);
-		data->player.planey = oldplanex * sin(ROTSPEED) + data->player.planey * cos(ROTSPEED);
-		normalize_vector(&data->player.pdirx, &data->player.pdiry);
-		normalize_vector(&data->player.planex, &data->player.planey);
+	if (keycode == 65363)
+		data->player.rotate_right = false;
+	if (keycode == 65361)
+		data->player.rotate_left = false;
+	if (keycode == A_KEY)
+		data->player.moving_left = false;
+	if (keycode == D_KEY)
+		data->player.moving_right = false;
+	if(keycode == S_KEY)
+		data->player.moving_down = false;
+	if(keycode == W_KEY)
+		data->player.moving_up = false;
+
+	return(SUCCESS);
 }
 
 int	key_press(int keycode, t_data *data)
 {
 	if (keycode == A_KEY)
-		buttons_a(&data->player, &data->map_pars);
+		data->player.moving_left = true;
 	if (keycode == D_KEY)
-		buttons_d(&data->player, &data->map_pars);
+		data->player.moving_right = true;
 	if(keycode == S_KEY)
-		buttons_s(&data->player, &data->map_pars);
+		data->player.moving_down = true;
 	if(keycode == W_KEY)
-		buttons_w(&data->player, &data->map_pars);
+		data->player.moving_up = true;
 	if (keycode == 65307)
-		clean_exit(data);
-	if (keycode == 65361) // fleche guache
-		left_key(data);
-	if (keycode == 65363) // fleche droite
-		right_key(data);
+	{
+		mlx_destroy_window(data->win.mlx, data->win.win);
+		mlx_clear_window(data->win.mlx, data->win.win);
+		exit(1);
+	}
+	if (keycode == 65363)
+		data->player.rotate_right = true;
+	if (keycode == 65361)
+		data->player.rotate_left = true;
+	return (0);
+}
+
+int mouse_info(int x, int y, t_data *data)
+{
+	(void)y;
+	if (x > WIDTH / 2)
+	{
+		data->player.rotate_right = true;
+		if (data->player.rotate_left)
+			data->player.rotate_left = false;
+	}
+	else if (x < WIDTH / 2)
+	{
+		data->player.rotate_left = true;
+		if (data->player.rotate_right)
+			data->player.rotate_right = false;
+	}
+	else
+	{
+		data->player.rotate_left = false;
+		data->player.rotate_right = false;
+	}
 	return (0);
 }

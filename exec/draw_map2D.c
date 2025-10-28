@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_map2D.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
+/*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 15:19:33 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/26 14:34:39 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/28 14:04:19 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,24 +50,51 @@ void	draw_square(t_data *data, int x, int y, int color, int square_size)
 	}
 }
 
+#define HALF_MINIMAP (MINIMAP_RADIUS / 2)
+
 void draw_map(t_data *data)
 {
-	int y = 0;
-	int x;
+    int px = data->player.px;
+    int py = data->player.py;
 
-	while (data->map_pars.map[y])
-	{
-		x = 0;
-		while (data->map_pars.map[y][x]) 
-		{
-			if (data->map_pars.map[y][x] == '1')
-				draw_square(data, x * SIZE_SQUARE, y * SIZE_SQUARE, TEAL, SIZE_SQUARE);
-			else if (data->map_pars.map[y][x] == '0')
-				draw_square(data, x * SIZE_SQUARE, y * SIZE_SQUARE, BLANC, SIZE_SQUARE);
-			x++;
-		}
-		y++;
-	}
+    for (int yCases = 0; yCases < MINIMAP_RADIUS; yCases++)
+    {
+        for (int xCases = 0; xCases < MINIMAP_RADIUS; xCases++)
+        {
+            if ((yCases == 0 && xCases == 0) ||
+                (yCases == 0 && xCases == MINIMAP_RADIUS - 1) ||
+                (yCases == MINIMAP_RADIUS - 1 && xCases == 0) ||
+                (yCases == MINIMAP_RADIUS - 1 && xCases == MINIMAP_RADIUS - 1))
+                continue;
+
+            int map_y = py + (yCases - HALF_MINIMAP);
+            int map_x = px + (xCases - HALF_MINIMAP);
+
+            char tile = 0;
+            if ((map_y >= 0 && map_y < data->map_pars.height) &&
+                map_x >= 0 &&
+                data->map_pars.map[map_y] &&
+                data->map_pars.map[map_y][map_x])
+                tile = data->map_pars.map[map_y][map_x];
+
+            int color;
+            if (tile == '1')
+                color = 0xAF0000;
+            else if (tile == '0')
+                color = BLANC;
+            else
+                color = 0x000000;
+
+            int draw_x = xCases * SIZE_SQUARE + SIZE_SQUARE;
+            int draw_y = yCases * SIZE_SQUARE + SIZE_SQUARE;
+
+            draw_square(data, draw_x, draw_y, color, SIZE_SQUARE);
+        }
+    }
+
+    int player_x = HALF_MINIMAP * SIZE_SQUARE + SIZE_SQUARE / 4 + SIZE_SQUARE;
+    int player_y = HALF_MINIMAP * SIZE_SQUARE + SIZE_SQUARE / 4 + SIZE_SQUARE;
+    draw_square(data, player_x, player_y, ROUGE, SIZE_SQUARE / 2);
 }
 
 int is_wall(t_data *data, float ray_x, float ray_y)
