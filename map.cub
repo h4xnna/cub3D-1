@@ -1,7 +1,7 @@
-NO ./texture/Grass.xpm
-SO ./texture/Grass.xpm
-WE ./texture/Grass.xpm
-EA  ./texture/Grass.xpm
+NO ./texture/wall.xpm
+SO ./texture/wall.xpm
+WE ./texture/wall.xpm
+EA  ./texture/wall.xpm
 
 F   255,255,255
 C 	169,234,254

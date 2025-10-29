@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 15:19:33 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/28 14:04:19 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/10/29 13:11:37 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void draw_map(t_data *data)
 
             int color;
             if (tile == '1')
-                color = 0xAF0000;
+                color = 0x707070;
             else if (tile == '0')
                 color = BLANC;
             else
