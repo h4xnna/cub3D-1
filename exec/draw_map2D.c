@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 15:19:33 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/29 13:11:37 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/10/29 16:16:42 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ void	draw_square(t_data *data, int x, int y, int color, int square_size)
 		j = 0;
 		while (j < square_size)
 		{
-			my_mlx_pixel_put(&data->win, x + j, y + i, color);
+			my_mlx_pixel_put(data->win, x + j, y + i, color);
 			j++;
 		}
 		i++;
@@ -54,8 +54,8 @@ void	draw_square(t_data *data, int x, int y, int color, int square_size)
 
 void draw_map(t_data *data)
 {
-    int px = data->player.px;
-    int py = data->player.py;
+    int px = data->player->px;
+    int py = data->player->py;
 
     for (int yCases = 0; yCases < MINIMAP_RADIUS; yCases++)
     {
@@ -71,11 +71,11 @@ void draw_map(t_data *data)
             int map_x = px + (xCases - HALF_MINIMAP);
 
             char tile = 0;
-            if ((map_y >= 0 && map_y < data->map_pars.height) &&
+            if ((map_y >= 0 && map_y < data->map_pars->height) &&
                 map_x >= 0 &&
-                data->map_pars.map[map_y] &&
-                data->map_pars.map[map_y][map_x])
-                tile = data->map_pars.map[map_y][map_x];
+                data->map_pars->map[map_y] &&
+                data->map_pars->map[map_y][map_x])
+                tile = data->map_pars->map[map_y][map_x];
 
             int color;
             if (tile == '1')
@@ -99,22 +99,22 @@ void draw_map(t_data *data)
 
 int is_wall(t_data *data, float ray_x, float ray_y)
 {
-	if (data->map_pars.map[(int)(ray_y / SIZE_SQUARE)][(int)(ray_x / SIZE_SQUARE)]
-			&& data->map_pars.map[(int)(ray_y / SIZE_SQUARE)][(int)(ray_x / SIZE_SQUARE)] == '1')
+	if (data->map_pars->map[(int)(ray_y / SIZE_SQUARE)][(int)(ray_x / SIZE_SQUARE)]
+			&& data->map_pars->map[(int)(ray_y / SIZE_SQUARE)][(int)(ray_x / SIZE_SQUARE)] == '1')
 			return (1);
 	return (0);
 }
 
 void draw_line(t_data *data)
 {
-	float ray_x = data->player.px * SIZE_SQUARE;
-	float ray_y = data->player.py * SIZE_SQUARE;
+	float ray_x = data->player->px * SIZE_SQUARE;
+	float ray_y = data->player->py * SIZE_SQUARE;
 	
 	while (!is_wall(data, ray_x, ray_y))
 	{
-		ray_x += data->raycast.raydirx;
-		ray_y += data->raycast.raydiry;
-		my_mlx_pixel_put(&data->win, ray_x, ray_y, 0xFF0000);
+		ray_x += data->raycast->raydirx;
+		ray_y += data->raycast->raydiry;
+		my_mlx_pixel_put(data->win, ray_x, ray_y, 0xFF0000);
 	}
 	
 }

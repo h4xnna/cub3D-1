@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/29 16:12:55 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/10/29 17:10:56 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@
 # define ROTSPEED 0.05
 # define VERT 0x006400
 # define MINIMAP_RADIUS 5
+# define REFLECTIONSTRENGTH 0.1
 # define RED "\033[1;31m"
 # define RESET "\033[0m"
 
@@ -144,23 +145,23 @@ typedef struct s_img
 
 typedef struct s_texture
 {
-	t_img		skybox;
-	t_img		floor;
-	t_img		text_South;
-	t_img		text_North;
-	t_img		text_West;
-	t_img		text_East;
+	t_img		*skybox;
+	t_img		*floor;
+	t_img		*text_South;
+	t_img		*text_North;
+	t_img		*text_West;
+	t_img		*text_East;
 }				t_texture;
 
 typedef struct s_data
 {
-	t_map_pars	map_pars;
-	t_info_pars	info_pars;
-	t_map_info	map_info;
-	t_player	player;
-	t_win		win;
-	t_raycast	raycast;
-	t_texture	texture;
+	t_map_pars	*map_pars;
+	t_info_pars	*info_pars;
+	t_map_info	*map_info;
+	t_player	*player;
+	t_win		*win;
+	t_raycast	*raycast;
+	t_texture	*texture;
 }				t_data;
 
 // utils_pars1
@@ -239,8 +240,8 @@ t_win			*init_win(void);
 void			free_win(t_win *win);
 
 // utils_main
-int				init_structs(t_map_pars *map, t_map_info *infos,
-					t_info_pars *pars, int *fd, t_data *data);
+int				init_structs(t_map_pars **map, t_map_info **infos,
+					t_info_pars **pars, int *fd, t_data **data);
 int				parse_info_line(char *line, t_info_pars *pars,
 					t_map_info *infos);
 int				parse_error(t_map_pars *map, t_map_info *infos,

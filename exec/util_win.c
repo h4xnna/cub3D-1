@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   util_win.c                                         :+:      :+:    :+:   */
+/*   util_win->c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -19,15 +19,15 @@ void	split_win(t_data *data)
 	int	colors_ceiling;
 	int	colors_floor;
 
-	colors_ceiling = rgb_to_hex_int(data, data->map_info.ceiling);
-	colors_floor = rgb_to_hex_int(data, data->map_info.floor);
+	colors_ceiling = rgb_to_hex_int(data, data->map_info->ceiling);
+	colors_floor = rgb_to_hex_int(data, data->map_info->floor);
 	y = 0;
 	while (y < HEIGHT / 2)
 	{
 		x = 0;
 		while (x < WIDTH)
 		{
-			my_mlx_pixel_put(&data->win, x, y, colors_ceiling);
+			my_mlx_pixel_put(data->win, x, y, colors_ceiling);
 			x++;
 		}
 		y++;
@@ -37,12 +37,12 @@ void	split_win(t_data *data)
 		x = 0;
 		while (x < WIDTH)
 		{
-			my_mlx_pixel_put(&data->win, x, y, colors_floor);
+			my_mlx_pixel_put(data->win, x, y, colors_floor);
 			x++;
 		}
 		y++;
 	}
-	mlx_put_image_to_window(data->win.mlx, data->win.win, data->win.img, 0, 0);
+	mlx_put_image_to_window(data->win->mlx, data->win->win, data->win->img, 0, 0);
 }
 
 void	my_mlx_pixel_put(t_win *win, int x, int y, int color)

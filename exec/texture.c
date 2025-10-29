@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 10:55:48 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/29 14:35:14 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/10/29 16:47:08 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,27 +26,29 @@ void	ft_putstr_Red(char *str)
     write(2, "\n", 1);
     write(2, RESET, sizeof(RESET) - 1);
 }
-static void	load_one_texture(t_data *data, t_img *tex, char *path)
+static t_img    *load_one_texture(t_data *data, t_img *tex, char *path)
 {
-	tex->img = mlx_xpm_file_to_image(data->win.mlx, path, &tex->width,
+    tex = malloc(sizeof(t_img));
+	tex->img = mlx_xpm_file_to_image(data->win->mlx, path, &tex->width,
 			&tex->height);
 	if (!tex->img)
 	{
-		error_message(" no textur");
+		error_message(" no texur");
         ft_putstr_Red(path);
         clean_exit(data);
 	}
 	tex->addr = mlx_get_data_addr(tex->img, &tex->bits_per_pixel,
 			&tex->line_length, &tex->endian);
+    return (tex);
 }
 
 void	load_all_textures(t_data *data)
 {
-    load_one_texture(data, &data->texture.skybox, "./texture/2.xpm");
-    load_one_texture(data, &data->texture.floor, "./texture/metal.xpm");
-	load_one_texture(data, &data->texture.text_South, data->map_info.south);
-	load_one_texture(data, &data->texture.text_North, data->map_info.north);
-	load_one_texture(data, &data->texture.text_West, data->map_info.west);
-	load_one_texture(data, &data->texture.text_East, data->map_info.east);
+    data->texture->skybox = load_one_texture(data, data->texture->skybox, "./texture/2.xpm");
+    data->texture->floor = load_one_texture(data, data->texture->floor, "./texture/metal.xpm");
+	data->texture->text_South = load_one_texture(data, data->texture->text_South, data->map_info->south);
+	data->texture->text_North = load_one_texture(data, data->texture->text_North, data->map_info->north);
+	data->texture->text_West = load_one_texture(data, data->texture->text_West, data->map_info->west);
+	data->texture->text_East = load_one_texture(data, data->texture->text_East, data->map_info->east);
 }
 

@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 14:46:58 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/28 12:33:56 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/10/29 16:26:01 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,17 @@ void normalize_vector(double *x, double *y)
 int	key_release(int keycode, t_data *data)
 {
 	if (keycode == 65363)
-		data->player.rotate_right = false;
+		data->player->rotate_right = false;
 	if (keycode == 65361)
-		data->player.rotate_left = false;
+		data->player->rotate_left = false;
 	if (keycode == A_KEY)
-		data->player.moving_left = false;
+		data->player->moving_left = false;
 	if (keycode == D_KEY)
-		data->player.moving_right = false;
+		data->player->moving_right = false;
 	if(keycode == S_KEY)
-		data->player.moving_down = false;
+		data->player->moving_down = false;
 	if(keycode == W_KEY)
-		data->player.moving_up = false;
+		data->player->moving_up = false;
 
 	return(SUCCESS);
 }
@@ -44,23 +44,23 @@ int	key_release(int keycode, t_data *data)
 int	key_press(int keycode, t_data *data)
 {
 	if (keycode == A_KEY)
-		data->player.moving_left = true;
+		data->player->moving_left = true;
 	if (keycode == D_KEY)
-		data->player.moving_right = true;
+		data->player->moving_right = true;
 	if(keycode == S_KEY)
-		data->player.moving_down = true;
+		data->player->moving_down = true;
 	if(keycode == W_KEY)
-		data->player.moving_up = true;
+		data->player->moving_up = true;
 	if (keycode == 65307)
 	{
-		mlx_destroy_window(data->win.mlx, data->win.win);
-		mlx_clear_window(data->win.mlx, data->win.win);
+		mlx_destroy_window(data->win->mlx, data->win->win);
+		mlx_clear_window(data->win->mlx, data->win->win);
 		exit(1);
 	}
 	if (keycode == 65363)
-		data->player.rotate_right = true;
+		data->player->rotate_right = true;
 	if (keycode == 65361)
-		data->player.rotate_left = true;
+		data->player->rotate_left = true;
 	return (0);
 }
 
@@ -69,20 +69,20 @@ int mouse_info(int x, int y, t_data *data)
 	(void)y;
 	if (x > WIDTH / 2)
 	{
-		data->player.rotate_right = true;
-		if (data->player.rotate_left)
-			data->player.rotate_left = false;
+		data->player->rotate_right = true;
+		if (data->player->rotate_left)
+			data->player->rotate_left = false;
 	}
 	else if (x < WIDTH / 2)
 	{
-		data->player.rotate_left = true;
-		if (data->player.rotate_right)
-			data->player.rotate_right = false;
+		data->player->rotate_left = true;
+		if (data->player->rotate_right)
+			data->player->rotate_right = false;
 	}
 	else
 	{
-		data->player.rotate_left = false;
-		data->player.rotate_right = false;
+		data->player->rotate_left = false;
+		data->player->rotate_right = false;
 	}
 	return (0);
 }
