@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:26:45 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/29 16:41:34 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/10/30 15:50:18 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,7 @@ int	main(int ac, char **av)
 	data->texture = ft_calloc(1, sizeof(t_texture));
 	data->player->px = map->x_start + 0.5;
 	data->player->py = map->y_start + 0.5;
-	data->player->pa = PI / 2;
-	data->player->pdirx = 0;
-	data->player->pdiry = -1;
-	data->player->planex = 0.66;
-	data->player->planey = 0;
+	data->player->sensitivity = 0.001;
 	data->map_pars->height = len_tab(data->map_pars->map);
 	win = init_win();
 	if (!win)

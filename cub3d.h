@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/30 14:01:50 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/10/30 15:44:07 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,8 @@ typedef struct s_player // position
 	bool	moving_down;
 	bool	rotate_right;
 	bool	rotate_left;
+	double	rotate_speed;
+	double	sensitivity;
 }				t_player;
 
 typedef struct s_map_info

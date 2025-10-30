@@ -6,42 +6,40 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 14:54:11 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/30 13:53:43 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/10/30 15:40:21 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void move_camera_left(t_data *data)
+void rotate_player(t_data *data)
 {
 	double oldDirX = data->player->pdirx;
-	data->player->pdirx = data->player->pdirx * cos(-ROTSPEED) - data->player->pdiry * sin(-ROTSPEED);
-	data->player->pdiry = oldDirX * sin(-ROTSPEED) + data->player->pdiry * cos(-ROTSPEED);
+	data->player->pdirx = data->player->pdirx * cos(data->player->rotate_speed) - data->player->pdiry * sin(data->player->rotate_speed);
+	data->player->pdiry = oldDirX * sin(data->player->rotate_speed) + data->player->pdiry * cos(data->player->rotate_speed);
 	double oldPlaneX = data->player->planex;
-	data->player->planex = data->player->planex * cos(-ROTSPEED) - data->player->planey * sin(-ROTSPEED);
-	data->player->planey = oldPlaneX * sin(-ROTSPEED) + data->player->planey * cos(-ROTSPEED);
+	data->player->planex = data->player->planex * cos(data->player->rotate_speed) - data->player->planey * sin(data->player->rotate_speed);
+	data->player->planey = oldPlaneX * sin(data->player->rotate_speed) + data->player->planey * cos(data->player->rotate_speed);
 	normalize_vector(&data->player->pdirx, &data->player->pdiry);
 	normalize_vector(&data->player->planex, &data->player->planey);
 }
 
-void move_camera_right(t_data *data)
-{
-	double oldDirX = data->player->pdirx;
-	data->player->pdirx = data->player->pdirx * cos(ROTSPEED) - data->player->pdiry * sin(ROTSPEED);
-	data->player->pdiry = oldDirX * sin(ROTSPEED) + data->player->pdiry * cos(ROTSPEED);
-	double oldPlaneX = data->player->planex;
-	data->player->planex = data->player->planex * cos(ROTSPEED) - data->player->planey * sin(ROTSPEED);
-	data->player->planey = oldPlaneX * sin(ROTSPEED) + data->player->planey * cos(ROTSPEED);
-	normalize_vector(&data->player->pdirx, &data->player->pdiry);
-	normalize_vector(&data->player->planex, &data->player->planey);
-}
+// void move_camera_right(t_data *data)
+// {
+// 	double oldDirX = data->player->pdirx;
+// 	data->player->pdirx = data->player->pdirx * cos(ROTSPEED) - data->player->pdiry * sin(ROTSPEED);
+// 	data->player->pdiry = oldDirX * sin(ROTSPEED) + data->player->pdiry * cos(ROTSPEED);
+// 	double oldPlaneX = data->player->planex;
+// 	data->player->planex = data->player->planex * cos(ROTSPEED) - data->player->planey * sin(ROTSPEED);
+// 	data->player->planey = oldPlaneX * sin(ROTSPEED) + data->player->planey * cos(ROTSPEED);
+// 	normalize_vector(&data->player->pdirx, &data->player->pdiry);
+// 	normalize_vector(&data->player->planex, &data->player->planey);
+// }
 
 void player_position(t_data *data)
 {
-	if (data->player->rotate_left)
-		move_camera_left(data);
-	else if (data->player->rotate_right)
-		move_camera_right(data);
+	if (data->player->rotate_left || data->player->rotate_right)
+		rotate_player(data);
 	if (data->player->moving_left)
 		buttons_a(data->player, data->map_pars);
 	if (data->player->moving_right)
