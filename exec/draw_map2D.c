@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 15:19:33 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/29 16:16:42 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/10/30 14:01:38 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,6 @@ void	draw_square(t_data *data, int x, int y, int color, int square_size)
 		i++;
 	}
 }
-
-#define HALF_MINIMAP (MINIMAP_RADIUS / 2)
 
 void draw_map(t_data *data)
 {

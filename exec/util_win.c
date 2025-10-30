@@ -45,17 +45,6 @@ void	split_win(t_data *data)
 	mlx_put_image_to_window(data->win->mlx, data->win->win, data->win->img, 0, 0);
 }
 
-void	my_mlx_pixel_put(t_win *win, int x, int y, int color)
-{
-	char	*dst;
-
-	if (!win || !win->addr)
-		return ;
-	if (x < 0 || y < 0 || x >= WIDTH || y >= HEIGHT)
-		return ;
-	dst = win->addr + (y * win->line_length + x * (win->bits_per_pixel / 8));
-	*(unsigned int *)dst = color;
-}
 void	clear_window(t_win *win)
 {
 	ft_bzero(win->addr, WIDTH * HEIGHT * (win->bits_per_pixel / 8));

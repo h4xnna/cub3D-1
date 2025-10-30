@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/29 17:10:56 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/10/30 14:01:50 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,11 @@
 # define ROTSPEED 0.05
 # define VERT 0x006400
 # define MINIMAP_RADIUS 5
+# define HALF_MINIMAP (MINIMAP_RADIUS / 2)
 # define REFLECTIONSTRENGTH 0.1
 # define RED "\033[1;31m"
 # define RESET "\033[0m"
+
 
 typedef struct s_color
 {
@@ -164,8 +166,62 @@ typedef struct s_data
 	t_texture	*texture;
 }				t_data;
 
+static inline void	my_mlx_pixel_put(t_win *win, int x, int y, int color)
+{
+	char	*dst;
+
+	if (!win || !win->addr)
+		return ;
+	if (x < 0 || y < 0 || x >= WIDTH || y >= HEIGHT)
+		return ;
+	dst = win->addr + (y * win->line_length + x * (win->bits_per_pixel / 8));
+	*(unsigned int *)dst = color;
+}
+
+static inline uint32_t apply_shading(double distance, uint32_t color) // apply shading based on distance
+{
+    uint8_t r, g, b;
+    double factor;
+    uint8_t new_r, new_g, new_b;
+    uint32_t new_color;
+
+    if (distance < 1.0)
+        distance = 1.0;
+
+    factor = 1.0 / distance;
+    if (factor < 0.1)
+        factor = 0.1;
+
+    r = (color >> 16) & 0xFF;
+    g = (color >> 8) & 0xFF;
+    b = color & 0xFF;
+
+    new_r = (uint8_t)(r * factor);
+    new_g = (uint8_t)(g * factor);
+    new_b = (uint8_t)(b * factor);
+
+    if (new_r > 255) new_r = 255;
+    if (new_g > 255) new_g = 255;
+    if (new_b > 255) new_b = 255;
+
+    new_color = (new_r << 16) | (new_g << 8) | new_b;
+
+    return new_color;
+}
+
+static inline int	get_texture_pixel(t_img *img, int x, int y)
+{
+	char	*dst;
+
+	if (x < 0 || y < 0 || x >= img->width || y >= img->height)
+		return (0);
+	dst = img->addr
+		+ (y * img->line_length + x * (img->bits_per_pixel / 8));
+	return (*(unsigned int *)dst);
+}
+
 // utils_pars1
-int				get_texture_pixel(t_img *img, int x, int y);
+
 int				len_tab(char **tab);
 char			*remove_newline(char *line);
 int				ft_strcmp(char *str, char *str2);
@@ -234,7 +290,6 @@ void			load_text(t_data *data);
 
 // exec../ util_win
 void			split_win(t_data *data);
-void			my_mlx_pixel_put(t_win *win, int x, int y, int color);
 void			clear_window(t_win *win);
 t_win			*init_win(void);
 void			free_win(t_win *win);

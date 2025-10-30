@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/08 13:51:22 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/29 17:13:45 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/10/30 13:54:08 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,37 +125,6 @@ int	get_window_pixel(t_win *win, int x, int y)
 	return (*(unsigned int *)dst);
 }
 
-int apply_shading(double distance, int color) // apply shading based on distance
-{
-    int r, g, b;
-    double factor;
-    int new_r, new_g, new_b;
-    int new_color;
-
-    if (distance < 1.0)
-        distance = 1.0;
-
-    factor = 1.0 / distance;
-    if (factor < 0.1)
-        factor = 0.1;
-
-    r = (color >> 16) & 0xFF;
-    g = (color >> 8) & 0xFF;
-    b = color & 0xFF;
-
-    new_r = (int)(r * factor);
-    new_g = (int)(g * factor);
-    new_b = (int)(b * factor);
-
-    if (new_r > 255) new_r = 255;
-    if (new_g > 255) new_g = 255;
-    if (new_b > 255) new_b = 255;
-
-    new_color = (new_r << 16) | (new_g << 8) | new_b;
-
-    return new_color;
-}
-
 
 void drawRays2D(t_data *data)
 {
@@ -181,6 +150,8 @@ void drawRays2D(t_data *data)
     int reflectedY;
     int reflectedColor;
     int wallColor;
+
+    double floorXWall, floorYWall;
 
 	t_img *texture;
 	
@@ -297,7 +268,6 @@ void drawRays2D(t_data *data)
             }
 			y++;
         }
-		double floorXWall, floorYWall;
 
 		if (data->raycast->side == 0 && data->raycast->raydirx > 0)
 		{
