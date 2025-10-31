@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:26:45 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/30 15:50:18 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/10/31 16:53:03 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ int	main(int ac, char **av)
 	// print_char(map.map);
 	// write(1, "\n", 1);
 	// write(1, "\n", 1);
-	x_to_0(map);
 	// print_char(map.map);
 	data->player = ft_calloc(1, sizeof(t_player));
 	data->raycast = ft_calloc(1, sizeof(t_raycast));
@@ -62,6 +61,9 @@ int	main(int ac, char **av)
 	data->win = win;
 	load_all_textures(data);
 	set_player_direction(data->player, map->position);
+	normalize_vector(&data->player->pdirx, &data->player->pdiry);
+	normalize_vector(&data->player->planex, &data->player->planey);
+	print_char(data->map_pars->map);
 	mlx_mouse_hide(data->win->mlx, data->win->win);
 	mlx_mouse_move(data->win->mlx, data->win->win, WIDTH / 2, HEIGHT / 2);
 	mlx_hook(data->win->win, 2, 1L << 0, (int (*)())key_press, data);

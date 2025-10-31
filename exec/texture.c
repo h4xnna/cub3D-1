@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 10:55:48 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/29 16:47:08 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/10/31 16:33:50 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	ft_putstr_Red(char *str)
     write(2, "\n", 1);
     write(2, RESET, sizeof(RESET) - 1);
 }
+
 static t_img    *load_one_texture(t_data *data, t_img *tex, char *path)
 {
     tex = malloc(sizeof(t_img));
@@ -46,6 +47,7 @@ void	load_all_textures(t_data *data)
 {
     data->texture->skybox = load_one_texture(data, data->texture->skybox, "./texture/2.xpm");
     data->texture->floor = load_one_texture(data, data->texture->floor, "./texture/metal.xpm");
+    data->texture->door = load_one_texture(data, data->texture->floor, "./texture/pre.xpm");
 	data->texture->text_South = load_one_texture(data, data->texture->text_South, data->map_info->south);
 	data->texture->text_North = load_one_texture(data, data->texture->text_North, data->map_info->north);
 	data->texture->text_West = load_one_texture(data, data->texture->text_West, data->map_info->west);

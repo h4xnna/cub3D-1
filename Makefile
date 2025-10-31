@@ -19,7 +19,7 @@ CYAN_SHOCK      = "\033[38;5;51m"
 
 NAME	= cube
 CC		= cc 
-CFLAGS	= -Wall -Werror -Wextra -Ofast -march=native
+CFLAGS	= -Wall -Werror -Wextra -Ofast -march=native -g3
 
 SRCS	=	gnl/get_next_line.c\
 			main.c \

@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 14:54:11 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/30 15:40:21 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/10/31 16:19:14 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,10 @@ void rotate_player(t_data *data)
 void player_position(t_data *data)
 {
 	if (data->player->rotate_left || data->player->rotate_right)
+	{
 		rotate_player(data);
+		mlx_mouse_move(data->win->mlx, data->win->win, WIDTH / 2, HEIGHT / 2);
+	}
 	if (data->player->moving_left)
 		buttons_a(data->player, data->map_pars);
 	if (data->player->moving_right)
@@ -56,7 +59,6 @@ int render(t_data *data)
 	drawSkybox(data);
 	drawRays2D(data);
 	player_position(data);
-	mlx_mouse_move(data->win->mlx, data->win->win, WIDTH / 2, HEIGHT / 2);
 	return (0);
 }
 

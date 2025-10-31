@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pars_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
+/*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 15:26:04 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/26 16:34:10 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/10/31 16:53:21 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	check_char(char *line, t_map_pars *map)
 	while (line[i])
 	{
 		if ((line[i] != 'N' && line[i] != 'S' && line[i] != 'E'
-				&& line[i] != 'W') && (line[i] != 48 && line[i] != 49
+				&& line[i] != 'W' && line[i] != 'D') && (line[i] != 48 && line[i] != 49
 				&& line[i] != ' '))
 			return (FAILURE);
 		if (line[i] == 48 || line[i] == 49)
@@ -35,7 +35,7 @@ int	check_char(char *line, t_map_pars *map)
 	return (SUCCESS);
 }
 
-static void	free_splif(char **out, int i)
+void	free_splif(char **out, int i)
 {
 	while (i > 0)
 	{

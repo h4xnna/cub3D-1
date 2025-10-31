@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/30 15:44:07 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/10/31 17:03:53 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,7 @@ typedef struct s_texture
 {
 	t_img		*skybox;
 	t_img		*floor;
+	t_img		*door;
 	t_img		*text_South;
 	t_img		*text_North;
 	t_img		*text_West;
@@ -230,6 +231,7 @@ int				ft_strcmp(char *str, char *str2);
 int				is_fichier(char *path);
 int				is_direction(char *str);
 void			drawRays2D(t_data *data);
+void			free_splif(char **out, int i);
 
 // utils_pars2
 void			print_info(t_map_info info, t_map_pars map);

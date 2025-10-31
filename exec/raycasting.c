@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/08 13:51:22 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/30 13:54:08 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/10/31 17:04:21 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,7 +209,7 @@ void drawRays2D(t_data *data)
             }
 
             if (data->map_pars->map[data->raycast->mapy] &&
-                data->map_pars->map[data->raycast->mapy][data->raycast->mapx] == '1') // si mur stop DDA
+                (data->map_pars->map[data->raycast->mapy][data->raycast->mapx] == '1' || data->map_pars->map[data->raycast->mapy][data->raycast->mapx] == 'D')) // si mur stop DDA
                 data->raycast->hit = 1;
         }
 		// draw_line( data);
@@ -225,20 +225,27 @@ void drawRays2D(t_data *data)
         data->raycast->draw_end = data->raycast->line_height / 2 + HEIGHT / 2;
         if (data->raycast->draw_end >= HEIGHT) data->raycast->draw_end = HEIGHT - 1; //  calcul hauteur de la colonne a dessiner a lecran 
 
-        if (data->raycast->side == 0)
+        if (data->map_pars->map[data->raycast->mapy][data->raycast->mapx] == '1')
         {
-            if (data->raycast->raydirx > 0)
-                texture = data->texture->text_West;
+            if (data->raycast->side == 0)
+            {
+                if (data->raycast->raydirx > 0)
+                    texture = data->texture->text_West;
+                else
+                    texture = data->texture->text_East;
+            }
             else
-                texture = data->texture->text_East;
+            {
+                if (data->raycast->raydiry > 0)
+                    texture = data->texture->text_North;
+                else
+                    texture = data->texture->text_South;
+            }
         }
         else
         {
-            if (data->raycast->raydiry > 0)
-                texture = data->texture->text_North;
-            else
-			
-                texture = data->texture->text_South;
+            texture = data->texture->door;
+            
         }
 
         if (data->raycast->side == 0)
@@ -260,6 +267,11 @@ void drawRays2D(t_data *data)
 				texY = 0;
 
             color = ((int *)texture->addr)[texture->height * texY + texX];
+            if (color == 65280)
+            {
+                y++;
+                continue;
+            }
             color = apply_shading(data->raycast->perpwall_dist / 2, color);
             my_mlx_pixel_put(data->win, x, y, color);
             if ((y + (data->raycast->draw_end - y) * 2) < HEIGHT)
