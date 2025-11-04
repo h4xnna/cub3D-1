@@ -19,7 +19,8 @@ CYAN_SHOCK      = "\033[38;5;51m"
 
 NAME	= cube
 CC		= cc 
-CFLAGS	= -Wall -Werror -Wextra -Ofast -march=native -g3
+# CFLAGS	= -Wall -Werror -Wextra -Ofast -march=native -g3
+CFLAGS	= -Wall -Werror -Wextra  -g3
 
 SRCS	=	gnl/get_next_line.c\
 			main.c \
@@ -30,6 +31,7 @@ SRCS	=	gnl/get_next_line.c\
 			pars/pars_map2.c  \
 			pars/free_pars1.c \
 			pars/info_pars4.c\
+			pars/doors.c \
 			exec/buttons.c\
 			exec/draw_map2D.c\
 			exec/raycasting.c\
@@ -39,7 +41,8 @@ SRCS	=	gnl/get_next_line.c\
 			utils_main.c\
 			utils_main2.c\
 			exec/player_position.c\
-			exec/drawSkybox.c
+			exec/drawSkybox.c\
+
 
 
 

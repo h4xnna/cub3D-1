@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 14:54:11 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/31 16:19:14 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/04 18:39:38 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,55 @@ void rotate_player(t_data *data)
 // 	normalize_vector(&data->player->planex, &data->player->planey);
 // }
 
+t_door	*find_door(t_door *doors, int y, int x)
+{
+	while (doors)
+	{
+		if (doors->y == y && doors->x == x)
+			return (doors);
+		doors = doors->next;
+	}
+	return (NULL);
+}
+
+void	update_doors(t_data	*data, double delta_time)
+{
+	t_door	*door;
+
+	door = data->doors;
+	while (door)
+	{
+		if (door->opened == 1 && door->opening < 1.0)
+		{
+			door->opening += delta_time * 0.8;
+		}
+		if (door->opening >= 1.0)
+		{
+			door->opening = 1.0;
+			data->map_pars->map[door->y][door->x] = '0';
+		}
+		door = door->next;
+	}
+}
+
+void	check_doors(t_data *data)
+{
+	t_player	*player = data->player;
+	t_door		*door = NULL;
+
+	if ((data->map_pars->map[(int)player->py][(int)(player->px + player->pdirx
+				* 1.1)]) == 'D')
+			door = find_door(data->doors, (int)player->py, (int)(player->px + player->pdirx * 1.1));
+	if (data->map_pars->map[(int)(player->py + player->pdiry
+			* 1.1)][(int)(player->px)] == 'D')
+			door = find_door(data->doors, (int)(player->py + player->pdiry * 1.1), (int)player->px);
+	if (door)
+	{
+		if(!door->opened)
+			door->opened = 1;
+	}
+}
+
 void player_position(t_data *data)
 {
 	if (data->player->rotate_left || data->player->rotate_right)
@@ -51,6 +100,7 @@ void player_position(t_data *data)
 		buttons_s(data->player, data->map_pars);
 	if(data->player->moving_up)
 		buttons_w(data->player, data->map_pars);
+	check_doors(data);
 }
 
 int render(t_data *data)
@@ -59,6 +109,7 @@ int render(t_data *data)
 	drawSkybox(data);
 	drawRays2D(data);
 	player_position(data);
+	update_doors(data, 0.016);
 	return (0);
 }
 

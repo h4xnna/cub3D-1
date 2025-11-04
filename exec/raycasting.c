@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/08 13:51:22 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/31 17:04:21 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/04 18:37:49 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,8 +152,10 @@ void drawRays2D(t_data *data)
     int wallColor;
 
     double floorXWall, floorYWall;
+    bool skip_door = false;
 
 	t_img *texture;
+    t_door  *door;
 	
     while (x < WIDTH)
     {
@@ -209,24 +211,22 @@ void drawRays2D(t_data *data)
             }
 
             if (data->map_pars->map[data->raycast->mapy] &&
-                (data->map_pars->map[data->raycast->mapy][data->raycast->mapx] == '1' || data->map_pars->map[data->raycast->mapy][data->raycast->mapx] == 'D')) // si mur stop DDA
+                (data->map_pars->map[data->raycast->mapy][data->raycast->mapx] == '1' || (data->map_pars->map[data->raycast->mapy][data->raycast->mapx] == 'D' && skip_door == false))) // si mur stop DDA
                 data->raycast->hit = 1;
-        }
-		// draw_line( data);
+            else
+                continue;
 
-        if (data->raycast->side == 0)
-            data->raycast->perpwall_dist = data->raycast->sidedistx - data->raycast->delta_dist_x;
-        else
-            data->raycast->perpwall_dist = data->raycast->side_dist_y - data->raycast->delta_dist_y; // fish eyes fix
+            if (data->raycast->side == 0)
+                data->raycast->perpwall_dist = data->raycast->sidedistx - data->raycast->delta_dist_x;
+            else
+                data->raycast->perpwall_dist = data->raycast->side_dist_y - data->raycast->delta_dist_y; // fish eyes fix
 
-        data->raycast->line_height = (int)(HEIGHT / data->raycast->perpwall_dist);
-        data->raycast->draw_start = -data->raycast->line_height / 2 + HEIGHT / 2;
-        if (data->raycast->draw_start < 0) data->raycast->draw_start = 0;
-        data->raycast->draw_end = data->raycast->line_height / 2 + HEIGHT / 2;
-        if (data->raycast->draw_end >= HEIGHT) data->raycast->draw_end = HEIGHT - 1; //  calcul hauteur de la colonne a dessiner a lecran 
+            data->raycast->line_height = (int)(HEIGHT / data->raycast->perpwall_dist);
+            data->raycast->draw_start = -data->raycast->line_height / 2 + HEIGHT / 2;
+            if (data->raycast->draw_start < 0) data->raycast->draw_start = 0;
+                data->raycast->draw_end = data->raycast->line_height / 2 + HEIGHT / 2;
+            if (data->raycast->draw_end >= HEIGHT) data->raycast->draw_end = HEIGHT - 1; //  calcul hauteur de la colonne a dessiner a lecran 
 
-        if (data->map_pars->map[data->raycast->mapy][data->raycast->mapx] == '1')
-        {
             if (data->raycast->side == 0)
             {
                 if (data->raycast->raydirx > 0)
@@ -241,18 +241,29 @@ void drawRays2D(t_data *data)
                 else
                     texture = data->texture->text_South;
             }
-        }
-        else
-        {
-            texture = data->texture->door;
-            
-        }
 
-        if (data->raycast->side == 0)
-            wallX = data->player->py + data->raycast->perpwall_dist * data->raycast->raydiry;
-        else
-            wallX = data->player->px + data->raycast->perpwall_dist * data->raycast->raydirx;
-        wallX -= floor(wallX);
+            if (data->raycast->side == 0)
+                wallX = data->player->py + data->raycast->perpwall_dist * data->raycast->raydiry;
+            else
+                wallX = data->player->px + data->raycast->perpwall_dist * data->raycast->raydirx;
+            wallX -= floor(wallX);
+
+            if (data->map_pars->map[data->raycast->mapy][data->raycast->mapx] == 'D' && !skip_door)
+            {
+                door = find_door(data->doors, data->raycast->mapy, data->raycast->mapx);
+                wallX -= door->opening;
+                if (wallX <= 0.0)
+                {
+                    skip_door = true;
+                    data->raycast->hit = 0;
+                    continue ;
+                }
+            }
+            skip_door = false;
+            break;
+        }
+		// draw_line( data);
+
     	texX = (int)(wallX * (double)texture->width);
         if ((data->raycast->side == 0 && data->raycast->raydirx > 0) ||
             (data->raycast->side == 1 && data->raycast->raydiry < 0))
@@ -267,12 +278,7 @@ void drawRays2D(t_data *data)
 				texY = 0;
 
             color = ((int *)texture->addr)[texture->height * texY + texX];
-            if (color == 65280)
-            {
-                y++;
-                continue;
-            }
-            color = apply_shading(data->raycast->perpwall_dist / 2, color);
+            color = apply_shading(data->raycast->perpwall_dist / 1.5, color);
             my_mlx_pixel_put(data->win, x, y, color);
             if ((y + (data->raycast->draw_end - y) * 2) < HEIGHT)
             {

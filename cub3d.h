@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/31 17:03:53 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/04 18:57:05 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@
 # define REFLECTIONSTRENGTH 0.1
 # define RED "\033[1;31m"
 # define RESET "\033[0m"
-
 
 typedef struct s_color
 {
@@ -114,6 +113,15 @@ typedef struct s_win
 
 }				t_win;
 
+typedef struct s_door
+{
+	int				x;
+	int				y;
+	double			opening;
+	int				opened;
+	struct	s_door	*next;
+}	t_door;
+
 typedef struct s_raycast
 {
 	double		camerax;
@@ -167,6 +175,7 @@ typedef struct s_data
 	t_win		*win;
 	t_raycast	*raycast;
 	t_texture	*texture;
+	t_door		*doors;
 }				t_data;
 
 static inline void	my_mlx_pixel_put(t_win *win, int x, int y, int color)
@@ -224,6 +233,10 @@ static inline int	get_texture_pixel(t_img *img, int x, int y)
 }
 
 // utils_pars1
+
+void			print_doors(t_door *doors);
+void			make_doors(t_data *data);
+t_door			*find_door(t_door *doors, int y, int x);
 
 int				len_tab(char **tab);
 char			*remove_newline(char *line);
