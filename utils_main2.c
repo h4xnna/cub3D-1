@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 14:54:11 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/11/04 18:39:38 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/05 18:46:15 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,34 +54,29 @@ void	update_doors(t_data	*data, double delta_time)
 	door = data->doors;
 	while (door)
 	{
-		if (door->opened == 1 && door->opening < 1.0)
+		if (sqrt(pow(data->player->px - (door->x + 0.5), 2) + pow(data->player->py - (door->y + 0.5), 2)) < sqrt(2))
 		{
-			door->opening += delta_time * 0.8;
+			if (door->opening >= 0.0 || !door->opened)
+				door->opened = 1;
 		}
+		else
+		{
+			data->map_pars->map[door->y][door->x] = 'D';
+			door->opened = -1;
+		}
+		if (door->opened == 1 && door->opening < 1.0)
+			door->opening += delta_time * 0.8;
+		else if (door->opened == -1 && door->opening > 0.0)
+			door->opening += delta_time * -0.8;
 		if (door->opening >= 1.0)
 		{
 			door->opening = 1.0;
 			data->map_pars->map[door->y][door->x] = '0';
 		}
+		if (door->opening <= 0.0)
+			door->opening = 0.0;
+		// printf("%d : %f\n", door->opened, door->opening);
 		door = door->next;
-	}
-}
-
-void	check_doors(t_data *data)
-{
-	t_player	*player = data->player;
-	t_door		*door = NULL;
-
-	if ((data->map_pars->map[(int)player->py][(int)(player->px + player->pdirx
-				* 1.1)]) == 'D')
-			door = find_door(data->doors, (int)player->py, (int)(player->px + player->pdirx * 1.1));
-	if (data->map_pars->map[(int)(player->py + player->pdiry
-			* 1.1)][(int)(player->px)] == 'D')
-			door = find_door(data->doors, (int)(player->py + player->pdiry * 1.1), (int)player->px);
-	if (door)
-	{
-		if(!door->opened)
-			door->opened = 1;
 	}
 }
 
@@ -92,6 +87,20 @@ void player_position(t_data *data)
 		rotate_player(data);
 		mlx_mouse_move(data->win->mlx, data->win->win, WIDTH / 2, HEIGHT / 2);
 	}
+	if (data->player->look_down || data->player->look_up)
+	{
+		if (data->player->look_down)
+		{
+			// if (data->player->pitch - data->player->rotate_speed >= -HEIGHT)
+				data->player->pitch += 20;
+		}
+		else
+		{
+			// if (data->player->pitch + data->player->rotate_speed <= HEIGHT)
+				data->player->pitch -= 20;
+		}
+		mlx_mouse_move(data->win->mlx, data->win->win, WIDTH / 2, HEIGHT / 2);
+	}
 	if (data->player->moving_left)
 		buttons_a(data->player, data->map_pars);
 	if (data->player->moving_right)
@@ -100,7 +109,6 @@ void player_position(t_data *data)
 		buttons_s(data->player, data->map_pars);
 	if(data->player->moving_up)
 		buttons_w(data->player, data->map_pars);
-	check_doors(data);
 }
 
 int render(t_data *data)

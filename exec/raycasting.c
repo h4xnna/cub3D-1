@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/08 13:51:22 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/11/04 18:37:49 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/05 19:35:41 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -251,6 +251,7 @@ void drawRays2D(t_data *data)
             if (data->map_pars->map[data->raycast->mapy][data->raycast->mapx] == 'D' && !skip_door)
             {
                 door = find_door(data->doors, data->raycast->mapy, data->raycast->mapx);
+                // printf("%d\n", door->opened);
                 wallX -= door->opening;
                 if (wallX <= 0.0)
                 {
