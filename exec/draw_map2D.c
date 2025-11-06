@@ -6,31 +6,12 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/05 15:19:33 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/11/04 19:39:31 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/06 11:58:42 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
-void	x_to_0(t_map_pars *map)
-{
-	int	x;
-	int	y;
-
-	x = 0;
-	y = 0;
-	while (map->map[y])
-	{
-		while (map->map[y][x])
-		{
-			if (map->map[y][x] == 'X')
-				map->map[y][x] = '0';
-			x++;
-		}
-		x = 0;
-		y++;
-	}
-}
 void	draw_square(t_data *data, int x, int y, int color, int square_size)
 {
 	int	i;
@@ -102,18 +83,4 @@ int is_wall(t_data *data, float ray_x, float ray_y)
 			&& data->map_pars->map[(int)(ray_y / SIZE_SQUARE)][(int)(ray_x / SIZE_SQUARE)] == '1')
 			return (1);
 	return (0);
-}
-
-void draw_line(t_data *data)
-{
-	float ray_x = data->player->px * SIZE_SQUARE;
-	float ray_y = data->player->py * SIZE_SQUARE;
-	
-	while (!is_wall(data, ray_x, ray_y))
-	{
-		ray_x += data->raycast->raydirx;
-		ray_y += data->raycast->raydiry;
-		my_mlx_pixel_put(data->win, ray_x, ray_y, 0xFF0000);
-	}
-	
 }

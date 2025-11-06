@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/11/05 19:38:14 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/06 14:00:06 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,9 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <stdint.h>
+# include <time.h>
+# include <sys/time.h>
+
 # define PI 3.1415926535
 # define WIDTH 1280
 # define HEIGHT 720
@@ -44,6 +47,7 @@
 # define REFLECTIONSTRENGTH 0.1
 # define RED "\033[1;31m"
 # define RESET "\033[0m"
+# define MOVE_SPEED 3
 
 typedef struct s_color
 {
@@ -71,7 +75,7 @@ typedef struct s_map_pars
 	int			map_started;
 }				t_map_pars;
 
-typedef struct s_player // position
+typedef struct s_player
 {
 	float pa;
 	double pdirx;
@@ -91,6 +95,9 @@ typedef struct s_player // position
 	double	rotate_speed;
 	double	sensitivity;
 	double	pitch;
+	double	delta_time;
+	int mouse_x;
+	
 }				t_player;
 
 typedef struct s_map_info
@@ -163,6 +170,7 @@ typedef struct s_texture
 	t_img		*skybox;
 	t_img		*floor;
 	t_img		*door;
+	t_img		*exit;
 	t_img		*text_South;
 	t_img		*text_North;
 	t_img		*text_West;
@@ -193,7 +201,7 @@ static inline void	my_mlx_pixel_put(t_win *win, int x, int y, int color)
 	*(unsigned int *)dst = color;
 }
 
-static inline uint32_t apply_shading(double distance, uint32_t color) // apply shading based on distance
+static inline uint32_t apply_shading(double distance, uint32_t color)
 {
     uint8_t r, g, b;
     double factor;
@@ -237,6 +245,7 @@ static inline int	get_texture_pixel(t_img *img, int x, int y)
 
 // utils_pars1
 
+void			rotate_player(t_data *data, int mouse_x);
 void			print_doors(t_door *doors);
 void			make_doors(t_data *data);
 t_door			*find_door(t_door *doors, int y, int x);

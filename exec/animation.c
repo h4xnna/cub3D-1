@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 14:46:58 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/11/05 19:17:47 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/06 14:07:30 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,25 +66,7 @@ int	key_press(int keycode, t_data *data)
 
 int mouse_info(int x, int y, t_data *data)
 {
-	data->player->rotate_speed = data->player->sensitivity * (x - (WIDTH / 2));
-
+	data->player->mouse_x = x;
 	(void)y;
-	if (x > WIDTH / 2)
-	{
-		data->player->rotate_right = true;
-		if (data->player->rotate_left)
-			data->player->rotate_left = false;
-	}
-	else if (x < WIDTH / 2)
-	{
-		data->player->rotate_left = true;
-		if (data->player->rotate_right)
-			data->player->rotate_right = false;
-	}
-	else
-	{
-		data->player->rotate_left = false;
-		data->player->rotate_right = false;
-	}
 	return (0);
 }

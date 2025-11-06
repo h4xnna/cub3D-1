@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:26:45 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/11/05 19:40:13 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/06 14:09:47 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,9 @@ int	main(int ac, char **av)
 	data->player->px = map->x_start + 0.5;
 	data->player->py = map->y_start + 0.5;
 	data->player->sensitivity = 0.001;
+	data->player->delta_time = 0.016;
+	data->player->mouse_x = WIDTH / 2;
 	data->map_pars->height = len_tab(data->map_pars->map);
-
 
 	make_doors(data);
 	win = init_win();

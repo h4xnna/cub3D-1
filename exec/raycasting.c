@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/08 13:51:22 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/11/05 19:35:41 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/06 19:42:37 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,12 +150,14 @@ void drawRays2D(t_data *data)
     int reflectedY;
     int reflectedColor;
     int wallColor;
+    int finalColor;
 
     double floorXWall, floorYWall;
     bool skip_door = false;
 
 	t_img *texture;
     t_door  *door;
+    t_color floort, wall, reflect, final;
 	
     while (x < WIDTH)
     {
@@ -327,23 +329,23 @@ void drawRays2D(t_data *data)
 			reflectedColor = get_window_pixel(data->win, x, reflectedY);
 			wallColor = get_window_pixel(data->win, x, p);
 
-			uint8_t r1 = (floorColor >> 16) & 0xFF;
-			uint8_t g1 = (floorColor >> 8) & 0xFF;
-			uint8_t b1 = floorColor & 0xFF;
+			floort.r = (floorColor >> 16) & 0xFF;
+			floort.g = (floorColor >> 8) & 0xFF;
+			floort.b = floorColor & 0xFF;
 
-			uint8_t r2 = (reflectedColor >> 16) & 0xFF;
-			uint8_t g2 = (reflectedColor >> 8) & 0xFF;
-			uint8_t b2 = reflectedColor & 0xFF;
+			reflect.r = (reflectedColor >> 16) & 0xFF;
+			reflect.g = (reflectedColor >> 8) & 0xFF;
+			reflect.b = reflectedColor & 0xFF;
 
-			uint8_t r3 = (wallColor >> 16) & 0xFF;
-			uint8_t g3 = (wallColor >> 8) & 0xFF;
-			uint8_t b3 = wallColor & 0xFF;
+			wall.r = (wallColor >> 16) & 0xFF;
+			wall.g = (wallColor >> 8) & 0xFF;
+			wall.b = wallColor & 0xFF;
 
-			uint8_t finalR = (uint8_t)((r1 * (1.0 - REFLECTIONSTRENGTH * 3) + r2 * REFLECTIONSTRENGTH + r3 * REFLECTIONSTRENGTH * 2));
-			uint8_t finalG = (uint8_t)((g1 * (1.0 - REFLECTIONSTRENGTH * 3) + g2 * REFLECTIONSTRENGTH + g3 * REFLECTIONSTRENGTH * 2));
-			uint8_t finalB = (uint8_t)((b1 * (1.0 - REFLECTIONSTRENGTH * 3) + b2 * REFLECTIONSTRENGTH + b3 * REFLECTIONSTRENGTH * 2));
+			final.r = (uint8_t)((floort.r * (1.0 - REFLECTIONSTRENGTH * 3) + reflect.r * REFLECTIONSTRENGTH + wall.r * REFLECTIONSTRENGTH * 2));
+			final.g = (uint8_t)((floort.g * (1.0 - REFLECTIONSTRENGTH * 3) + reflect.g * REFLECTIONSTRENGTH + wall.g * REFLECTIONSTRENGTH * 2));
+			final.b = (uint8_t)((floort.b * (1.0 - REFLECTIONSTRENGTH * 3) + reflect.b * REFLECTIONSTRENGTH + wall.b * REFLECTIONSTRENGTH * 2));
 
-			int finalColor = (finalR << 16) | (finalG << 8) | finalB;
+			finalColor = (final.r << 16) | (final.g << 8) | final.b;
 			my_mlx_pixel_put(data->win, x, p, apply_shading(currentDist / 2, finalColor));
 
 			p++;

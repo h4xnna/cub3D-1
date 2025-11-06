@@ -6,22 +6,44 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 14:54:11 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/11/05 18:46:15 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/06 19:32:19 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void rotate_player(t_data *data)
+static double get_time_seconds(void)
 {
+    struct timeval t;
+    gettimeofday(&t, NULL);
+    return (t.tv_sec + t.tv_usec / 1000000.0);
+}
+
+void rotate_player(t_data *data, int mouse_x)
+{
+	static double current_speed = 0.0;
+ 
+	double max_speed = 0.15;
+	double target_speed = data->player->sensitivity * (mouse_x - WIDTH/2);
+
+    if (target_speed > max_speed)
+		target_speed = max_speed;
+	if (target_speed < -max_speed)
+		target_speed = -max_speed;
+
+    double accel = 15.0;
+    current_speed += (target_speed - current_speed) * accel * data->player->delta_time;
+
 	double oldDirX = data->player->pdirx;
-	data->player->pdirx = data->player->pdirx * cos(data->player->rotate_speed) - data->player->pdiry * sin(data->player->rotate_speed);
-	data->player->pdiry = oldDirX * sin(data->player->rotate_speed) + data->player->pdiry * cos(data->player->rotate_speed);
+	data->player->pdirx = data->player->pdirx * cos(current_speed) - data->player->pdiry * sin(current_speed);
+	data->player->pdiry = oldDirX * sin(current_speed) + data->player->pdiry * cos(current_speed);
 	double oldPlaneX = data->player->planex;
-	data->player->planex = data->player->planex * cos(data->player->rotate_speed) - data->player->planey * sin(data->player->rotate_speed);
-	data->player->planey = oldPlaneX * sin(data->player->rotate_speed) + data->player->planey * cos(data->player->rotate_speed);
+	data->player->planex = data->player->planex * cos(current_speed) - data->player->planey * sin(current_speed);
+	data->player->planey = oldPlaneX * sin(current_speed) + data->player->planey * cos(current_speed);
 	normalize_vector(&data->player->pdirx, &data->player->pdiry);
 	normalize_vector(&data->player->planex, &data->player->planey);
+
+	mlx_mouse_move(data->win->mlx, data->win->win, WIDTH / 2, HEIGHT / 2);
 }
 
 // void move_camera_right(t_data *data)
@@ -47,7 +69,7 @@ t_door	*find_door(t_door *doors, int y, int x)
 	return (NULL);
 }
 
-void	update_doors(t_data	*data, double delta_time)
+static void	update_doors(t_data	*data, double delta_time)
 {
 	t_door	*door;
 
@@ -80,27 +102,8 @@ void	update_doors(t_data	*data, double delta_time)
 	}
 }
 
-void player_position(t_data *data)
+static void player_position(t_data *data)
 {
-	if (data->player->rotate_left || data->player->rotate_right)
-	{
-		rotate_player(data);
-		mlx_mouse_move(data->win->mlx, data->win->win, WIDTH / 2, HEIGHT / 2);
-	}
-	if (data->player->look_down || data->player->look_up)
-	{
-		if (data->player->look_down)
-		{
-			// if (data->player->pitch - data->player->rotate_speed >= -HEIGHT)
-				data->player->pitch += 20;
-		}
-		else
-		{
-			// if (data->player->pitch + data->player->rotate_speed <= HEIGHT)
-				data->player->pitch -= 20;
-		}
-		mlx_mouse_move(data->win->mlx, data->win->win, WIDTH / 2, HEIGHT / 2);
-	}
 	if (data->player->moving_left)
 		buttons_a(data->player, data->map_pars);
 	if (data->player->moving_right)
@@ -113,12 +116,23 @@ void player_position(t_data *data)
 
 int render(t_data *data)
 {
-	clear_window(data->win);
-	drawSkybox(data);
-	drawRays2D(data);
-	player_position(data);
-	update_doors(data, 0.016);
-	return (0);
+    static double last_time = 0;
+    double current_time = get_time_seconds();
+	
+	data->player->delta_time = current_time - last_time;
+    last_time = current_time;
+	
+    double fps = 1.0 / data->player->delta_time;
+
+    clear_window(data->win);
+    drawSkybox(data);
+    drawRays2D(data);
+    player_position(data);
+	rotate_player(data, data->player->mouse_x);
+    update_doors(data, data->player->delta_time);
+    mlx_string_put(data->win->mlx, data->win->win, WIDTH - 20, 20, 0xFFFFFF, ft_itoa((int)fps));
+
+    return (0);
 }
 
 void free_textures(t_data *data)
