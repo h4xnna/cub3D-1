@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 12:53:12 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/31 16:56:51 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/08 14:39:58 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int flood_fill_helper(char **map, int x, int y)
         return 0;
     if (map[y][x] == ' ')
         return 0;
-    if (map[y][x] == '1' || map[y][x] == 'X' || map[y][x] == 'D')
+    if (map[y][x] == '1' || map[y][x] == 'X' || map[y][x] == 'D' || map[y][x] == 'L')
         return 1;
     if (map[y][x] == 'N' || map[y][x] == 'S' ||
         map[y][x] == 'E' || map[y][x] == 'W')

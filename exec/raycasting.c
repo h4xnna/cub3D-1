@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/08 13:51:22 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/11/06 19:42:37 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/08 16:45:25 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,11 +153,12 @@ void drawRays2D(t_data *data)
     int finalColor;
 
     double floorXWall, floorYWall;
-    bool skip_door = false;
+    bool skip = false;
 
 	t_img *texture;
+    t_img *floorTexture;
     t_door  *door;
-    t_color floort, wall, reflect, final;
+    t_color floort, wall, reflect, final, exitColor;
 	
     while (x < WIDTH)
     {
@@ -213,7 +214,7 @@ void drawRays2D(t_data *data)
             }
 
             if (data->map_pars->map[data->raycast->mapy] &&
-                (data->map_pars->map[data->raycast->mapy][data->raycast->mapx] == '1' || (data->map_pars->map[data->raycast->mapy][data->raycast->mapx] == 'D' && skip_door == false))) // si mur stop DDA
+                (data->map_pars->map[data->raycast->mapy][data->raycast->mapx] == '1' || (data->map_pars->map[data->raycast->mapy][data->raycast->mapx] == 'D' && skip == false))) // si mur stop DDA
                 data->raycast->hit = 1;
             else
                 continue;
@@ -250,19 +251,19 @@ void drawRays2D(t_data *data)
                 wallX = data->player->px + data->raycast->perpwall_dist * data->raycast->raydirx;
             wallX -= floor(wallX);
 
-            if (data->map_pars->map[data->raycast->mapy][data->raycast->mapx] == 'D' && !skip_door)
+            if (data->map_pars->map[data->raycast->mapy][data->raycast->mapx] == 'D' && !skip)
             {
                 door = find_door(data->doors, data->raycast->mapy, data->raycast->mapx);
                 // printf("%d\n", door->opened);
                 wallX -= door->opening;
                 if (wallX <= 0.0)
                 {
-                    skip_door = true;
+                    skip = true;
                     data->raycast->hit = 0;
                     continue ;
                 }
             }
-            skip_door = false;
+            skip = false;
             break;
         }
 		// draw_line( data);
@@ -317,17 +318,45 @@ void drawRays2D(t_data *data)
 			currentDist = HEIGHT / (2.0 * p - HEIGHT);
 			weight = currentDist / data->raycast->perpwall_dist;
 
+            
 			currentFloorX = weight * floorXWall + (1.0 - weight) * data->player->px;
 			currentFloorY = weight * floorYWall + (1.0 - weight) * data->player->py;
+    
+            if (data->map_pars->map[(int)currentFloorY][(int)currentFloorX] == 'L')
+            {
+                floorTexture = data->texture->exit;
+                floorTexX = (int)(currentFloorX * floorTexture->width) % floorTexture->width;
+                floorTexY = (int)(currentFloorY * floorTexture->height) % floorTexture->height;
+    
+                floorColor = ((int *)floorTexture->addr)[floorTexture->width * floorTexY + floorTexX];
 
-			floorTexX = (int)(currentFloorX * data->texture->floor->width) % data->texture->floor->width;
-			floorTexY = (int)(currentFloorY * data->texture->floor->height) % data->texture->floor->height;
+                exitColor.g = (floorColor >> 8) & 0xFF;
+                if (exitColor.g > 0)
+                {
+                    floorTexture = data->texture->floor;
+                }
+            }
+            else
+                floorTexture = data->texture->floor;
+            
+            floorTexX = (int)(currentFloorX * floorTexture->width) % floorTexture->width;
+            floorTexY = (int)(currentFloorY * floorTexture->height) % floorTexture->height;
 
-			floorColor = ((int *)data->texture->floor->addr)[data->texture->floor->width * floorTexY + floorTexX];
+            floorColor = ((int *)floorTexture->addr)[floorTexture->width * floorTexY + floorTexX];
+
+            
 
 			reflectedY = HEIGHT - p;
-			reflectedColor = get_window_pixel(data->win, x, reflectedY);
-			wallColor = get_window_pixel(data->win, x, p);
+            if (floorTexture == data->texture->floor)
+            {
+                reflectedColor = get_window_pixel(data->win, x, reflectedY);
+                wallColor = get_window_pixel(data->win, x, p);
+            }
+            else
+            {
+                reflectedColor = 0;
+                wallColor = 0;
+            }
 
 			floort.r = (floorColor >> 16) & 0xFF;
 			floort.g = (floorColor >> 8) & 0xFF;
