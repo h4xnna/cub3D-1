@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/08 13:51:22 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/11/08 16:45:25 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/09 20:02:03 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,9 +225,9 @@ void drawRays2D(t_data *data)
                 data->raycast->perpwall_dist = data->raycast->side_dist_y - data->raycast->delta_dist_y; // fish eyes fix
 
             data->raycast->line_height = (int)(HEIGHT / data->raycast->perpwall_dist);
-            data->raycast->draw_start = -data->raycast->line_height / 2 + HEIGHT / 2;
+            data->raycast->draw_start = -data->raycast->line_height / 2 + HEIGHT / 2 + data->player->pitch;
             if (data->raycast->draw_start < 0) data->raycast->draw_start = 0;
-                data->raycast->draw_end = data->raycast->line_height / 2 + HEIGHT / 2;
+            data->raycast->draw_end = data->raycast->line_height / 2 + HEIGHT / 2 + data->player->pitch;
             if (data->raycast->draw_end >= HEIGHT) data->raycast->draw_end = HEIGHT - 1; //  calcul hauteur de la colonne a dessiner a lecran 
 
             if (data->raycast->side == 0)
@@ -276,7 +276,7 @@ void drawRays2D(t_data *data)
 		y = data->raycast->draw_start;
         while (y <= data->raycast->draw_end)
         {
-			d = y * 256 - HEIGHT * 128 + data->raycast->line_height * 128;
+			d = (y - data->player->pitch) * 256 - HEIGHT * 128 + data->raycast->line_height * 128;
 			texY = ((d * texture->height) / data->raycast->line_height) / 256;
 			if (texY < 0)
 				texY = 0;
@@ -321,7 +321,7 @@ void drawRays2D(t_data *data)
             
 			currentFloorX = weight * floorXWall + (1.0 - weight) * data->player->px;
 			currentFloorY = weight * floorYWall + (1.0 - weight) * data->player->py;
-    
+    ;
             if (data->map_pars->map[(int)currentFloorY][(int)currentFloorX] == 'L')
             {
                 floorTexture = data->texture->exit;

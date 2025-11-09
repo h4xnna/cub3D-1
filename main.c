@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:26:45 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/11/06 14:09:47 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/09 19:38:50 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,17 +34,12 @@ int	main(int ac, char **av)
 	data->map_info = infos;
 	if (final_checks(infos, map))
 		return (FAILURE);
-	// print_info(infos, map);
 	if (flood_fill(map))
 	{
 		error_message("map pas ferme");
 		clean_exit(data);
 		return (FAILURE);
 	}
-	// print_char(map.map);
-	// write(1, "\n", 1);
-	// write(1, "\n", 1);
-	// print_char(map.map);
 	data->player = ft_calloc(1, sizeof(t_player));
 	data->raycast = ft_calloc(1, sizeof(t_raycast));
 	data->texture = ft_calloc(1, sizeof(t_texture));
@@ -53,6 +48,7 @@ int	main(int ac, char **av)
 	data->player->sensitivity = 0.001;
 	data->player->delta_time = 0.016;
 	data->player->mouse_x = WIDTH / 2;
+	data->player->pitch = 0;
 	data->map_pars->height = len_tab(data->map_pars->map);
 
 	make_doors(data);

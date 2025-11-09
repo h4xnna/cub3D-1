@@ -6,20 +6,33 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/04 16:43:22 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/11/06 17:34:05 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/09 19:28:27 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
+bool	is_walkable(char c)
+{
+	char	walkalbles[3] = "0L";
+	int i = 0;
+	while (walkalbles[i])
+	{
+		if (c == walkalbles[i])
+			return true;
+		i++;
+	}
+	return (false);
+}
+
 void	buttons_a(t_player *player, t_map_pars *map)
 {
 	double strafe_x = player->pdiry;
 	double strafe_y = -player->pdirx;
-	if (map->map[(int)player->py][(int)(player->px + strafe_x
-			* 0.2)] == '0')
+	if (is_walkable(map->map[(int)player->py][(int)(player->px + strafe_x
+			* 0.2)]))
 		player->px += strafe_x * MOVE_SPEED * player->delta_time;
-	if (map->map[(int)(player->py + strafe_y * 0.2)][(int)player->px] == '0')
+	if (is_walkable(map->map[(int)(player->py + strafe_y * 0.2)][(int)player->px]))
 		player->py += strafe_y * MOVE_SPEED * player->delta_time;
 }
 
@@ -27,29 +40,29 @@ void	buttons_d(t_player *player, t_map_pars *map)
 {
 		double strafe_x = -player->pdiry;
 		double strafe_y = player->pdirx;
-		if (map->map[(int)player->py][(int)(player->px + strafe_x
-				* 0.2)] == '0')
+		if (is_walkable(map->map[(int)player->py][(int)(player->px + strafe_x
+				* 0.2)]))
 			player->px += strafe_x * MOVE_SPEED * player->delta_time;
-		if (map->map[(int)(player->py + strafe_y * 0.2)][(int)player->px] == '0')
+		if (is_walkable(map->map[(int)(player->py + strafe_y * 0.2)][(int)player->px]))
 			player->py += strafe_y * MOVE_SPEED * player->delta_time;
 	}
 
 void	buttons_w(t_player *player, t_map_pars *map)
 {
-	if ((map->map[(int)player->py][(int)(player->px + player->pdirx
-				* 0.2)]) == '0')
+	if (is_walkable(map->map[(int)player->py][(int)(player->px + player->pdirx
+				* 0.2)]))
 		player->px += player->pdirx * MOVE_SPEED * player->delta_time;
-	if (map->map[(int)(player->py + player->pdiry
-			* 0.2)][(int)(player->px)] == '0')
+	if (is_walkable(map->map[(int)(player->py + player->pdiry
+			* 0.2)][(int)(player->px)]))
 		player->py += player->pdiry * MOVE_SPEED * player->delta_time;
 }
 
 void	buttons_s(t_player *player, t_map_pars *map)
 {
-	if ((map->map[(int)player->py][(int)(player->px - player->pdirx
-				* 0.2)]) == '0')
+	if (is_walkable(map->map[(int)player->py][(int)(player->px - player->pdirx
+				* 0.2)]))
 		player->px -= player->pdirx * MOVE_SPEED * player->delta_time;
-	if (map->map[(int)(player->py - player->pdiry
-			* 0.2)][(int)(player->px)] == '0')
+	if (is_walkable(map->map[(int)(player->py - player->pdiry
+			* 0.2)][(int)(player->px)]))
 		player->py -= player->pdiry * MOVE_SPEED * player->delta_time;
 }

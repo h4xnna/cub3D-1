@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 14:54:11 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/11/06 19:32:19 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/09 19:49:54 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,14 +104,24 @@ static void	update_doors(t_data	*data, double delta_time)
 
 static void player_position(t_data *data)
 {
-	if (data->player->moving_left)
+	static bool	exited = 0;
+	if (data->player->moving_left && !exited)
 		buttons_a(data->player, data->map_pars);
-	if (data->player->moving_right)
+	if (data->player->moving_right && !exited)
 		buttons_d(data->player, data->map_pars);
-	if(data->player->moving_down)
+	if(data->player->moving_down && !exited)
 		buttons_s(data->player, data->map_pars);
-	if(data->player->moving_up)
+	if(data->player->moving_up && !exited)
 		buttons_w(data->player, data->map_pars);
+	if(data->map_pars->map[(int)data->player->py][(int)(data->player->px)] == 'L')
+		exited = 1;
+	if (exited == 1)
+	{
+		if ((data->player->pitch + 20) > 1080)
+			data->player->pitch = 1080;
+		else
+			data->player->pitch -= 20;
+	}
 }
 
 int render(t_data *data)
