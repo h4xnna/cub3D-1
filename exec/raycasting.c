@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/08 13:51:22 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/11/09 20:02:03 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/12 14:55:54 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,8 +166,10 @@ void drawRays2D(t_data *data)
         data->raycast->raydirx = data->player->pdirx + data->player->planex * data->raycast->camerax;
         data->raycast->raydiry = data->player->pdiry + data->player->planey * data->raycast->camerax;
 
-        if (data->raycast->raydirx == 0) data->raycast->raydirx = 0.001;
-        if (data->raycast->raydiry == 0) data->raycast->raydiry = 0.001;
+        if (data->raycast->raydirx == 0)
+            data->raycast->raydirx = 0.001;
+        if (data->raycast->raydiry == 0)
+            data->raycast->raydiry = 0.001;
 
         data->raycast->mapx = (int)data->player->px; // convert pos joeurs coordonne case map
         data->raycast->mapy = (int)data->player->py;
@@ -254,7 +256,6 @@ void drawRays2D(t_data *data)
             if (data->map_pars->map[data->raycast->mapy][data->raycast->mapx] == 'D' && !skip)
             {
                 door = find_door(data->doors, data->raycast->mapy, data->raycast->mapx);
-                // printf("%d\n", door->opened);
                 wallX -= door->opening;
                 if (wallX <= 0.0)
                 {
@@ -284,101 +285,104 @@ void drawRays2D(t_data *data)
             color = ((int *)texture->addr)[texture->height * texY + texX];
             color = apply_shading(data->raycast->perpwall_dist / 1.5, color);
             my_mlx_pixel_put(data->win, x, y, color);
-            if ((y + (data->raycast->draw_end - y) * 2) < HEIGHT)
+            if (data->player->pitch > -800 && (y + (data->raycast->draw_end - y) * 2) < HEIGHT)
             {
                 my_mlx_pixel_put(data->win, x, y + (data->raycast->draw_end - y) * 2, color);
             }
 			y++;
         }
 
-		if (data->raycast->side == 0 && data->raycast->raydirx > 0)
-		{
-			floorXWall = data->raycast->mapx;
-			floorYWall = data->raycast->mapy + wallX;
-		}
-		else if (data->raycast->side == 0 && data->raycast->raydirx < 0)
-		{
-			floorXWall = data->raycast->mapx + 1.0;
-			floorYWall = data->raycast->mapy + wallX;
-		}
-		else if (data->raycast->side == 1 && data->raycast->raydiry > 0)
-		{
-			floorXWall = data->raycast->mapx + wallX;
-			floorYWall = data->raycast->mapy;
-		}
-		else
-		{
-			floorXWall = data->raycast->mapx + wallX;
-			floorYWall = data->raycast->mapy + 1.0;
-		}
-
-		p = data->raycast->draw_end;
-		while (p < HEIGHT)
-		{
-			currentDist = HEIGHT / (2.0 * p - HEIGHT);
-			weight = currentDist / data->raycast->perpwall_dist;
-
+        if (data->player->pitch > -500)
+        {
             
-			currentFloorX = weight * floorXWall + (1.0 - weight) * data->player->px;
-			currentFloorY = weight * floorYWall + (1.0 - weight) * data->player->py;
-    ;
-            if (data->map_pars->map[(int)currentFloorY][(int)currentFloorX] == 'L')
+            if (data->raycast->side == 0 && data->raycast->raydirx > 0)
             {
-                floorTexture = data->texture->exit;
+                floorXWall = data->raycast->mapx;
+                floorYWall = data->raycast->mapy + wallX;
+            }
+            else if (data->raycast->side == 0 && data->raycast->raydirx < 0)
+            {
+                floorXWall = data->raycast->mapx + 1.0;
+                floorYWall = data->raycast->mapy + wallX;
+            }
+            else if (data->raycast->side == 1 && data->raycast->raydiry > 0)
+            {
+                floorXWall = data->raycast->mapx + wallX;
+                floorYWall = data->raycast->mapy;
+            }
+            else
+            {
+                floorXWall = data->raycast->mapx + wallX;
+                floorYWall = data->raycast->mapy + 1.0;
+            }
+    
+            p = data->raycast->draw_end;
+            while (p < HEIGHT)
+            {
+                currentDist = HEIGHT / (2.0 * p - HEIGHT);
+                weight = currentDist / data->raycast->perpwall_dist;
+    
+                
+                currentFloorX = weight * floorXWall + (1.0 - weight) * data->player->px;
+                currentFloorY = weight * floorYWall + (1.0 - weight) * data->player->py;
+                if ((currentFloorY > 0 && currentFloorY < data->map_pars->height) && data->map_pars->map[(int)currentFloorY][(int)currentFloorX] == 'L')
+                {
+                    floorTexture = data->texture->exit;
+                    floorTexX = (int)(currentFloorX * floorTexture->width) % floorTexture->width;
+                    floorTexY = (int)(currentFloorY * floorTexture->height) % floorTexture->height;
+        
+                    floorColor = ((int *)floorTexture->addr)[floorTexture->width * floorTexY + floorTexX];
+    
+                    exitColor.g = (floorColor >> 8) & 0xFF;
+                    if (exitColor.g > 0)
+                    {
+                        floorTexture = data->texture->floor;
+                    }
+                }
+                else
+                    floorTexture = data->texture->floor;
+                
                 floorTexX = (int)(currentFloorX * floorTexture->width) % floorTexture->width;
                 floorTexY = (int)(currentFloorY * floorTexture->height) % floorTexture->height;
     
                 floorColor = ((int *)floorTexture->addr)[floorTexture->width * floorTexY + floorTexX];
-
-                exitColor.g = (floorColor >> 8) & 0xFF;
-                if (exitColor.g > 0)
+    
+                
+    
+                reflectedY = HEIGHT - p;
+                if (floorTexture == data->texture->floor)
                 {
-                    floorTexture = data->texture->floor;
+                    reflectedColor = get_window_pixel(data->win, x, reflectedY);
+                    wallColor = get_window_pixel(data->win, x, p);
                 }
+                else
+                {
+                    reflectedColor = 0;
+                    wallColor = 0;
+                }
+    
+                floort.r = (floorColor >> 16) & 0xFF;
+                floort.g = (floorColor >> 8) & 0xFF;
+                floort.b = floorColor & 0xFF;
+    
+                reflect.r = (reflectedColor >> 16) & 0xFF;
+                reflect.g = (reflectedColor >> 8) & 0xFF;
+                reflect.b = reflectedColor & 0xFF;
+    
+                wall.r = (wallColor >> 16) & 0xFF;
+                wall.g = (wallColor >> 8) & 0xFF;
+                wall.b = wallColor & 0xFF;
+    
+                final.r = (uint8_t)((floort.r * (1.0 - REFLECTIONSTRENGTH * 3) + reflect.r * REFLECTIONSTRENGTH + wall.r * REFLECTIONSTRENGTH * 2));
+                final.g = (uint8_t)((floort.g * (1.0 - REFLECTIONSTRENGTH * 3) + reflect.g * REFLECTIONSTRENGTH + wall.g * REFLECTIONSTRENGTH * 2));
+                final.b = (uint8_t)((floort.b * (1.0 - REFLECTIONSTRENGTH * 3) + reflect.b * REFLECTIONSTRENGTH + wall.b * REFLECTIONSTRENGTH * 2));
+    
+                finalColor = (final.r << 16) | (final.g << 8) | final.b;
+                my_mlx_pixel_put(data->win, x, p, apply_shading(currentDist / 2, finalColor));
+    
+                p++;
             }
-            else
-                floorTexture = data->texture->floor;
-            
-            floorTexX = (int)(currentFloorX * floorTexture->width) % floorTexture->width;
-            floorTexY = (int)(currentFloorY * floorTexture->height) % floorTexture->height;
-
-            floorColor = ((int *)floorTexture->addr)[floorTexture->width * floorTexY + floorTexX];
-
-            
-
-			reflectedY = HEIGHT - p;
-            if (floorTexture == data->texture->floor)
-            {
-                reflectedColor = get_window_pixel(data->win, x, reflectedY);
-                wallColor = get_window_pixel(data->win, x, p);
-            }
-            else
-            {
-                reflectedColor = 0;
-                wallColor = 0;
-            }
-
-			floort.r = (floorColor >> 16) & 0xFF;
-			floort.g = (floorColor >> 8) & 0xFF;
-			floort.b = floorColor & 0xFF;
-
-			reflect.r = (reflectedColor >> 16) & 0xFF;
-			reflect.g = (reflectedColor >> 8) & 0xFF;
-			reflect.b = reflectedColor & 0xFF;
-
-			wall.r = (wallColor >> 16) & 0xFF;
-			wall.g = (wallColor >> 8) & 0xFF;
-			wall.b = wallColor & 0xFF;
-
-			final.r = (uint8_t)((floort.r * (1.0 - REFLECTIONSTRENGTH * 3) + reflect.r * REFLECTIONSTRENGTH + wall.r * REFLECTIONSTRENGTH * 2));
-			final.g = (uint8_t)((floort.g * (1.0 - REFLECTIONSTRENGTH * 3) + reflect.g * REFLECTIONSTRENGTH + wall.g * REFLECTIONSTRENGTH * 2));
-			final.b = (uint8_t)((floort.b * (1.0 - REFLECTIONSTRENGTH * 3) + reflect.b * REFLECTIONSTRENGTH + wall.b * REFLECTIONSTRENGTH * 2));
-
-			finalColor = (final.r << 16) | (final.g << 8) | final.b;
-			my_mlx_pixel_put(data->win, x, p, apply_shading(currentDist / 2, finalColor));
-
-			p++;
-		}
+        }
         x++;
     }
     draw_map(data);

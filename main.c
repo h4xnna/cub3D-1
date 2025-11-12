@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:26:45 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/11/09 19:38:50 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/12 15:01:59 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ int	main(int ac, char **av)
 	data->player->delta_time = 0.016;
 	data->player->mouse_x = WIDTH / 2;
 	data->player->pitch = 0;
+	data->player->show_knife = false;
 	data->map_pars->height = len_tab(data->map_pars->map);
 
 	make_doors(data);

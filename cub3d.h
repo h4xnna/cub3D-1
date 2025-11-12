@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/11/09 19:13:36 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/12 15:39:02 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@
 # define NOIR 0x000000
 # define ROUGE 0xFF0000
 # define TEAL 0x008080
-# define ROTSPEED 0.05
+# define ROTSPEED 25
 # define VERT 0x006400
 # define MINIMAP_RADIUS 5
 # define HALF_MINIMAP (MINIMAP_RADIUS / 2)
@@ -90,13 +90,13 @@ typedef struct s_player
 	bool	moving_down;
 	bool	rotate_right;
 	bool	rotate_left;
-	bool	look_up;
-	bool	look_down;
 	double	rotate_speed;
 	double	sensitivity;
 	double	pitch;
 	double	delta_time;
-	int mouse_x;
+	int		mouse_x;
+	int		mouse_y;
+	bool	show_knife;
 	
 }				t_player;
 
@@ -122,6 +122,29 @@ typedef struct s_win
 	int			endian;
 
 }				t_win;
+
+typedef struct s_img
+{
+	void		*img;
+	char		*addr;
+	int			width;
+	int			height;
+	int			bits_per_pixel;
+	int			line_length;
+	int			endian;
+	void		*mlx;
+}				t_img;
+
+
+typedef struct s_animation
+{
+	t_img	**frames;
+	int		frame_count;
+	int		current_frame;
+	double	frame_time;
+	double	timer;
+	int		playing;
+}	t_animation;
 
 typedef struct s_door
 {
@@ -153,18 +176,6 @@ typedef struct s_raycast
 	int			draw_end;
 }				t_raycast;
 
-typedef struct s_img
-{
-	void		*img;
-	char		*addr;
-	int			width;
-	int			height;
-	int			bits_per_pixel;
-	int			line_length;
-	int			endian;
-	void		*mlx;
-}				t_img;
-
 typedef struct s_texture
 {
 	t_img		*skybox;
@@ -187,6 +198,7 @@ typedef struct s_data
 	t_raycast	*raycast;
 	t_texture	*texture;
 	t_door		*doors;
+	t_animation	*knife_anim;
 }				t_data;
 
 static inline void	my_mlx_pixel_put(t_win *win, int x, int y, int color)
@@ -243,12 +255,42 @@ static inline int	get_texture_pixel(t_img *img, int x, int y)
 	return (*(unsigned int *)dst);
 }
 
+static inline void draw_image_to_buffer(t_win *win, t_img *src, int x_off, int y_off)
+{
+    int x, y;
+    unsigned int color;
+
+    for (y = 0; y < src->height; y++)
+    {
+        int dst_y = y + y_off;
+        if (dst_y < 0 || dst_y >= HEIGHT)
+            continue;
+
+        for (x = 0; x < src->width; x++)
+        {
+            int dst_x = x + x_off;
+            if (dst_x < 0 || dst_x >= WIDTH)
+                continue;
+
+            color = *(unsigned int *)(src->addr + y * src->line_length + x * (src->bits_per_pixel / 8));
+
+            unsigned char r = (color >> 16) & 0xFF;
+            unsigned char g = (color >> 8) & 0xFF;
+            unsigned char b = color & 0xFF;
+
+            if (!(g > 100 && g > r * 1.5 && g > b * 1.5))
+                my_mlx_pixel_put(win, dst_x, dst_y, color);
+        }
+    }
+}
+
 // utils_pars1
 
 void			rotate_player(t_data *data, int mouse_x);
 void			print_doors(t_door *doors);
 void			make_doors(t_data *data);
 t_door			*find_door(t_door *doors, int y, int x);
+t_animation		*load_animation(t_data *data, char *pattern, int frame_count);
 
 int				len_tab(char **tab);
 char			*remove_newline(char *line);

@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 14:54:11 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/11/09 19:49:54 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/12 15:16:30 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,11 @@ void rotate_player(t_data *data, int mouse_x)
 	static double current_speed = 0.0;
  
 	double max_speed = 0.15;
+
+	if (data->player->rotate_right)
+		mouse_x = WIDTH / 2 + ROTSPEED;
+	else if (data->player->rotate_left)
+		mouse_x = WIDTH / 2 - ROTSPEED;
 	double target_speed = data->player->sensitivity * (mouse_x - WIDTH/2);
 
     if (target_speed > max_speed)
@@ -97,50 +102,94 @@ static void	update_doors(t_data	*data, double delta_time)
 		}
 		if (door->opening <= 0.0)
 			door->opening = 0.0;
-		// printf("%d : %f\n", door->opened, door->opening);
 		door = door->next;
 	}
 }
 
+void	update_animation(t_animation *anim, double delta_time)
+{
+	if (!anim->playing)
+		return;
+	anim->timer += delta_time;
+	if (anim->timer >= anim->frame_time)
+	{
+		anim->timer -= anim->frame_time;
+		anim->current_frame++;
+		if (anim->current_frame >= anim->frame_count)
+		{
+			anim->current_frame = 0;
+			anim->playing = 0;
+		}
+	}
+}
+
+void	draw_animation(t_data *data, t_animation *anim, int x, int y)
+{
+	if (!anim->frames[anim->current_frame])
+		return;
+	mlx_put_image_to_window(data->win->mlx, data->win->win,
+		anim->frames[anim->current_frame]->img, x, y);
+}
+
+
 static void player_position(t_data *data)
 {
 	static bool	exited = 0;
-	if (data->player->moving_left && !exited)
-		buttons_a(data->player, data->map_pars);
-	if (data->player->moving_right && !exited)
-		buttons_d(data->player, data->map_pars);
-	if(data->player->moving_down && !exited)
-		buttons_s(data->player, data->map_pars);
-	if(data->player->moving_up && !exited)
-		buttons_w(data->player, data->map_pars);
-	if(data->map_pars->map[(int)data->player->py][(int)(data->player->px)] == 'L')
-		exited = 1;
-	if (exited == 1)
+	if (!exited)
 	{
-		if ((data->player->pitch + 20) > 1080)
-			data->player->pitch = 1080;
-		else
-			data->player->pitch -= 20;
+		if (data->player->moving_left)
+			buttons_a(data->player, data->map_pars);
+		if (data->player->moving_right)
+			buttons_d(data->player, data->map_pars);
+		if(data->player->moving_down)
+			buttons_s(data->player, data->map_pars);
+		if(data->player->moving_up)
+			buttons_w(data->player, data->map_pars);
+		if(data->map_pars->map[(int)data->player->py][(int)(data->player->px)] == 'L')
+			exited = 1;
 	}
+	else
+	{
+		data->player->pitch -= 50;
+		if (data->player->pitch < -5000)
+			clean_exit(data);
+	}
+		
 }
 
 int render(t_data *data)
 {
-    static double last_time = 0;
+	static double last_time = 0;
     double current_time = get_time_seconds();
-	
 	data->player->delta_time = current_time - last_time;
-    last_time = current_time;
+	if (data->player->delta_time >= 1)
+		data->player->delta_time = 0.016;
+	last_time = current_time;
 	
-    double fps = 1.0 / data->player->delta_time;
-
+	double fps = 1.0 / data->player->delta_time;
+	
     clear_window(data->win);
-    drawSkybox(data);
-    drawRays2D(data);
-    player_position(data);
+
+	if (!data->player->pitch)
+	{
+		drawSkybox(data);
+	}
+	drawRays2D(data);
+	player_position(data);
 	rotate_player(data, data->player->mouse_x);
-    update_doors(data, data->player->delta_time);
-    mlx_string_put(data->win->mlx, data->win->win, WIDTH - 20, 20, 0xFFFFFF, ft_itoa((int)fps));
+	update_doors(data, data->player->delta_time);
+	update_animation(data->knife_anim, data->player->delta_time);
+
+
+	if (!data->player->pitch && data->player->show_knife)
+	{
+		if (data->knife_anim->playing)
+			draw_image_to_buffer(data->win, data->knife_anim->frames[data->knife_anim->current_frame], 0, 0);
+		else
+			draw_image_to_buffer(data->win, data->knife_anim->frames[0], 0, 0);
+	}
+
+	mlx_string_put(data->win->mlx, data->win->win, WIDTH - 20, 20, 0xFFFFFF, ft_itoa((int)fps));	
 
     return (0);
 }

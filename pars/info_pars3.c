@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   info_pars3.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
+/*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 15:17:32 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/26 15:09:13 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/11/12 15:45:16 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,5 @@ void	*ft_realloc(void *ptr, size_t new_size)
 		return (NULL);
 	}
 	new_ptr = malloc(new_size);
-	if (!new_ptr)
-		return (NULL);
 	return (new_ptr);
 }

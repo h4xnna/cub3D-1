@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 14:46:58 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/11/06 14:07:30 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/12 15:22:45 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,21 +52,27 @@ int	key_press(int keycode, t_data *data)
 	if(keycode == W_KEY)
 		data->player->moving_up = true;
 	if (keycode == 65307)
-	{
-		mlx_destroy_window(data->win->mlx, data->win->win);
-		mlx_clear_window(data->win->mlx, data->win->win);
-		exit(1);
-	}
+		clean_exit(data);
 	if (keycode == 65363)
 		data->player->rotate_right = true;
 	if (keycode == 65361)
 		data->player->rotate_left = true;
+	if (data->player->show_knife && keycode == 121)
+		data->knife_anim->playing = 1;
+	if (keycode == 49)
+		data->player->show_knife = true;
+	if (keycode == 50)
+	{
+		data->player->show_knife = false;
+		data->knife_anim->playing = 0;
+		data->knife_anim->current_frame = 0;
+	}
 	return (0);
 }
 
 int mouse_info(int x, int y, t_data *data)
 {
 	data->player->mouse_x = x;
-	(void)y;
+	data->player->mouse_y = y;
 	return (0);
 }
