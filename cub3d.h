@@ -6,15 +6,15 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/11/12 15:39:02 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/13 09:30:04 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
-# include "gnl/get_next_line.h"
-# include "libft/libft.h"
-# include "minilibx-linux/mlx.h"
+# include "libs/gnl/get_next_line.h"
+# include "libs/libft/libft.h"
+# include "libs/minilibx-linux/mlx.h"
 # include <math.h>
 # include <stdbool.h>
 # include <stdio.h>
@@ -201,6 +201,18 @@ typedef struct s_data
 	t_animation	*knife_anim;
 }				t_data;
 
+static inline int	get_window_pixel(t_win *win, int x, int y)
+{
+	char	*dst;
+
+	if (!win->addr)
+		return (0);
+	if (x < 0 || y < 0 || x >= WIDTH || y >= HEIGHT)
+		return (0);
+	dst = win->addr + (y * win->line_length + x * (win->bits_per_pixel / 8));
+	return (*(unsigned int *)dst);
+}
+
 static inline void	my_mlx_pixel_put(t_win *win, int x, int y, int color)
 {
 	char	*dst;
@@ -255,37 +267,10 @@ static inline int	get_texture_pixel(t_img *img, int x, int y)
 	return (*(unsigned int *)dst);
 }
 
-static inline void draw_image_to_buffer(t_win *win, t_img *src, int x_off, int y_off)
-{
-    int x, y;
-    unsigned int color;
-
-    for (y = 0; y < src->height; y++)
-    {
-        int dst_y = y + y_off;
-        if (dst_y < 0 || dst_y >= HEIGHT)
-            continue;
-
-        for (x = 0; x < src->width; x++)
-        {
-            int dst_x = x + x_off;
-            if (dst_x < 0 || dst_x >= WIDTH)
-                continue;
-
-            color = *(unsigned int *)(src->addr + y * src->line_length + x * (src->bits_per_pixel / 8));
-
-            unsigned char r = (color >> 16) & 0xFF;
-            unsigned char g = (color >> 8) & 0xFF;
-            unsigned char b = color & 0xFF;
-
-            if (!(g > 100 && g > r * 1.5 && g > b * 1.5))
-                my_mlx_pixel_put(win, dst_x, dst_y, color);
-        }
-    }
-}
-
 // utils_pars1
 
+void			drawSkybox(t_data *data);
+void			draw_image_to_buffer(t_win *win, t_img *src, int x_off, int y_off);
 void			rotate_player(t_data *data, int mouse_x);
 void			print_doors(t_door *doors);
 void			make_doors(t_data *data);
@@ -297,7 +282,6 @@ char			*remove_newline(char *line);
 int				ft_strcmp(char *str, char *str2);
 int				is_fichier(char *path);
 int				is_direction(char *str);
-void			drawRays2D(t_data *data);
 void			free_splif(char **out, int i);
 
 // utils_pars2
@@ -321,6 +305,7 @@ int				add_line_to_map(t_map_pars *map, char *line);
 int				check_char(char *line, t_map_pars *map);
 int				is_full_of_spaces(char *line);
 int				check_fd(int *fd, char **av);
+void player_position(t_data *data);
 
 // free_pars1
 void			free_info(t_map_info *info);
@@ -344,12 +329,8 @@ void			buttons_w(t_player *player, t_map_pars *map);
 void			buttons_s(t_player *player, t_map_pars *map);
 
 // draw_map2D
-void			x_to_0(t_map_pars *map);
-void			draw_square(t_data *data, int x, int y, int color,
-					int square_size);
 void			draw_map(t_data *data);
 int				is_wall(t_data *data, float ray_x, float ray_y);
-void			draw_line(t_data *data);
 
 // player_position
 void			set_player_direction(t_player *player, char direction);
@@ -357,10 +338,8 @@ int				rgb_to_hex_int(t_data *data, int *rgb);
 
 // exec../texture
 void			load_all_textures(t_data *data);
-void			load_text(t_data *data);
 
 // exec../ util_win
-void			split_win(t_data *data);
 void			clear_window(t_win *win);
 t_win			*init_win(void);
 void			free_win(t_win *win);
@@ -385,7 +364,6 @@ int				key_release(int keycode, t_data *data);
 
 // animation
 void			normalize_vector(double *x, double *y);
-void			drawSkybox(t_data *data);
 
 
 #endif

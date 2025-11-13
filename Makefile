@@ -8,7 +8,7 @@ LIGHT_CYAN      = "\033[96m"
 BROWN           = "\033[38;5;94m"
 
 NEON_GREEN      = "\033[38;5;46m"
-ELECTRIC_BLUE   = "\033[38;5;51mare"
+ELECTRIC_BLUE   = "\033[38;5;51m"
 HOT_PINK        = "\033[38;5;198m"
 BLOOD_RED       = "\033[38;5;196m"
 SUNBURST_YELLOW = "\033[38;5;226m"
@@ -22,56 +22,59 @@ CC		= cc
 CFLAGS	= -Wall -Werror -Wextra -Ofast -march=native
 # CFLAGS	= -Wall -Werror -Wextra  -g3
 
-SRCS	=	gnl/get_next_line.c\
+PARSING =	parsing/
+GAME	=	game/
+
+SRCS	=	libs/gnl/get_next_line.c\
 			main.c \
-			pars/info_pars1.c\
-			pars/info_pars2.c\
-			pars/info_pars3.c\
-			pars/pars_map.c \
-			pars/pars_map2.c  \
-			pars/free_pars1.c \
-			pars/info_pars4.c\
-			pars/doors.c \
-			exec/buttons.c\
-			exec/draw_map2D.c\
-			exec/raycasting.c\
-			exec/texture.c\
-			exec/util_win.c\
-			exec/animation.c\
-			utils_main.c\
-			utils_main2.c\
-			exec/player_position.c\
-			exec/drawSkybox.c\
-
-
+			$(PARSING)info_pars1.c\
+			$(PARSING)info_pars2.c\
+			$(PARSING)info_pars3.c\
+			$(PARSING)pars_map.c \
+			$(PARSING)pars_map2.c  \
+			$(PARSING)free_pars1.c \
+			$(PARSING)info_pars4.c\
+			$(PARSING)info_pars5.c\
+			$(PARSING)doors.c \
+			$(GAME)events.c\
+			$(GAME)textures.c\
+			$(GAME)window.c\
+			$(GAME)movement.c\
+			$(PARSING)init.c\
+			$(GAME)exit.c\
+			$(GAME)render.c\
+			$(GAME)player.c\
+			$(GAME)drawing.c
 
 
 # Libraries
-MLX         = minilibx-linux/
+MLX         = libs/minilibx-linux/
 MLX_A       = $(MLX_PATH)libmlx.a
-MLX_PATH    = ./minilibx-linux/
+MLX_PATH    = ./libs/minilibx-linux/
 MLX_FLAGS   = -lm -lbsd -lXext -lX11
-LIBPRINTF   = ft_printf/libftprintf.a
  
 
-INCL	= -I. -Ilibft 
+INCL	= -I. -Ilibs/libft 
 
 
-LIBFT_PATH        = libft/
+LIBFT_PATH        = libs/libft/
 LIBFT_NAME        = libft.a
 LIBFT            = $(LIBFT_PATH)$(LIBFT_NAME)
 
 HEADERS = cub3d.h
 
-OBJS = ${SRCS:.c=.o}
+# Object files
+OBJ_DIR = objs
+OBJS = $(SRCS:%.c=$(OBJ_DIR)/%.o)
 
 all: ${NAME}
 
-%.o: %.c 
+$(OBJ_DIR)/%.o: %.c 
+	@mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) -I. -c $< -o $@ $(INCL)
 
-$(MLX_PATH) : 
-	@if [ ! -d $(MLX_PATH) ]; then git clone https://github.com/42Paris/minilibx-linux.git; fi;
+# $(MLX_PATH) : 
+# 	@if [ ! -d $(MLX_PATH) ]; then git clone https://github.com/42Paris/minilibx-linux.git; fi;
 
 $(MLX_A) :
 	@echo $(LIGHT_CYAN)$(BOLD)"\nCompiling MiniLibX..."
@@ -79,7 +82,6 @@ $(MLX_A) :
 	@echo $(NEON_GREEN)$(BOLD)"Library Compiled. ✔\n"
 
 ${NAME}:  $(HEADERS) ${OBJS} $(LIBFT)
-
 	@echo $(LIGHT_GREEN) "Compilation..."$(BOLD)
 	@${CC} ${CFLAGS} ${OBJS} $(LIBFT) $(MLX_A) $(MLX_FLAGS) -o ${NAME}
 	@echo $(LIGHT_GREEN)"Compilation réussie ✔"$(RESET)
@@ -89,7 +91,7 @@ $(LIBFT):
 	@make -sC $(LIBFT_PATH)
 
 clean:
-	@rm -f ${OBJS}
+	@rm -rf ${OBJ_DIR}
 	@make clean -C $(LIBFT_PATH)
 	@echo $(BROWN)clean reussi
 

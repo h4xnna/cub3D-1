@@ -1,18 +1,77 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   draw_map2D.c                                       :+:      :+:    :+:   */
+/*   drawing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/05 15:19:33 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/11/09 19:42:26 by pacda-si         ###   ########.fr       */
+/*   Created: 2025/11/13 08:00:02 by pacda-si          #+#    #+#             */
+/*   Updated: 2025/11/13 08:05:39 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
-void	draw_square(t_data *data, int x, int y, int color, int square_size)
+
+void	draw_animation(t_data *data, t_animation *anim, int x, int y)
+{
+	if (!anim->frames[anim->current_frame])
+		return;
+	mlx_put_image_to_window(data->win->mlx, data->win->win,
+		anim->frames[anim->current_frame]->img, x, y);
+}
+
+
+void draw_image_to_buffer(t_win *win, t_img *src, int x_off, int y_off)
+{
+    int x, y;
+    unsigned int color;
+
+    for (y = 0; y < src->height; y++)
+    {
+        int dst_y = y + y_off;
+        if (dst_y < 0 || dst_y >= HEIGHT)
+            continue;
+
+        for (x = 0; x < src->width; x++)
+        {
+            int dst_x = x + x_off;
+            if (dst_x < 0 || dst_x >= WIDTH)
+                continue;
+
+            color = *(unsigned int *)(src->addr + y * src->line_length + x * (src->bits_per_pixel / 8));
+
+            uint8_t r = (color >> 16) & 0xFF;
+            uint8_t g = (color >> 8) & 0xFF;
+            uint8_t b = color & 0xFF;
+
+            if (!(g > 100 && g > r * 1.5 && g > b * 1.5))
+                my_mlx_pixel_put(win, dst_x, dst_y, color);
+        }
+    }
+}
+
+void drawSkybox(t_data *data)
+{
+	int x, y, tex_x, tex_y;
+	int start_y = HEIGHT / 2;
+
+	double player_angle = atan2(data->player->pdirx, data->player->pdiry);
+	int offset_x = (int)(data->texture->skybox->width *
+						(0.5 - player_angle / (2 * PI)));
+	for (y = 0; y < start_y; y++)
+	{
+		tex_y = (y * data->texture->skybox->height) / HEIGHT;
+		for (x = 0; x < WIDTH; x++)
+		{
+			tex_x = (offset_x + x) % data->texture->skybox->width;
+			int color = get_texture_pixel(data->texture->skybox, tex_x, tex_y);
+			my_mlx_pixel_put(data->win, x, y, color);
+		}
+	}
+}
+
+static void draw_square(t_data *data, int x, int y, int color, int square_size)
 {
 	int	i;
 	int	j;
