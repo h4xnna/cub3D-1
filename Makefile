@@ -35,6 +35,7 @@ SRCS	=	libs/gnl/get_next_line.c\
 			$(PARSING)free_pars1.c \
 			$(PARSING)info_pars4.c\
 			$(PARSING)info_pars5.c\
+			$(PARSING)info_pars6.c\
 			$(PARSING)doors.c \
 			$(GAME)events.c\
 			$(GAME)textures.c\

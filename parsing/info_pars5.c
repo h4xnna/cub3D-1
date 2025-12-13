@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   info_pars5.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 09:11:13 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/13 09:11:20 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/13 11:13:35 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ int	parse_error(t_map_pars *map, t_map_info *infos, t_info_pars *pars,
 	get_next_line(-1);
 	return (1);
 }
+
 int	final_checks(t_map_info *infos, t_map_pars *map)
 {
 	if (map->position == 0)
@@ -56,7 +57,7 @@ int	final_checks(t_map_info *infos, t_map_pars *map)
 
 int	parse_file(int fd, t_map_pars *map, t_map_info *infos, t_info_pars *pars)
 {
-	char *line;
+	char	*line;
 
 	while ((line = get_next_line(fd)) != NULL)
 	{
@@ -67,19 +68,16 @@ int	parse_file(int fd, t_map_pars *map, t_map_info *infos, t_info_pars *pars)
 		{
 			if (parse_info_line(line, pars, infos))
 			{
-				free(line);
-				// free_info(infos);
-				parse_error(map, infos, pars,"parsing infos");
-				return FAILURE;
-			}	
+				parse_error(map, infos, pars, "parsing infos");
+				return (free(line), FAILURE);
+			}
 		}
 		else if ((!line[0] || !is_full_of_spaces(line)) && !map->map_started)
 			;
 		else if (!check_char(line, map) && !check_positions(map, line))
 			add_line_to_map(map, line);
 		else
-			return (free(line), parse_error(map, infos, pars,
-					" parsing map"));
+			return (free(line), parse_error(map, infos, pars, " parsing map"));
 		free(line);
 		free_pars(pars);
 	}

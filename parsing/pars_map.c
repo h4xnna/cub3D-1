@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pars_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 15:26:04 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/11/12 15:43:45 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/13 11:18:12 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ int	check_char(char *line, t_map_pars *map)
 	while (line[i])
 	{
 		if ((line[i] != 'N' && line[i] != 'S' && line[i] != 'E'
-				&& line[i] != 'W' && line[i] != 'D' && line[i] != 'L') && (line[i] != 48 && line[i] != 49
+				&& line[i] != 'W' && line[i] != 'D' && line[i] != 'L')
+			&& (line[i] != 48 && line[i] != 49
 				&& line[i] != ' '))
 			return (FAILURE);
 		if (line[i] == 48 || line[i] == 49)
@@ -63,7 +64,10 @@ int	check_positions(t_map_pars *map, char *line)
 				map->y_start = len_tab(map->map);
 			}
 			else
-				return (error_message("invalide map: trop de position joueur"), FAILURE);
+			{
+				error_message("invalide map: trop de position joueur");
+				return (FAILURE);
+			}
 		}
 		i++;
 	}
@@ -104,20 +108,9 @@ int	is_full_of_spaces(char *line)
 	i = 0;
 	while (line[i])
 	{
-		if (line[i] != ' ' && line[i] !=  '\t')
+		if (line[i] != ' ' && line[i] != '\t')
 			return (FAILURE);
 		i++;
-	}
-	return (SUCCESS);
-}
-
-int	check_fd(int *fd, char **av)
-{
-	*fd = open((av[1]), O_RDONLY);
-	if (*fd == -1)
-	{
-		error_message("Aucun fichier a ce nom");
-		return (FAILURE);
 	}
 	return (SUCCESS);
 }

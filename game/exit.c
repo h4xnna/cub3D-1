@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_main2.c                                      :+:      :+:    :+:   */
+/*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 14:54:11 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/11/13 07:53:30 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/13 10:33:24 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,14 @@
 
 void free_textures(t_data *data)
 {
-	if (data->texture->text_East->img)
-		mlx_destroy_image(data->win->mlx, data->texture->text_East->img);
-	if (data->texture->text_North->img)
-		mlx_destroy_image(data->win->mlx, data->texture->text_North->img);
-	if (data->texture->text_South->img)
-		mlx_destroy_image(data->win->mlx,data->texture->text_South->img);
-	if (data->texture->text_West->img)
-		mlx_destroy_image(data->win->mlx, data->texture->text_West->img);
+	if (data->texture->text_east->img)
+		mlx_destroy_image(data->win->mlx, data->texture->text_east->img);
+	if (data->texture->text_north->img)
+		mlx_destroy_image(data->win->mlx, data->texture->text_north->img);
+	if (data->texture->text_south->img)
+		mlx_destroy_image(data->win->mlx,data->texture->text_south->img);
+	if (data->texture->text_west->img)
+		mlx_destroy_image(data->win->mlx, data->texture->text_west->img);
 }
 
 void	clean_exit(t_data *data)

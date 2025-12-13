@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   textures.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 10:55:48 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/12/13 09:57:18 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/13 10:32:40 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,10 @@ void	load_all_textures(t_data *data)
     data->texture->skybox = load_one_texture(data, data->texture->skybox, "./textures/4.xpm");
     data->texture->floor = load_one_texture(data, data->texture->floor, "./textures/metal.xpm");
     data->texture->exit = load_one_texture(data, data->texture->floor, "./textures/hole.xpm");
-	data->texture->text_South = load_one_texture(data, data->texture->text_South, data->map_info->south);
-	data->texture->text_North = load_one_texture(data, data->texture->text_North, data->map_info->north);
-	data->texture->text_West = load_one_texture(data, data->texture->text_West, data->map_info->west);
-	data->texture->text_East = load_one_texture(data, data->texture->text_East, data->map_info->east);
+	data->texture->text_south = load_one_texture(data, data->texture->text_south, data->map_info->south);
+	data->texture->text_north = load_one_texture(data, data->texture->text_north, data->map_info->north);
+	data->texture->text_west = load_one_texture(data, data->texture->text_west, data->map_info->west);
+	data->texture->text_east = load_one_texture(data, data->texture->text_east, data->map_info->east);
 	data->knife_anim = load_animation(data, "./textures/inspect_frames/frame_%03d.xpm", 144, 4.78);
 	data->deploy_anim = load_animation(data, "./textures/deploy_frames/frame_%02d.xpm", 29, 0.96);
 	data->lmb_anim = load_animation(data, "./textures/lmb_frames/frame_%02d.xpm", 33, 1.09);

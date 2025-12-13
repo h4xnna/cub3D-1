@@ -3,43 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:26:45 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/11/23 16:19:42 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/13 11:02:23 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	main(int ac, char **av)
+void init_data(	t_data	*data, t_map_pars *map)
 {
-	int			fd;
-	t_map_info	*infos = NULL;
-	t_info_pars	*pars = NULL;
-	t_map_pars	*map = NULL;
-	t_data		*data = NULL;
-	t_win		*win = NULL;
-
-	if (init_structs(&map, &infos, &pars, &fd, &data) || checks_args(ac, av)
-		|| check_fd(&fd, av))
-		return (FAILURE);
-	if (parse_file(fd, map, infos, pars))
-	{
-		// free_info(data->map_info);
-		return (FAILURE);
-	}
-	data->map_pars = map;
-	data->info_pars = pars;
-	data->map_info = infos;
-	if (final_checks(infos, map))
-		return (FAILURE);
-	if (flood_fill(map))
-	{
-		error_message("map pas ferme");
-		clean_exit(data);
-		return (FAILURE);
-	}
 	data->player = ft_calloc(1, sizeof(t_player));
 	data->raycast = ft_calloc(1, sizeof(t_raycast));
 	data->texture = ft_calloc(1, sizeof(t_texture));
@@ -51,7 +25,39 @@ int	main(int ac, char **av)
 	data->player->pitch = 0;
 	data->player->show_knife = false;
 	data->map_pars->height = len_tab(data->map_pars->map);
+}
 
+int	main(int ac, char **av)
+{
+	int			fd;
+	t_map_info	*infos;
+	t_info_pars	*pars;
+	t_map_pars	*map;
+	t_data		*data;
+	t_win		*win;
+
+	infos = NULL;
+	pars = NULL;
+	map = NULL;
+	data = NULL;
+	win = NULL;
+	if (init_structs(&map, &infos, &pars, &fd, &data) || checks_args(ac, av)
+		|| check_fd(&fd, av))
+		return (FAILURE);
+	if (parse_file(fd, map, infos, pars))
+		return (FAILURE);
+	data->map_pars = map;
+	data->info_pars = pars;
+	data->map_info = infos;
+	if (final_checks(infos, map))
+		return (FAILURE);
+	if (flood_fill(map))
+	{
+		error_message("map pas ferme");
+		clean_exit(data);
+		return (FAILURE);
+	}
+	init_data(data, map);
 	make_doors(data);
 	win = init_win();
 	if (!win)

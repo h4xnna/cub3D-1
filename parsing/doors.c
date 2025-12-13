@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   doors.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 16:16:44 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/04 17:10:39 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/13 11:03:54 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	print_doors(t_door *doors)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	while (doors)
@@ -34,7 +34,7 @@ void	doors_add_back(t_door **doors, t_door *new)
 	if (!*doors)
 	{
 		*doors = new;
-		return;
+		return ;
 	}
 	head = *doors;
 	while (head->next)
@@ -54,10 +54,10 @@ t_door	*new_door(int x, int y)
 
 void	make_doors(t_data *data)
 {
-	char **map;
-	int i;
-	int	j;
-	
+	char	**map;
+	int		i;
+	int		j;
+
 	map = data->map_pars->map;
 	i = 0;
 	while (map[i])

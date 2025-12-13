@@ -6,7 +6,7 @@
 /*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 18:07:44 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/26 15:07:45 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/12/13 11:14:18 by hmimouni         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,6 @@ int	print_tab(int *tab)
 		i++;
 	}
 	return (0);
-}
-
-int	skip_space(char *line)
-{
-	int	i;
-
-	i = 0;
-	while (line[i])
-		i++;
-	return (i);
 }
 
 int	ft_isspecial2(char c)
@@ -90,8 +80,8 @@ void	pass_chars2(const char *s, int *i, int *minus)
 long long	ft_atoll(const char *nptr)
 {
 	long long	out;
-	int	i;
-	int	minus;
+	int			i;
+	int			minus;
 
 	i = 0;
 	out = 0;
