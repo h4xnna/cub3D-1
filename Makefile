@@ -73,15 +73,15 @@ $(OBJ_DIR)/%.o: %.c
 	@mkdir -p $(dir $@)
 	@$(CC) $(CFLAGS) -I. -c $< -o $@ $(INCL)
 
-# $(MLX_PATH) : 
-# 	@if [ ! -d $(MLX_PATH) ]; then git clone https://github.com/42Paris/minilibx-linux.git; fi;
+$(MLX_PATH) : 
+	@if [ ! -d $(MLX_PATH) ]; then git clone https://github.com/42Paris/minilibx-linux.git ./libs/minilibx-linux; fi;
 
 $(MLX_A) :
 	@echo $(LIGHT_CYAN)$(BOLD)"\nCompiling MiniLibX..."
-	@make -sC minilibx-linux -j
+	@make -sC $(MLX_PATH) -j
 	@echo $(NEON_GREEN)$(BOLD)"Library Compiled. ✔\n"
 
-${NAME}:  $(HEADERS) ${OBJS} $(LIBFT)
+${NAME}: $(MLX_PATH) $(MLX_A) $(HEADERS) ${OBJS} $(LIBFT)
 	@echo $(LIGHT_GREEN) "Compilation..."$(BOLD)
 	@${CC} ${CFLAGS} ${OBJS} $(LIBFT) $(MLX_A) $(MLX_FLAGS) -o ${NAME}
 	@echo $(LIGHT_GREEN)"Compilation réussie ✔"$(RESET)
@@ -101,7 +101,7 @@ leak : all
 fclean: clean
 	@rm -rf ${NAME}
 	@rm -rf $(LIBFT_NAME)
-# 	@rm -rf $(MLX_PATH)
+	@rm -rf $(MLX_PATH)
 	@echo $(BROWN)fclean reussi
 
 re: fclean all

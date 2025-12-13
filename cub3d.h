@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/11/13 09:30:04 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/13 09:57:43 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@
 # define ROTSPEED 25
 # define VERT 0x006400
 # define MINIMAP_RADIUS 5
-# define HALF_MINIMAP (MINIMAP_RADIUS / 2)
 # define REFLECTIONSTRENGTH 0.1
 # define RED "\033[1;31m"
 # define RESET "\033[0m"
@@ -143,6 +142,7 @@ typedef struct s_animation
 	int		current_frame;
 	double	frame_time;
 	double	timer;
+	double duration;
 	int		playing;
 }	t_animation;
 
@@ -199,6 +199,9 @@ typedef struct s_data
 	t_texture	*texture;
 	t_door		*doors;
 	t_animation	*knife_anim;
+	t_animation	*deploy_anim;
+	t_animation	*lmb_anim;
+	t_animation	*rmb_anim;
 }				t_data;
 
 static inline int	get_window_pixel(t_win *win, int x, int y)
@@ -275,8 +278,8 @@ void			rotate_player(t_data *data, int mouse_x);
 void			print_doors(t_door *doors);
 void			make_doors(t_data *data);
 t_door			*find_door(t_door *doors, int y, int x);
-t_animation		*load_animation(t_data *data, char *pattern, int frame_count);
-
+t_animation		*load_animation(t_data *data, char *pattern, int frame_count, double duration);
+int mouse_hook(int keycode, int x, int y, t_data *data);
 int				len_tab(char **tab);
 char			*remove_newline(char *line);
 int				ft_strcmp(char *str, char *str2);

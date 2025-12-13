@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:26:45 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/11/12 15:01:59 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/23 16:19:42 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ int	main(int ac, char **av)
 	mlx_hook(data->win->win, 2, 1L << 0, (int (*)())key_press, data);
 	mlx_hook(data->win->win, 3, 1L << 1, (int (*)())key_release, data);
 	mlx_hook(data->win->win, 6, 1L << 6, (int (*)())mouse_info, data);
+	mlx_mouse_hook(data->win->win, (int (*)())mouse_hook, data);
 	mlx_hook(data->win->win, 17, 0L, (int (*)())clean_exit, data);
 	mlx_loop_hook(data->win->mlx, (int (*)())render, data);
 	mlx_loop(data->win->mlx);

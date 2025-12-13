@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 07:53:02 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/11/13 09:32:42 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/15 14:52:18 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -365,13 +365,25 @@ int render(t_data *data)
 	rotate_player(data, data->player->mouse_x);
 	update_doors(data, data->player->delta_time);
 	update_animation(data->knife_anim, data->player->delta_time);
+    update_animation(data->deploy_anim, data->player->delta_time);
+    update_animation(data->lmb_anim, data->player->delta_time);
+    update_animation(data->rmb_anim, data->player->delta_time);
 
 	if (!data->player->pitch && data->player->show_knife)
 	{
-		if (data->knife_anim->playing)
-			draw_image_to_buffer(data->win, data->knife_anim->frames[data->knife_anim->current_frame], 0, 0);
-		else
-			draw_image_to_buffer(data->win, data->knife_anim->frames[data->knife_anim->frame_count - 1], 0, 0);
+        if (data->deploy_anim->playing || data->knife_anim->playing || data->lmb_anim->playing || data->rmb_anim->playing)
+        {
+            if (data->deploy_anim->playing)
+                draw_image_to_buffer(data->win, data->deploy_anim->frames[data->deploy_anim->current_frame], 0, 0);
+            if (data->knife_anim->playing)
+                draw_image_to_buffer(data->win, data->knife_anim->frames[data->knife_anim->current_frame], 0, 0);
+            if (data->lmb_anim->playing)
+                draw_image_to_buffer(data->win, data->lmb_anim->frames[data->lmb_anim->current_frame], 0, 0);
+            if (data->rmb_anim->playing)
+                draw_image_to_buffer(data->win, data->rmb_anim->frames[data->rmb_anim->current_frame], 0, 0);
+        }
+        else
+            draw_image_to_buffer(data->win, data->deploy_anim->frames[data->deploy_anim->frame_count - 1], 0, 0);
 	}
 
 	mlx_put_image_to_window(data->win->mlx, data->win->win, data->win->img, 0, 0);

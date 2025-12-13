@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 10:55:48 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/11/13 08:17:02 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/13 09:57:18 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,24 +45,28 @@ static t_img    *load_one_texture(t_data *data, t_img *tex, char *path)
 
 void	load_all_textures(t_data *data)
 {
-    data->texture->skybox = load_one_texture(data, data->texture->skybox, "./textures/7.xpm");
+    data->texture->skybox = load_one_texture(data, data->texture->skybox, "./textures/4.xpm");
     data->texture->floor = load_one_texture(data, data->texture->floor, "./textures/metal.xpm");
     data->texture->exit = load_one_texture(data, data->texture->floor, "./textures/hole.xpm");
 	data->texture->text_South = load_one_texture(data, data->texture->text_South, data->map_info->south);
 	data->texture->text_North = load_one_texture(data, data->texture->text_North, data->map_info->north);
 	data->texture->text_West = load_one_texture(data, data->texture->text_West, data->map_info->west);
 	data->texture->text_East = load_one_texture(data, data->texture->text_East, data->map_info->east);
-	data->knife_anim = load_animation(data, "./textures/inspect_frames/frame_%03d.xpm", 287);
+	data->knife_anim = load_animation(data, "./textures/inspect_frames/frame_%03d.xpm", 144, 4.78);
+	data->deploy_anim = load_animation(data, "./textures/deploy_frames/frame_%02d.xpm", 29, 0.96);
+	data->lmb_anim = load_animation(data, "./textures/lmb_frames/frame_%02d.xpm", 33, 1.09);
+	data->rmb_anim = load_animation(data, "./textures/rmb_frames/frame_%02d.xpm", 30, 1.0);
 }
 
 
-t_animation	*load_animation(t_data *data, char *pattern, int frame_count)
+t_animation	*load_animation(t_data *data, char *pattern, int frame_count, double duration)
 {
 	t_animation	*anim = malloc(sizeof(t_animation));
 	anim->frames = malloc(sizeof(t_img *) * frame_count);
 	anim->frame_count = frame_count;
 	anim->current_frame = 0;
-	anim->frame_time = 1.0 / 60.0;
+	anim->duration = duration;
+	anim->frame_time = duration / frame_count;
 	anim->timer = 0;
 	anim->playing = 0;
 
@@ -70,7 +74,7 @@ t_animation	*load_animation(t_data *data, char *pattern, int frame_count)
 	for (int i = 0; i < frame_count; i++)
 	{
 		snprintf(path, sizeof(path), pattern, i + 1);
-		anim->frames[i] = load_one_texture(data, anim->frames[i], path);
+		anim->frames[i] = load_one_texture(data, anim->frames[i], path); 
 	}
 	return (anim);
 }

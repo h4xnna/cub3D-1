@@ -1,16 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   animation.c                                        :+:      :+:    :+:   */
+/*   events.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 14:46:58 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/11/12 15:22:45 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/11/15 16:25:31 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+void reset_all_animations(t_data *data)
+{
+	if (data->knife_anim->playing)
+	{
+		data->knife_anim->playing = 0;
+		data->knife_anim->current_frame = 0;
+	}
+	if (data->deploy_anim->playing)
+	{
+		data->deploy_anim->playing = 0;
+		data->deploy_anim->current_frame = 0;
+	}
+	if (data->lmb_anim->playing)
+	{
+		data->lmb_anim->playing = 0;
+		data->lmb_anim->current_frame = 0;
+	}
+	if (data->rmb_anim->playing)
+	{
+		data->rmb_anim->playing = 0;
+		data->rmb_anim->current_frame = 0;
+	}
+}
 
 void normalize_vector(double *x, double *y)
 {
@@ -58,14 +82,38 @@ int	key_press(int keycode, t_data *data)
 	if (keycode == 65361)
 		data->player->rotate_left = true;
 	if (data->player->show_knife && keycode == 121)
+	{
+		reset_all_animations(data);
 		data->knife_anim->playing = 1;
-	if (keycode == 49)
+	}
+	if (keycode == 51)
+	{
 		data->player->show_knife = true;
-	if (keycode == 50)
+		reset_all_animations(data);
+		data->deploy_anim->playing = 1;
+	}
+
+	if (keycode == 50 || keycode == 49)
 	{
 		data->player->show_knife = false;
-		data->knife_anim->playing = 0;
-		data->knife_anim->current_frame = 0;
+		reset_all_animations(data);
+	}
+	return (0);
+}
+
+int mouse_hook(int keycode, int x, int y, t_data *data)
+{
+	(void)x;
+	(void)y;
+	if (keycode == 1 && data->player->show_knife)
+	{
+		reset_all_animations(data);
+		data->lmb_anim->playing = 1;
+	}
+	if (keycode == 3 && data->player->show_knife)
+	{
+		reset_all_animations(data);
+		data->rmb_anim->playing = 1;
 	}
 	return (0);
 }
