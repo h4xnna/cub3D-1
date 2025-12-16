@@ -46,13 +46,16 @@ t_win    *init_win(void)
 }
 void	free_win(t_win *win)
 {
-	if (win->img)
-		mlx_destroy_image(win->mlx, win->img);
-	if (win->win)
-		mlx_destroy_window(win->mlx, win->win);
-	if (win->mlx)
-	{
-		mlx_destroy_display(win->mlx);
-		free(win->mlx);
-	}
+    if (win)
+    {
+        if (win->img)
+            mlx_destroy_image(win->mlx, win->img);
+        if (win->win)
+            mlx_destroy_window(win->mlx, win->win);
+        if (win->mlx)
+        {
+            mlx_destroy_display(win->mlx);
+            free(win->mlx);
+        }
+    }
 }

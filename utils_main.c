@@ -6,34 +6,36 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 14:38:55 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/29 16:32:37 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/16 17:19:27 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	init_structs(t_map_pars **map, t_map_info **infos, t_info_pars **pars, int *fd,
-		t_data **data)
+int	init_structs(t_data **data)
 {
-	*fd = 0;
-	*map = ft_calloc(1, sizeof(t_map_pars));
-	*infos = ft_calloc(1, sizeof(t_map_info));
-	*pars = ft_calloc(1, sizeof(t_info_pars));
-	*data = ft_calloc(1, sizeof(t_data));
-	(*map)->map = malloc(sizeof(char *) * 1);
-	if (!(*map)->map)
-		return (1);
-	(*map)->map[0] = NULL;
-	return (0);
+	(*data) = ft_calloc(1, sizeof(t_data));
+	if (!*data)
+		return (FAILURE);
+	(*data)->map_pars = ft_calloc(1, sizeof(t_map_pars));
+	(*data)->map_info = ft_calloc(1, sizeof(t_map_info));
+	(*data)->info_pars = ft_calloc(1, sizeof(t_info_pars));
+	if (!(*data)->map_pars || !(*data)->map_info || !(*data)->info_pars)
+		return (FAILURE);
+	(*data)->map_pars->map = malloc(sizeof(char *) * 1);
+	if (!(*data)->map_pars->map)
+		return (FAILURE);
+	(*data)->map_pars->map[0] = NULL;
+	return (SUCCESS);
 }
 int	parse_info_line(char *line, t_info_pars *pars, t_map_info *infos)
 {
 	pars->line_split = ft_split(line, ' ');
 	if (!pars->line_split)
-		return (1);
+		return (FAILURE);
 	if (pars_info(pars, infos))
-		return (1);
-	return (0);
+		return (FAILURE);
+	return (SUCCESS);
 }
 
 int	parse_error(t_map_pars *map, t_map_info *infos, t_info_pars *pars,
@@ -47,7 +49,7 @@ int	parse_error(t_map_pars *map, t_map_info *infos, t_info_pars *pars,
 	if (infos)
 		free_info(infos);
 	get_next_line(-1);
-	return (1);
+	return (FAILURE);
 }
 int	final_checks(t_map_info *infos, t_map_pars *map)
 {
