@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   info_pars2.c                                       :+:      :+:    :+:   */
+/*   storage.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 19:07:05 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/12/16 16:24:56 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/29 18:23:07 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,4 +68,26 @@ int	allouer_colors(t_info_pars *pars, t_map_info *infos)
 		return (SUCCESS);
 	}
 	return (FAILURE);
+}
+
+int	remplir_colors(t_info_pars *pars, t_map_info *infos)
+{
+	int	i;
+
+	i = 0;
+	while (pars->colors[i])
+	{
+		if (ft_atoll(pars->colors[i]) >= 0 && ft_atoll(pars->colors[i]) <= 255)
+		{
+			stock_colors(infos, pars, ft_atoll(pars->colors[i]), i);
+			i++;
+		}
+		else
+		{
+			free_tab(pars->colors);
+			pars->colors = NULL;
+			return (FAILURE);
+		}
+	}
+	return (SUCCESS);
 }

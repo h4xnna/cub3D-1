@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   player_position.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
+/*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/18 16:51:35 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/26 16:30:15 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/12/29 18:06:56 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,12 @@ void	set_player_direction(t_player *player, char direction)
 {
 	if (direction == 'N')
 	{
-		player->pdirx = 0;
 		player->pdiry = -1;
 		player->planex = 0.66;
 		player->planey = 0;
 	}
 	else if (direction == 'S')
 	{
-		player->pdirx = 0;
 		player->pdiry = 1;
 		player->planex = -0.66;
 		player->planey = 0;
@@ -31,14 +29,12 @@ void	set_player_direction(t_player *player, char direction)
 	else if (direction == 'E')
 	{
 		player->pdirx = 1;
-		player->pdiry = 0;
 		player->planex = 0;
 		player->planey = 0.66;
 	}
 	else if (direction == 'W')
 	{
 		player->pdirx = -1;
-		player->pdiry = 0;
 		player->planex = 0;
 		player->planey = -0.66;
 	}
@@ -65,5 +61,3 @@ int	rgb_to_hex_int(t_data *data, int *rgb)
 	}
 	return ((r << 16) | (g << 8) | b);
 }
-
-

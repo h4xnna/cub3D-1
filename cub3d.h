@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/12/16 17:12:40 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/29 18:55:06 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,20 @@ typedef struct s_data
 	t_win			*win;
 	t_raycast		*raycast;
 	t_texture		*texture;
+	int				fd;
 }					t_data;
+
+static inline int	get_window_pixel(t_win *win, int x, int y)
+{
+	char	*dst;
+
+	if (!win->addr)
+		return (0);
+	if (x < 0 || y < 0 || x >= WIDTH || y >= HEIGHT)
+		return (0);
+	dst = win->addr + (y * win->line_length + x * (win->bits_per_pixel / 8));
+	return (*(unsigned int *)dst);
+}
 
 static inline void	my_mlx_pixel_put(t_win *win, int x, int y, int color)
 {
@@ -164,6 +177,17 @@ static inline int	get_texture_pixel(t_img *img, int x, int y)
 	return (*(unsigned int *)dst);
 }
 
+void				draw_rays_2d(t_data *data);
+void				perform_dda(t_data *data);
+void				get_perp_wall_dist(t_data *data);
+void				calculate_line(t_data *data);
+void				init_raycasting(t_data *data, int x);
+void				init_step_side_dist(t_data *data);
+void				get_wall_texture(t_data *data, t_img **texture);
+void				get_texture_x(t_data *data, t_img *texture, int *tex_x);
+
+void				free_data(t_data *data);
+int					remplir_colors(t_info_pars *pars, t_map_info *infos);
 // utils_pars1
 
 int					len_tab(char **tab);
@@ -171,7 +195,7 @@ char				*remove_newline(char *line);
 int					ft_strcmp(char *str, char *str2);
 int					is_fichier(char *path);
 int					is_direction(char *str);
-void				drawRays2D(t_data *data);
+void				draw_rays_2d(t_data *data);
 void				free_splif(char **out, int i);
 
 void				move_camera_right(t_data *data);
@@ -226,7 +250,8 @@ void				draw_square(t_data *data, int x, int y, int color,
 						int square_size);
 void				draw_map(t_data *data);
 int					is_wall(t_data *data, float ray_x, float ray_y);
-void				draw_line(t_data *data);
+void				draw_line(t_data *data, t_img *texture, int tex_x, int x);
+
 
 // player_position
 void				set_player_direction(t_player *player, char direction);
@@ -242,11 +267,10 @@ t_win				*init_win(void);
 void				free_win(t_win *win);
 
 // utils_main
-int					init_structs(t_data **data);
+int					init_data(t_data **data, int fd);
 int					parse_info_line(char *line, t_info_pars *pars,
 						t_map_info *infos);
-int					parse_error(t_map_pars *map, t_map_info *infos,
-						t_info_pars *pars, char *msg);
+int					parse_error(char *msg);
 int					final_checks(t_map_info *infos, t_map_pars *map);
 int					parse_file(int fd, t_map_pars *map, t_map_info *infos,
 						t_info_pars *pars);

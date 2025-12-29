@@ -6,62 +6,84 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:26:45 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/12/16 17:26:30 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/29 18:51:40 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	main(int ac, char **av)
+void	final_initializations(t_data *data)
 {
-	int			fd;
-	t_data		*data = NULL;
-	t_win		*win = NULL;
-
-	if (init_structs(&data) || checks_args(ac, av)
-		|| check_fd(&fd, av) || parse_file(fd, data->map_pars, data->map_info, data->info_pars)
-		|| final_checks(data->map_info, data->map_pars))
-	{	
-		clean_exit(data);
-		return (FAILURE);
-	}
-
-	if (flood_fill(data->map_pars))
-	{
-		error_message("map pas ferme");
-		clean_exit(data);
-		return (FAILURE);
-	}
-
-	data->player = ft_calloc(1, sizeof(t_player));
-	data->raycast = ft_calloc(1, sizeof(t_raycast));
-	data->texture = ft_calloc(1, sizeof(t_texture));
 	data->player->px = data->map_pars->x_start + 0.5;
 	data->player->py = data->map_pars->y_start + 0.5;
-	data->map_pars->height = len_tab(data->map_pars->map);
-
-
-	win = init_win();
-	if (!win)
-	{
-		error_message("Error : initialisation fenêtre");
-		return (FAILURE);
-	}
-	data->win = win;
+	data->raycast->ceiling = rgb_to_hex_int(data, data->map_info->ceiling);
+	data->raycast->floor = rgb_to_hex_int(data, data->map_info->floor);
 	load_all_textures(data);
 	set_player_direction(data->player, data->map_pars->position);
 	normalize_vector(&data->player->pdirx, &data->player->pdiry);
 	normalize_vector(&data->player->planex, &data->player->planey);
+}
+
+int	initialize_everything(t_data **data, int ac, char **av)
+{
+	int	fd;
+
+	if (checks_args(ac, av) == FAILURE || check_fd(&fd, av) == FAILURE)
+		return (FAILURE);
+	if (init_data(data, fd) == FAILURE)
+	{
+		error_message("Structs initialization failed");
+		return (free_data(*data), FAILURE);
+	}
+	if (parse_file(fd, (*data)->map_pars, (*data)->map_info, (*data)->info_pars)
+		|| final_checks((*data)->map_info, (*data)->map_pars))
+		return (free_data(*data), FAILURE);
+	if (flood_fill((*data)->map_pars))
+	{
+		error_message("Map is not closed");
+		return (free_data(*data), FAILURE);
+	}
+	final_initializations((*data));
+	return (SUCCESS);
+}
+
+int	init_data(t_data **data, int fd)
+{
+	(*data) = ft_calloc(1, sizeof(t_data));
+	if (!*data)
+		return (close(fd), FAILURE);
+	(*data)->fd = fd;
+	(*data)->map_pars = ft_calloc(1, sizeof(t_map_pars));
+	(*data)->map_info = ft_calloc(1, sizeof(t_map_info));
+	(*data)->info_pars = ft_calloc(1, sizeof(t_info_pars));
+	if (!(*data)->map_pars || !(*data)->map_info || !(*data)->info_pars)
+		return (FAILURE);
+	(*data)->map_pars->map = ft_calloc(1, sizeof(char *));
+	if (!(*data)->map_pars->map)
+		return (FAILURE);
+	(*data)->player = ft_calloc(1, sizeof(t_player));
+	(*data)->raycast = ft_calloc(1, sizeof(t_raycast));
+	(*data)->texture = ft_calloc(1, sizeof(t_texture));
+	if (!(*data)->player || !(*data)->raycast || !(*data)->texture)
+		return (FAILURE);
+	(*data)->win = init_win();
+	if (!(*data)->win)
+		return (FAILURE);
+	return (SUCCESS);
+}
+
+int	main(int ac, char **av)
+{
+	t_data	*data;
+
+	data = NULL;
+	if (initialize_everything(&data, ac, av) == FAILURE)
+		return (FAILURE);
 	print_char(data->map_pars->map);
-	data->raycast->ceiling = rgb_to_hex_int(data, data->map_info->ceiling);
-	data->raycast->floor = rgb_to_hex_int(data, data->map_info->floor);
 	mlx_hook(data->win->win, 2, 1L << 0, (int (*)())key_press, data);
 	mlx_hook(data->win->win, 17, 0L, (int (*)())clean_exit, data);
 	mlx_loop_hook(data->win->mlx, (int (*)())render, data);
 	mlx_loop(data->win->mlx);
-	free_win(data->win);
-	free_info(data->map_info);
-	free_tab(data->map_pars->map);
-	close(fd);
+	free_data(data);
 	return (SUCCESS);
 }

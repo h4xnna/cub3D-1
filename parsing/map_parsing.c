@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 15:26:04 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/11/06 10:27:06 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/29 18:29:04 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,6 @@ int	check_char(char *line, t_map_pars *map)
 	return (SUCCESS);
 }
 
-void	free_splif(char **out, int i)
-{
-	while (i > 0)
-	{
-		free(out[i]);
-		i--;
-	}
-	free(out);
-}
-
 int	check_positions(t_map_pars *map, char *line)
 {
 	int	i;
@@ -63,7 +53,8 @@ int	check_positions(t_map_pars *map, char *line)
 				map->y_start = len_tab(map->map);
 			}
 			else
-				return (error_message("invalide map: trop de position joueur"), FAILURE);
+				return (error_message("invalide map: trop de position joueur"),
+					FAILURE);
 		}
 		i++;
 	}
@@ -104,20 +95,26 @@ int	is_full_of_spaces(char *line)
 	i = 0;
 	while (line[i])
 	{
-		if (line[i] != ' ' && line[i] !=  '\t')
+		if (line[i] != ' ' && line[i] != '\t')
 			return (FAILURE);
 		i++;
 	}
 	return (SUCCESS);
 }
 
-int	check_fd(int *fd, char **av)
+void	*ft_realloc(void *ptr, size_t new_size)
 {
-	*fd = open((av[1]), O_RDONLY);
-	if (*fd == -1)
+	void	*new_ptr;
+
+	if (!ptr)
+		return (malloc(new_size));
+	if (new_size == 0)
 	{
-		error_message("Aucun fichier a ce nom");
-		return (FAILURE);
+		free(ptr);
+		return (NULL);
 	}
-	return (SUCCESS);
+	new_ptr = malloc(new_size);
+	if (!new_ptr)
+		return (NULL);
+	return (new_ptr);
 }

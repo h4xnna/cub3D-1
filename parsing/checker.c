@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   info_pars3.c                                       :+:      :+:    :+:   */
+/*   checker.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 15:17:32 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/11/06 11:27:41 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/29 18:28:30 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,35 +48,29 @@ int	checks_args(int ac, char **av)
 {
 	if (ac != 2)
 	{
-		error_message("Mauvais nb d'args");
+		error_message("Wrong number of arguments");
 		return (FAILURE);
 	}
 	if (check_cub(av[1]))
 	{
-		error_message("Mauvais extension");
+		error_message("Wrong file extension");
 		return (FAILURE);
 	}
 	if (HEIGHT < 20 || WIDTH <= 0 || HEIGHT > 1440 || WIDTH > 2560)
 	{
-		error_message("Mauvaise taille de fenetre");
+		error_message("Wrong window size");
 		return (FAILURE);
 	}
 	return (SUCCESS);
 }
 
-void	*ft_realloc(void *ptr, size_t new_size)
+int	check_fd(int *fd, char **av)
 {
-	void	*new_ptr;
-
-	if (!ptr)
-		return (malloc(new_size));
-	if (new_size == 0)
+	*fd = open((av[1]), O_RDONLY);
+	if (*fd == -1)
 	{
-		free(ptr);
-		return (NULL);
+		error_message("Aucun fichier a ce nom");
+		return (FAILURE);
 	}
-	new_ptr = malloc(new_size);
-	if (!new_ptr)
-		return (NULL);
-	return (new_ptr);
+	return (SUCCESS);
 }

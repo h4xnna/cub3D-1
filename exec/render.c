@@ -1,33 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   draw_map2D.c                                       :+:      :+:    :+:   */
+/*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/05 15:19:33 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/11/06 11:29:03 by pacda-si         ###   ########.fr       */
+/*   Created: 2025/12/29 18:14:37 by pacda-si          #+#    #+#             */
+/*   Updated: 2025/12/29 18:53:47 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
-void	x_to_0(t_map_pars *map)
+int	render(t_data *data)
 {
-	int	x;
-	int	y;
-
-	x = 0;
-	y = 0;
-	while (map->map[y])
-	{
-		while (map->map[y][x])
-		{
-			if (map->map[y][x] == 'X')
-				map->map[y][x] = '0';
-			x++;
-		}
-		x = 0;
-		y++;
-	}
+	clear_window(data->win);
+	draw_rays_2d(data);
+	return (0);
 }

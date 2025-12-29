@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
+/*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 23:52:35 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/29 18:20:12 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/12/29 17:46:27 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,9 +146,9 @@ char	*get_next_line(int fd)
 // 			i++;
 // 			free(line);
 // 		}
-// 		else 
-// 			break;
-// 		j++;		
+// 		else
+// 			break ;
+// 		j++;
 // 	}
 // 	if( i > 6)
 // 		printf("prout");

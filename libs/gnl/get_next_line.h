@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
+/*   By: 2cz <2cz@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/22 13:45:17 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/15 16:57:30 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/12/28 18:43:20 by 2cz              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,6 @@
 # include <stdio.h>
 # include <unistd.h>
 
-int		len(char *stock_line);
-char	*extract_line(char *stock_line);
-char	*clear_stock(char *stock_line);
 char	*get_next_line(int fd);
 
 #endif

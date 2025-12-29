@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pars_map2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
+/*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 18:07:44 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/26 15:07:45 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/12/29 17:45:55 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,8 @@ void	pass_chars2(const char *s, int *i, int *minus)
 long long	ft_atoll(const char *nptr)
 {
 	long long	out;
-	int	i;
-	int	minus;
+	int			i;
+	int			minus;
 
 	i = 0;
 	out = 0;

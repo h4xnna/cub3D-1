@@ -6,28 +6,12 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 14:38:55 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/12/16 17:19:27 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/29 18:16:14 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	init_structs(t_data **data)
-{
-	(*data) = ft_calloc(1, sizeof(t_data));
-	if (!*data)
-		return (FAILURE);
-	(*data)->map_pars = ft_calloc(1, sizeof(t_map_pars));
-	(*data)->map_info = ft_calloc(1, sizeof(t_map_info));
-	(*data)->info_pars = ft_calloc(1, sizeof(t_info_pars));
-	if (!(*data)->map_pars || !(*data)->map_info || !(*data)->info_pars)
-		return (FAILURE);
-	(*data)->map_pars->map = malloc(sizeof(char *) * 1);
-	if (!(*data)->map_pars->map)
-		return (FAILURE);
-	(*data)->map_pars->map[0] = NULL;
-	return (SUCCESS);
-}
 int	parse_info_line(char *line, t_info_pars *pars, t_map_info *infos)
 {
 	pars->line_split = ft_split(line, ' ');
@@ -38,66 +22,44 @@ int	parse_info_line(char *line, t_info_pars *pars, t_map_info *infos)
 	return (SUCCESS);
 }
 
-int	parse_error(t_map_pars *map, t_map_info *infos, t_info_pars *pars,
-		char *msg)
+int	parse_error(char *msg)
 {
 	error_message(msg);
-	if (map->map)
-		free_tab(map->map);
-	if (pars)
-		free_pars(pars);
-	if (infos)
-		free_info(infos);
-	get_next_line(-1);
 	return (FAILURE);
 }
+
 int	final_checks(t_map_info *infos, t_map_pars *map)
 {
 	if (map->position == 0)
-	{
-		error_message("map invalide: aucune position trouvée pour le joueur");
-		free_info(infos);
-		free_tab(map->map);
-		return (1);
-	}
+		return (parse_error("Final checks failed"));
 	if (infos->count_info != 6 || check_infos(infos))
-	{
-		error_message(" Infos pas bon");
-		free_tab(map->map);
-		free_info(infos);
-		return (1);
-	}
-	return (0);
+		return (parse_error("Final checks failed"));
+	return (SUCCESS);
 }
 
 int	parse_file(int fd, t_map_pars *map, t_map_info *infos, t_info_pars *pars)
 {
-	char *line;
+	char	*line;
 
 	while ((line = get_next_line(fd)) != NULL)
 	{
 		line = remove_newline(line);
 		if (!line)
-			return (parse_error(map, infos, pars, "lecture ligne"));
+			return (parse_error("Line reading failed"));
 		if (infos->count_info < 6)
 		{
 			if (parse_info_line(line, pars, infos))
-			{
-				free(line);
-				// free_info(infos);
-				parse_error(map, infos, pars,"parsing infos");
-				return FAILURE;
-			}	
+				return (free(line), parse_error("Info parsing failed"));
 		}
 		else if ((!line[0] || !is_full_of_spaces(line)) && !map->map_started)
 			;
 		else if (!check_char(line, map) && !check_positions(map, line))
 			add_line_to_map(map, line);
 		else
-			return (free(line), parse_error(map, infos, pars,
-					" parsing map"));
+			return (free(line), parse_error(" parsing map"));
 		free(line);
 		free_pars(pars);
 	}
+	map->height = len_tab(map->map);
 	return (0);
 }
