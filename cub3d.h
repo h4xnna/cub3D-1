@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/12/30 10:13:30 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/30 10:20:25 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -242,12 +242,6 @@ void				buttons_d(t_player *player, t_map_pars *map);
 void				buttons_w(t_player *player, t_map_pars *map);
 void				buttons_s(t_player *player, t_map_pars *map);
 
-// draw_map2D
-void				x_to_0(t_map_pars *map);
-void				draw_square(t_data *data, int x, int y, int color,
-						int square_size);
-void				draw_map(t_data *data);
-int					is_wall(t_data *data, float ray_x, float ray_y);
 void				draw_line(t_data *data, t_img *texture, int tex_x, int x);
 
 // player_position

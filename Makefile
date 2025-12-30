@@ -81,10 +81,10 @@ $(MLX_A) :
 	@make -sC $(MLX_PATH) -j
 	@echo $(NEON_GREEN)$(BOLD)"Library Compiled. ✔\n"
 
-# ${NAME}: $(MLX_PATH) $(MLX_A) $(HEADERS) ${OBJS} $(LIBFT)
-# 	@echo $(LIGHT_GREEN) "Compilation..."$(BOLD)
-# 	@${CC} ${CFLAGS} ${OBJS} $(LIBFT) $(MLX_A) $(MLX_FLAGS) -o ${NAME}
-# 	@echo $(LIGHT_GREEN)"Compilation réussie ✔"$(RESET)
+${NAME}: $(MLX_PATH) $(MLX_A) $(HEADERS) ${OBJS} $(LIBFT)
+	@echo $(LIGHT_GREEN) "Compilation..."$(BOLD)
+	@${CC} ${CFLAGS} ${OBJS} $(LIBFT) $(MLX_A) $(MLX_FLAGS) -o ${NAME}
+	@echo $(LIGHT_GREEN)"Compilation réussie ✔"$(RESET)
 
 ${NAME}: $(HEADERS) ${OBJS} $(LIBFT)
 	@echo $(LIGHT_GREEN) "Compilation..."$(BOLD)
@@ -106,7 +106,7 @@ leak : all
 fclean: clean
 	@rm -rf ${NAME}
 	@rm -rf $(LIBFT_NAME)
-# 	@rm -rf $(MLX_PATH)
+	@rm -rf $(MLX_PATH)
 	@echo $(BROWN)fclean reussi
 
 re: fclean all
