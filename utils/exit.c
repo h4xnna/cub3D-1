@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 18:19:57 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/29 18:29:14 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/30 10:11:55 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,18 +22,29 @@ void	free_splif(char **out, int i)
 	free(out);
 }
 
+static void	free_texture(t_img *texture, void *mlx)
+{
+	if (texture)
+	{
+		if (texture->img)
+			mlx_destroy_image(mlx, texture->img);
+		free(texture);
+	}
+}
+
 void	free_textures(t_data *data)
 {
 	if (data->texture)
 	{
-		if (data->texture->text_east && data->texture->text_east->img)
-			mlx_destroy_image(data->win->mlx, data->texture->text_east->img);
-		if (data->texture->text_north && data->texture->text_north->img)
-			mlx_destroy_image(data->win->mlx, data->texture->text_north->img);
-		if (data->texture->text_south && data->texture->text_south->img)
-			mlx_destroy_image(data->win->mlx, data->texture->text_south->img);
-		if (data->texture->text_west && data->texture->text_west->img)
-			mlx_destroy_image(data->win->mlx, data->texture->text_west->img);
+		if (data->texture->text_east)
+			free_texture(data->texture->text_east, data->win->mlx);
+		if (data->texture->text_north)
+			free_texture(data->texture->text_north, data->win->mlx);
+		if (data->texture->text_south)
+			free_texture(data->texture->text_south, data->win->mlx);
+		if (data->texture->text_west)
+			free_texture(data->texture->text_west, data->win->mlx);
+		free(data->texture);
 	}
 }
 
@@ -49,7 +60,10 @@ void	free_data(t_data *data)
 	if (data->map_info)
 		free_info(data->map_info);
 	if (data->info_pars)
+	{
 		free_pars(data->info_pars);
+		free(data->info_pars);
+	}
 	if (data->player)
 		free(data->player);
 	if (data->raycast)

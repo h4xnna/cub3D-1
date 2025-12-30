@@ -1,48 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pars_map2.c                                        :+:      :+:    :+:   */
+/*   parsing_utils2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 18:07:44 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/12/29 17:45:55 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/30 10:16:54 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-void	print_char(char **str)
-{
-	int	j;
-
-	j = 0;
-	if (!str)
-		return ;
-	while (str[j])
-	{
-		printf("%s\n", str[j]);
-		j++;
-	}
-}
-
-int	print_tab(int *tab)
-{
-	int	i;
-
-	i = 0;
-	if (!tab)
-	{
-		error_message(" info");
-		return (1);
-	}
-	while (i < 3)
-	{
-		printf("%i, ", tab[i]);
-		i++;
-	}
-	return (0);
-}
 
 int	skip_space(char *line)
 {

@@ -6,12 +6,11 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 12:53:12 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/12/29 18:23:59 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/30 10:14:05 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
 
 int	count_coma(char *line)
 {
@@ -53,7 +52,7 @@ int	pars_info(t_info_pars *pars, t_map_info *infos)
 			return (FAILURE);
 		pars->colors = ft_split(pars->line_split[1], ',');
 		if (!pars->colors || len_tab(pars->colors) != 3)
-			return (free_pars(pars), FAILURE);
+			return (FAILURE);
 		if (remplir_colors(pars, infos))
 			return (FAILURE);
 	}

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_main.c                                       :+:      :+:    :+:   */
+/*   file_parsing.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 14:38:55 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/12/29 18:16:14 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/30 10:14:47 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,8 @@ int	parse_file(int fd, t_map_pars *map, t_map_info *infos, t_info_pars *pars)
 {
 	char	*line;
 
-	while ((line = get_next_line(fd)) != NULL)
+	line = get_next_line(fd);
+	while (line)
 	{
 		line = remove_newline(line);
 		if (!line)
@@ -59,6 +60,7 @@ int	parse_file(int fd, t_map_pars *map, t_map_info *infos, t_info_pars *pars)
 			return (free(line), parse_error(" parsing map"));
 		free(line);
 		free_pars(pars);
+		line = get_next_line(fd);
 	}
 	map->height = len_tab(map->map);
 	return (0);

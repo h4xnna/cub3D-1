@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 10:55:48 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/12/29 18:03:49 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/30 10:03:53 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ static t_img	*load_one_texture(t_data *data, t_img *tex, char *path)
 			&tex->height);
 	if (!tex->img)
 	{
+		free(tex);
 		error_message("No such texture file: ");
 		ft_putstr_red(path);
 		clean_exit(data);

@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/12/29 18:55:06 by pacda-si         ###   ########.fr       */
+/*   Updated: 2025/12/30 10:13:30 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,10 +178,8 @@ static inline int	get_texture_pixel(t_img *img, int x, int y)
 }
 
 void				draw_rays_2d(t_data *data);
-void				perform_dda(t_data *data);
 void				get_perp_wall_dist(t_data *data);
 void				calculate_line(t_data *data);
-void				init_raycasting(t_data *data, int x);
 void				init_step_side_dist(t_data *data);
 void				get_wall_texture(t_data *data, t_img **texture);
 void				get_texture_x(t_data *data, t_img *texture, int *tex_x);
@@ -251,7 +249,6 @@ void				draw_square(t_data *data, int x, int y, int color,
 void				draw_map(t_data *data);
 int					is_wall(t_data *data, float ray_x, float ray_y);
 void				draw_line(t_data *data, t_img *texture, int tex_x, int x);
-
 
 // player_position
 void				set_player_direction(t_player *player, char direction);

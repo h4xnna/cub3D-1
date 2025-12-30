@@ -43,7 +43,8 @@ SRCS	=	libs/gnl/get_next_line.c\
 			$(EXEC)texture.c\
 			$(EXEC)window.c\
 			$(UTILS)exit.c\
-			$(UTILS)free.c
+			$(UTILS)free.c\
+			$(UTILS)print_utils.c
 
 
 # Libraries
