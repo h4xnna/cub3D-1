@@ -19,7 +19,7 @@ CYAN_SHOCK      = "\033[38;5;51m"
 
 NAME	= cube
 CC		= cc 
-CFLAGS	= -Wall -Werror -Wextra -Wno-error=cast-function-type -g3
+CFLAGS	= -Wall -Werror -Wextra -g3
 
 PARSING =	parsing/
 EXEC	=	exec/
@@ -86,10 +86,10 @@ ${NAME}: $(MLX_PATH) $(MLX_A) $(HEADERS) ${OBJS} $(LIBFT)
 	@${CC} ${CFLAGS} ${OBJS} $(LIBFT) $(MLX_A) $(MLX_FLAGS) -o ${NAME}
 	@echo $(LIGHT_GREEN)"Compilation réussie ✔"$(RESET)
 
-${NAME}: $(HEADERS) ${OBJS} $(LIBFT)
-	@echo $(LIGHT_GREEN) "Compilation..."$(BOLD)
-	@${CC} ${CFLAGS} ${OBJS} $(LIBFT) $(MLX_A) $(MLX_FLAGS) -o ${NAME}
-	@echo $(LIGHT_GREEN)"Compilation réussie ✔"$(RESET)
+# ${NAME}: $(HEADERS) ${OBJS} $(LIBFT)
+# 	@echo $(LIGHT_GREEN) "Compilation..."$(BOLD)
+# 	@${CC} ${CFLAGS} ${OBJS} $(LIBFT) $(MLX_A) $(MLX_FLAGS) -o ${NAME}
+# 	@echo $(LIGHT_GREEN)"Compilation réussie ✔"$(RESET)
 
 $(LIBFT):
 	@echo "Making libft..."
