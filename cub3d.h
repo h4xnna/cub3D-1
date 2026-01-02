@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
+/*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/12/13 11:27:11 by hmimouni         ###   ########.fr       */
+/*   Updated: 2026/01/02 18:44:50 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,6 +210,7 @@ typedef struct s_data
 	t_animation			*deploy_anim;
 	t_animation			*lmb_anim;
 	t_animation			*rmb_anim;
+	int					fd;
 }						t_data;
 
 static inline int	get_window_pixel(t_win *win, int x, int y)
@@ -275,8 +276,12 @@ static inline int	get_texture_pixel(t_img *img, int x, int y)
 }
 
 // utils_pars1
+void					free_textures(t_data *data);
+void					free_data(t_data *data);
+void					clean_exit(t_data *data);
 
-void					drawskybox(t_data *data);
+int						init_data(t_data **data, int fd);
+void					draw_skybox(t_data *data);
 void					draw_image_to_buffer(t_win *win, t_img *src, int x_off,
 						int y_off);
 void					rotate_player(t_data *data, int mouse_x);

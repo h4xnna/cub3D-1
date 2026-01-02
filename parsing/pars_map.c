@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pars_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
+/*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 15:26:04 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/12/13 11:18:12 by hmimouni         ###   ########.fr       */
+/*   Updated: 2026/01/02 18:33:22 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,7 @@ int	check_char(char *line, t_map_pars *map)
 	{
 		if ((line[i] != 'N' && line[i] != 'S' && line[i] != 'E'
 				&& line[i] != 'W' && line[i] != 'D' && line[i] != 'L')
-			&& (line[i] != 48 && line[i] != 49
-				&& line[i] != ' '))
+			&& (line[i] != 48 && line[i] != 49 && line[i] != ' '))
 			return (FAILURE);
 		if (line[i] == 48 || line[i] == 49)
 			bouboule = 1;

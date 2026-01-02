@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_pars1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
+/*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 14:11:06 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/26 16:07:48 by hmimouni         ###   ########.fr       */
+/*   Updated: 2026/01/02 17:35:33 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void	free_info(t_map_info *info)
 {
 	free_info_textures(info);
 	free_info_colors(info);
+	free(info);
 }
 
 void	free_tab(char **tab)

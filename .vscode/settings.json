@@ -1,4 +1,8 @@
 {
+	"[c]": {
+        "editor.defaultFormatter": "keyhr.42-c-format"
+    },
+
 	"files.associations": {
 		"cub3d.h": "c",
 		"mlx.h": "c",

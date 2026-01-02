@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
+/*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 07:53:02 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/13 11:34:13 by hmimouni         ###   ########.fr       */
+/*   Updated: 2026/01/02 20:13:47 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,22 +100,28 @@ static void	drawRays2D(t_data *data)
 	int			floortex_y;
 	int			floor_color;
 	int			reflected_y;
-	int			reflectedColor;
-	int			wallColor;
-	int			finalColor;
+	int			reflected_color;
+	int			wall_color;
+	int			final_color;
 	bool		skip;
 	t_img		*texture;
-	t_img		*floorTexture;
+	t_img		*floor_texture;
 	t_door		*door;
+	t_color		floort;
+	t_color		wall;
+	t_color		reflect;
+	t_color		final;
+	t_color		exit_color;
+	double		floor_x_wall;
+	double		floor_y_wall;
 
 	x = 0;
 	y = 0;
-	double floorXWall, floorYWall;
 	skip = false;
-	t_color floort, wall, reflect, final, exitColor;
 	while (x < WIDTH)
 	{
-		data->raycast->camerax = 2 * x / (double)WIDTH - 1;// calcul dir rayon chaque colonne
+		data->raycast->camerax = 2 * x / (double)WIDTH - 1;
+		// calcul dir rayon chaque colonne
 		data->raycast->raydirx = data->player->pdirx + data->player->planex
 			* data->raycast->camerax;
 		data->raycast->raydiry = data->player->pdiry + data->player->planey
@@ -126,8 +132,10 @@ static void	drawRays2D(t_data *data)
 			data->raycast->raydiry = 0.001;
 		data->raycast->mapx = (int)data->player->px;
 		data->raycast->mapy = (int)data->player->py;
-		data->raycast->delta_dist_x = fabs(1 / data->raycast->raydirx); // distance rayon parcourus jusqua ligne map
-		data->raycast->delta_dist_y = fabs(1 / data->raycast->raydiry);// fabs = valeur positivie
+		data->raycast->delta_dist_x = fabs(1 / data->raycast->raydirx);
+		// distance rayon parcourus jusqua ligne map
+		data->raycast->delta_dist_y = fabs(1 / data->raycast->raydiry);
+		// fabs = valeur positivie
 		if (data->raycast->raydirx < 0)
 		{
 			data->raycast->stepx = -1;
@@ -155,7 +163,8 @@ static void	drawRays2D(t_data *data)
 		data->raycast->hit = 0;
 		while (data->raycast->hit == 0) // 0 = vertical
 		{
-			if (data->raycast->sidedistx < data->raycast->side_dist_y) // si rayon a frapper un mur vertical ou horizontal
+			if (data->raycast->sidedistx < data->raycast->side_dist_y)
+			// si rayon a frapper un mur vertical ou horizontal
 			{
 				data->raycast->sidedistx += data->raycast->delta_dist_x;
 				data->raycast->mapx += data->raycast->stepx;
@@ -183,13 +192,14 @@ static void	drawRays2D(t_data *data)
 			data->raycast->line_height = (int)(HEIGHT
 					/ data->raycast->perpwall_dist);
 			data->raycast->draw_start = -data->raycast->line_height / 2
-				+ half_height + data->player->pitch;
+				+ half_height;
 			if (data->raycast->draw_start < 0)
 				data->raycast->draw_start = 0;
 			data->raycast->draw_end = data->raycast->line_height / 2
-				+ half_height + data->player->pitch;
+				+ half_height;
 			if (data->raycast->draw_end >= HEIGHT)
-				data->raycast->draw_end = HEIGHT - 1; //  calcul hauteur de la colonne a dessiner a lecran
+				data->raycast->draw_end = HEIGHT - 1;
+			//  calcul hauteur de la colonne a dessiner a lecran
 			if (data->raycast->side == 0)
 			{
 				if (data->raycast->raydirx > 0)
@@ -235,7 +245,7 @@ static void	drawRays2D(t_data *data)
 		y = data->raycast->draw_start;
 		while (y <= data->raycast->draw_end)
 		{
-			d = (y - data->player->pitch) * 256 - HEIGHT * 128
+			d = y * 256 - HEIGHT * 128
 				+ data->raycast->line_height * 128;
 			tex_y = ((d * texture->height) / data->raycast->line_height) / 256;
 			if (tex_y < 0)
@@ -243,7 +253,7 @@ static void	drawRays2D(t_data *data)
 			color = ((int *)texture->addr)[texture->height * tex_y + tex_x];
 			color = apply_shading(data->raycast->perpwall_dist / 2, color);
 			my_mlx_pixel_put(data->win, x, y, color);
-			if (data->player->pitch > -800 && (y + (data->raycast->draw_end - y)
+			if ((y + (data->raycast->draw_end - y)
 					* 2) < HEIGHT)
 			{
 				my_mlx_pixel_put(data->win, x, y + (data->raycast->draw_end - y)
@@ -251,96 +261,94 @@ static void	drawRays2D(t_data *data)
 			}
 			y++;
 		}
-		if (data->player->pitch > -500)
+		if (data->raycast->side == 0 && data->raycast->raydirx > 0)
 		{
-			if (data->raycast->side == 0 && data->raycast->raydirx > 0)
+			floor_x_wall = data->raycast->mapx;
+			floor_y_wall = data->raycast->mapy + wall_x;
+		}
+		else if (data->raycast->side == 0 && data->raycast->raydirx < 0)
+		{
+			floor_x_wall = data->raycast->mapx + 1.0;
+			floor_y_wall = data->raycast->mapy + wall_x;
+		}
+		else if (data->raycast->side == 1 && data->raycast->raydiry > 0)
+		{
+			floor_x_wall = data->raycast->mapx + wall_x;
+			floor_y_wall = data->raycast->mapy;
+		}
+		else
+		{
+			floor_x_wall = data->raycast->mapx + wall_x;
+			floor_y_wall = data->raycast->mapy + 1.0;
+		}
+		p = data->raycast->draw_end;
+		while (p < HEIGHT)
+		{
+			current_dist = HEIGHT / (2.0 * p - HEIGHT);
+			weight = current_dist / data->raycast->perpwall_dist;
+			current_floor_x = weight * floor_x_wall + (1.0 - weight)
+				* data->player->px;
+			current_floor_y = weight * floor_y_wall + (1.0 - weight)
+				* data->player->py;
+			if ((current_floor_y > 0
+					&& current_floor_y < data->map_pars->height)
+				&& data->map_pars->map[(int)current_floor_y][(int)current_floor_x] == 'L')
 			{
-				floorXWall = data->raycast->mapx;
-				floorYWall = data->raycast->mapy + wall_x;
+				floor_texture = data->texture->exit;
+				floortex_x = (int)(current_floor_x * floor_texture->width)
+					% floor_texture->width;
+				floortex_y = (int)(current_floor_y * floor_texture->height)
+					% floor_texture->height;
+				floor_color = ((int *)floor_texture->addr)[floor_texture->width
+					* floortex_y + floortex_x];
+				exit_color.g = (floor_color >> 8) & 0xFF;
+				if (exit_color.g > 0)
+				{
+					floor_texture = data->texture->floor;
+				}
 			}
-			else if (data->raycast->side == 0 && data->raycast->raydirx < 0)
+			else
+				floor_texture = data->texture->floor;
+			floortex_x = (int)(current_floor_x * floor_texture->width)
+				% floor_texture->width;
+			floortex_y = (int)(current_floor_y * floor_texture->height)
+				% floor_texture->height;
+			floor_color = ((int *)floor_texture->addr)[floor_texture->width
+				* floortex_y + floortex_x];
+			reflected_y = HEIGHT - p;
+			if (floor_texture == data->texture->floor)
 			{
-				floorXWall = data->raycast->mapx + 1.0;
-				floorYWall = data->raycast->mapy + wall_x;
-			}
-			else if (data->raycast->side == 1 && data->raycast->raydiry > 0)
-			{
-				floorXWall = data->raycast->mapx + wall_x;
-				floorYWall = data->raycast->mapy;
+				reflected_color = get_window_pixel(data->win, x,
+						reflected_y);
+				wall_color = get_window_pixel(data->win, x, p);
 			}
 			else
 			{
-				floorXWall = data->raycast->mapx + wall_x;
-				floorYWall = data->raycast->mapy + 1.0;
+				reflected_color = 0;
+				wall_color = 0;
 			}
-			p = data->raycast->draw_end;
-			while (p < HEIGHT)
-			{
-				current_dist = HEIGHT / (2.0 * p - HEIGHT);
-				weight = current_dist / data->raycast->perpwall_dist;
-				current_floor_x = weight * floorXWall + (1.0 - weight)
-					* data->player->px;
-				current_floor_y = weight * floorYWall + (1.0 - weight)
-					* data->player->py;
-				if ((current_floor_y > 0
-						&& current_floor_y < data->map_pars->height)
-					&& data->map_pars->map[(int)current_floor_y][(int)current_floor_x] == 'L')
-				{
-					floorTexture = data->texture->exit;
-					floortex_x = (int)(current_floor_x * floorTexture->width)
-						% floorTexture->width;
-					floortex_y = (int)(current_floor_y * floorTexture->height)
-						% floorTexture->height;
-					floor_color = ((int *)floorTexture->addr)[floorTexture->width
-						* floortex_y + floortex_x];
-					exitColor.g = (floor_color >> 8) & 0xFF;
-					if (exitColor.g > 0)
-					{
-						floorTexture = data->texture->floor;
-					}
-				}
-				else
-					floorTexture = data->texture->floor;
-				floortex_x = (int)(current_floor_x * floorTexture->width)
-					% floorTexture->width;
-				floortex_y = (int)(current_floor_y * floorTexture->height)
-					% floorTexture->height;
-				floor_color = ((int *)floorTexture->addr)[floorTexture->width
-					* floortex_y + floortex_x];
-				reflected_y = HEIGHT - p;
-				if (floorTexture == data->texture->floor)
-				{
-					reflectedColor = get_window_pixel(data->win, x, reflected_y);
-					wallColor = get_window_pixel(data->win, x, p);
-				}
-				else
-				{
-					reflectedColor = 0;
-					wallColor = 0;
-				}
-				floort.r = (floor_color >> 16) & 0xFF;
-				floort.g = (floor_color >> 8) & 0xFF;
-				floort.b = floor_color & 0xFF;
-				reflect.r = (reflectedColor >> 16) & 0xFF;
-				reflect.g = (reflectedColor >> 8) & 0xFF;
-				reflect.b = reflectedColor & 0xFF;
-				wall.r = (wallColor >> 16) & 0xFF;
-				wall.g = (wallColor >> 8) & 0xFF;
-				wall.b = wallColor & 0xFF;
-				final.r = (uint8_t)((floort.r * (1.0 - REFLECTIONSTRENGTH * 3)
-							+ reflect.r * REFLECTIONSTRENGTH + wall.r
-							* REFLECTIONSTRENGTH * 2));
-				final.g = (uint8_t)((floort.g * (1.0 - REFLECTIONSTRENGTH * 3)
-							+ reflect.g * REFLECTIONSTRENGTH + wall.g
-							* REFLECTIONSTRENGTH * 2));
-				final.b = (uint8_t)((floort.b * (1.0 - REFLECTIONSTRENGTH * 3)
-							+ reflect.b * REFLECTIONSTRENGTH + wall.b
-							* REFLECTIONSTRENGTH * 2));
-				finalColor = (final.r << 16) | (final.g << 8) | final.b;
-				my_mlx_pixel_put(data->win, x, p, apply_shading(current_dist / 2,
-						finalColor));
-				p++;
-			}
+			floort.r = (floor_color >> 16) & 0xFF;
+			floort.g = (floor_color >> 8) & 0xFF;
+			floort.b = floor_color & 0xFF;
+			reflect.r = (reflected_color >> 16) & 0xFF;
+			reflect.g = (reflected_color >> 8) & 0xFF;
+			reflect.b = reflected_color & 0xFF;
+			wall.r = (wall_color >> 16) & 0xFF;
+			wall.g = (wall_color >> 8) & 0xFF;
+			wall.b = wall_color & 0xFF;
+			final.r = (uint8_t)((floort.r * (1.0 - REFLECTIONSTRENGTH * 3)
+						+ reflect.r * REFLECTIONSTRENGTH + wall.r
+						* REFLECTIONSTRENGTH * 2));
+			final.g = (uint8_t)((floort.g * (1.0 - REFLECTIONSTRENGTH * 3)
+						+ reflect.g * REFLECTIONSTRENGTH + wall.g
+						* REFLECTIONSTRENGTH * 2));
+			final.b = (uint8_t)((floort.b * (1.0 - REFLECTIONSTRENGTH * 3)
+						+ reflect.b * REFLECTIONSTRENGTH + wall.b
+						* REFLECTIONSTRENGTH * 2));
+			final_color = (final.r << 16) | (final.g << 8) | final.b;
+			my_mlx_pixel_put(data->win, x, p, apply_shading(current_dist
+					/ 2, final_color));
+			p++;
 		}
 		x++;
 	}
@@ -359,10 +367,7 @@ int	render(t_data *data)
 
 	clear_window(data->win);
 
-	if (!data->player->pitch)
-	{
-		drawskybox(data);
-	}
+	draw_skybox(data);
 	drawRays2D(data);
 	draw_map(data);
 	player_position(data);
@@ -373,7 +378,7 @@ int	render(t_data *data)
 	update_animation(data->lmb_anim, data->player->delta_time);
 	update_animation(data->rmb_anim, data->player->delta_time);
 
-	if (!data->player->pitch && data->player->show_knife)
+	if (data->player->show_knife)
 	{
 		if (data->deploy_anim->playing || data->knife_anim->playing
 			|| data->lmb_anim->playing || data->rmb_anim->playing)

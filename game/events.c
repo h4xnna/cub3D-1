@@ -6,13 +6,13 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 14:46:58 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/11/15 16:25:31 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/02 18:34:34 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void reset_all_animations(t_data *data)
+void	reset_all_animations(t_data *data)
 {
 	if (data->knife_anim->playing)
 	{
@@ -36,16 +36,17 @@ void reset_all_animations(t_data *data)
 	}
 }
 
-void normalize_vector(double *x, double *y)
+void	normalize_vector(double *x, double *y)
 {
-    double length = sqrt((*x) * (*x) + (*y) * (*y));
-    if (length != 0)
-    {
-        *x /= length;
-        *y /= length;
-    }
-}
+	double	length;
 
+	length = sqrt((*x) * (*x) + (*y) * (*y));
+	if (length != 0)
+	{
+		*x /= length;
+		*y /= length;
+	}
+}
 
 int	key_release(int keycode, t_data *data)
 {
@@ -57,12 +58,11 @@ int	key_release(int keycode, t_data *data)
 		data->player->moving_left = false;
 	if (keycode == D_KEY)
 		data->player->moving_right = false;
-	if(keycode == S_KEY)
+	if (keycode == S_KEY)
 		data->player->moving_down = false;
-	if(keycode == W_KEY)
+	if (keycode == W_KEY)
 		data->player->moving_up = false;
-
-	return(SUCCESS);
+	return (SUCCESS);
 }
 
 int	key_press(int keycode, t_data *data)
@@ -71,9 +71,9 @@ int	key_press(int keycode, t_data *data)
 		data->player->moving_left = true;
 	if (keycode == D_KEY)
 		data->player->moving_right = true;
-	if(keycode == S_KEY)
+	if (keycode == S_KEY)
 		data->player->moving_down = true;
-	if(keycode == W_KEY)
+	if (keycode == W_KEY)
 		data->player->moving_up = true;
 	if (keycode == 65307)
 		clean_exit(data);
@@ -92,7 +92,6 @@ int	key_press(int keycode, t_data *data)
 		reset_all_animations(data);
 		data->deploy_anim->playing = 1;
 	}
-
 	if (keycode == 50 || keycode == 49)
 	{
 		data->player->show_knife = false;
@@ -101,7 +100,7 @@ int	key_press(int keycode, t_data *data)
 	return (0);
 }
 
-int mouse_hook(int keycode, int x, int y, t_data *data)
+int	mouse_hook(int keycode, int x, int y, t_data *data)
 {
 	(void)x;
 	(void)y;
@@ -118,7 +117,7 @@ int mouse_hook(int keycode, int x, int y, t_data *data)
 	return (0);
 }
 
-int mouse_info(int x, int y, t_data *data)
+int	mouse_info(int x, int y, t_data *data)
 {
 	data->player->mouse_x = x;
 	data->player->mouse_y = y;

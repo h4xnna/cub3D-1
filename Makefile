@@ -45,7 +45,8 @@ SRCS	=	libs/gnl/get_next_line.c\
 			$(GAME)exit.c\
 			$(GAME)render.c\
 			$(GAME)player.c\
-			$(GAME)drawing.c
+			$(GAME)drawing.c\
+			$(GAME)draw_map.c
 
 
 # Libraries
