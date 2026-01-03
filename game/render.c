@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 07:53:02 by pacda-si          #+#    #+#             */
-/*   Updated: 2026/01/03 15:43:50 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/03 15:52:47 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,19 +159,44 @@ static void	init_raycasting(t_data *data, int x)
 	init_step_side_dist(data);
 }
 
+static void	draw_wall(t_data *data, int x, double wall_x, t_img *texture)
+{
+	int				tex_x;
+	int				tex_y;
+	int				y;
+	int				d;
+	unsigned int	color;
+
+	tex_x = (int)(wall_x * (double)texture->width);
+	if ((data->raycast->side == 0 && data->raycast->raydirx > 0)
+		|| (data->raycast->side == 1 && data->raycast->raydiry < 0))
+		tex_x = texture->width - tex_x - 1;
+	y = data->raycast->draw_start;
+	while (y <= data->raycast->draw_end)
+	{
+		d = y * 256 - HEIGHT * 128 + data->raycast->line_height * 128;
+		tex_y = ((d * texture->height) / data->raycast->line_height) / 256;
+		if (tex_y < 0)
+			tex_y = 0;
+		color = ((int *)texture->addr)[texture->height * tex_y + tex_x];
+		color = apply_shading(data->raycast->perpwall_dist / 2, color);
+		my_mlx_pixel_put(data->win, x, y, color);
+		if ((y + (data->raycast->draw_end - y) * 2) < HEIGHT)
+		{
+			my_mlx_pixel_put(data->win, x, y + (data->raycast->draw_end - y)
+				* 2, color);
+		}
+		y++;
+	}
+}
+
 static void	drawRays2D(t_data *data)
 {
 	int			x;
-	int			y;
-	int			color;
-	int			d;
-	int			tex_y;
-	int			tex_x;
 	int			p;
 	double		wall_x;
 	double		current_dist;
 	double		weight;
-	static int	half_height = HEIGHT / 2;
 	double		current_floor_x;
 	double		current_floor_y;
 	int			floortex_x;
@@ -189,7 +214,6 @@ static void	drawRays2D(t_data *data)
 	double		floor_y_wall;
 
 	x = 0;
-	y = 0;
 	skip = false;
 	while (x < WIDTH)
 	{
@@ -226,11 +250,11 @@ static void	drawRays2D(t_data *data)
 			data->raycast->line_height = (int)(HEIGHT
 					/ data->raycast->perpwall_dist);
 			data->raycast->draw_start = -data->raycast->line_height / 2
-				+ half_height;
+				+ HEIGHT / 2;
 			if (data->raycast->draw_start < 0)
 				data->raycast->draw_start = 0;
 			data->raycast->draw_end = data->raycast->line_height / 2
-				+ half_height;
+				+ HEIGHT / 2;
 			if (data->raycast->draw_end >= HEIGHT)
 				data->raycast->draw_end = HEIGHT - 1;
 			//  calcul hauteur de la colonne a dessiner a lecran
@@ -270,27 +294,8 @@ static void	drawRays2D(t_data *data)
 			skip = false;
 		}
 
-		tex_x = (int)(wall_x * (double)texture->width);
-		if ((data->raycast->side == 0 && data->raycast->raydirx > 0)
-			|| (data->raycast->side == 1 && data->raycast->raydiry < 0))
-			tex_x = texture->width - tex_x - 1;
-		y = data->raycast->draw_start;
-		while (y <= data->raycast->draw_end)
-		{
-			d = y * 256 - HEIGHT * 128 + data->raycast->line_height * 128;
-			tex_y = ((d * texture->height) / data->raycast->line_height) / 256;
-			if (tex_y < 0)
-				tex_y = 0;
-			color = ((int *)texture->addr)[texture->height * tex_y + tex_x];
-			color = apply_shading(data->raycast->perpwall_dist / 2, color);
-			my_mlx_pixel_put(data->win, x, y, color);
-			if ((y + (data->raycast->draw_end - y) * 2) < HEIGHT)
-			{
-				my_mlx_pixel_put(data->win, x, y + (data->raycast->draw_end - y)
-					* 2, color);
-			}
-			y++;
-		}
+		draw_wall(data, x, wall_x, texture);
+
 		if (data->raycast->side == 0 && data->raycast->raydirx > 0)
 		{
 			floor_x_wall = data->raycast->mapx;
