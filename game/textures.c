@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 10:55:48 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/03 17:31:29 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/03 18:12:58 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,14 @@ t_animation	*load_animation(t_data *data, char *pattern, int frame_count,
 	char		path[128];
 
 	anim = malloc(sizeof(t_animation));
+	if (!anim)
+		clean_exit(data);
 	anim->frames = malloc(sizeof(t_img *) * frame_count);
+	if (!anim->frames)
+	{
+		free(anim);
+		clean_exit(data);
+	}
 	anim->frame_count = frame_count;
 	anim->current_frame = 0;
 	anim->duration = duration;

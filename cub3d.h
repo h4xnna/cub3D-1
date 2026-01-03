@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/03 17:36:02 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/03 18:26:32 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,7 +188,7 @@ typedef struct s_raycast
 	int					line_height;
 	int					draw_start;
 	int					draw_end;
-	t_img				*texture;
+	t_img				*tex;
 	bool				skip;
 }						t_raycast;
 

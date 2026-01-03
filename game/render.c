@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 07:53:02 by pacda-si          #+#    #+#             */
-/*   Updated: 2026/01/03 18:11:18 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/03 18:36:14 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,35 +31,38 @@ t_door	*find_door(t_door *doors, int y, int x)
 	return (NULL);
 }
 
-static void	update_doors(t_data *data, double delta_time)
+static void	update_single_door(t_data *data, t_door *door)
+{
+	if (sqrt(pow(data->player->px - (door->x + 0.5), 2) + pow(data->player->py
+				- (door->y + 0.5), 2)) < 1.45)
+	{
+		if (door->opening >= 0.0 || !door->opened)
+			door->opened = 1;
+	}
+	else if (door->opening >= 0.0)
+	{
+		data->map_pars->map[door->y][door->x] = 'D';
+		door->opened = -1;
+	}
+	if ((door->opening >= 0.0 && door->opening <= 1.0))
+		door->opening += data->player->delta_time * (door->opened * 0.8);
+	if (door->opening >= 1.0)
+	{
+		door->opening = 1.0;
+		data->map_pars->map[door->y][door->x] = '0';
+	}
+	if (door->opening <= 0.0)
+		door->opening = 0.0;
+}
+
+static void	update_doors(t_data *data)
 {
 	t_door	*door;
 
 	door = data->doors;
 	while (door)
 	{
-		if (sqrt(pow(data->player->px - (door->x + 0.5), 2)
-				+ pow(data->player->py - (door->y + 0.5), 2)) < 1.45)
-		{
-			if (door->opening >= 0.0 || !door->opened)
-				door->opened = 1;
-		}
-		else
-		{
-			data->map_pars->map[door->y][door->x] = 'D';
-			door->opened = -1;
-		}
-		if (door->opened == 1 && door->opening < 1.0)
-			door->opening += delta_time * 0.8;
-		else if (door->opened == -1 && door->opening > 0.0)
-			door->opening += delta_time * -0.8;
-		if (door->opening >= 1.0)
-		{
-			door->opening = 1.0;
-			data->map_pars->map[door->y][door->x] = '0';
-		}
-		if (door->opening <= 0.0)
-			door->opening = 0.0;
+		update_single_door(data, door);
 		door = door->next;
 	}
 }
@@ -159,6 +162,16 @@ static void	init_raycasting(t_data *data, int x)
 	init_step_side_dist(data);
 }
 
+static void	render_wall_pixels(t_data *data, int x, int y, unsigned int color)
+{
+	my_mlx_pixel_put(data->win, x, y, color);
+	if ((y + (data->raycast->draw_end - y) * 2) < HEIGHT)
+	{
+		my_mlx_pixel_put(data->win, x, y + (data->raycast->draw_end - y)
+			* 2, color);
+	}
+}
+
 static void	draw_wall(t_data *data, int x, double wall_x)
 {
 	int				tex_x;
@@ -167,27 +180,22 @@ static void	draw_wall(t_data *data, int x, double wall_x)
 	int				d;
 	unsigned int	color;
 
-	tex_x = (int)(wall_x * (double)data->raycast->texture->width);
+	tex_x = (int)(wall_x * (double)data->raycast->tex->width);
 	if ((data->raycast->side == 0 && data->raycast->raydirx > 0)
 		|| (data->raycast->side == 1 && data->raycast->raydiry < 0))
-		tex_x = data->raycast->texture->width - tex_x - 1;
+		tex_x = data->raycast->tex->width - tex_x - 1;
 	y = data->raycast->draw_start;
 	while (y <= data->raycast->draw_end)
 	{
 		d = y * 256 - HEIGHT * 128 + data->raycast->line_height * 128;
-		tex_y = ((d * data->raycast->texture->height)
-				/ data->raycast->line_height) / 256;
+		tex_y = ((d * data->raycast->tex->height) / data->raycast->line_height)
+			/ 256;
 		if (tex_y < 0)
 			tex_y = 0;
-		color = ((int *)data->raycast->texture->addr)[data->raycast->texture->height
+		color = ((int *)data->raycast->tex->addr)[data->raycast->tex->height
 			* tex_y + tex_x];
 		color = apply_shading(data->raycast->perpwall_dist / 2, color);
-		my_mlx_pixel_put(data->win, x, y, color);
-		if ((y + (data->raycast->draw_end - y) * 2) < HEIGHT)
-		{
-			my_mlx_pixel_put(data->win, x, y + (data->raycast->draw_end - y)
-				* 2, color);
-		}
+		render_wall_pixels(data, x, y, color);
 		y++;
 	}
 }
@@ -197,16 +205,16 @@ static void	choose_texture(t_data *data)
 	if (data->raycast->side == 0)
 	{
 		if (data->raycast->raydirx > 0)
-			data->raycast->texture = data->texture->text_west;
+			data->raycast->tex = data->texture->text_west;
 		else
-			data->raycast->texture = data->texture->text_east;
+			data->raycast->tex = data->texture->text_east;
 	}
 	else
 	{
 		if (data->raycast->raydiry > 0)
-			data->raycast->texture = data->texture->text_north;
+			data->raycast->tex = data->texture->text_north;
 		else
-			data->raycast->texture = data->texture->text_south;
+			data->raycast->tex = data->texture->text_south;
 	}
 }
 
@@ -269,15 +277,20 @@ static void	step_through(t_data *data)
 
 static void	perform_dda(t_data *data, double *wall_x)
 {
+	int	mapx;
+	int	mapy;
+
 	data->raycast->skip = false;
 	data->raycast->hit = 0;
 	while (data->raycast->hit == 0)
 	{
 		step_through(data);
-		if (data->map_pars->map[data->raycast->mapy]
-			&& (data->map_pars->map[data->raycast->mapy][data->raycast->mapx] == '1'
-				|| (data->map_pars->map[data->raycast->mapy][data->raycast->mapx] == 'D'
-					&& data->raycast->skip == false)))
+		mapx = data->raycast->mapx;
+		mapy = data->raycast->mapy;
+		if (data->map_pars->map[mapy]
+			&& (data->map_pars->map[mapy][mapx] == '1'
+			|| (data->map_pars->map[mapy][mapx] == 'D'
+			&& data->raycast->skip == false)))
 			data->raycast->hit = 1;
 		else
 			continue ;
@@ -375,7 +388,7 @@ static void	render_floor_pixel(t_data *data, int x, int p, t_point floor_coords)
 				reflected_color, wall_color)));
 }
 
-static void	drawRays2D(t_data *data)
+static void	raycasting(t_data *data)
 {
 	int		x;
 	int		p;
@@ -454,11 +467,11 @@ int	render(t_data *data)
 	fps = 1.0 / data->player->delta_time;
 	clear_window(data->win);
 	draw_skybox(data);
-	drawRays2D(data);
+	raycasting(data);
 	draw_map(data);
 	player_position(data);
 	rotate_player(data, data->player->mouse_x);
-	update_doors(data, data->player->delta_time);
+	update_doors(data);
 	update_animations(data);
 	display_overlay(data);
 	mlx_put_image_to_window(data->win->mlx, data->win->win, data->win->img, 0,
