@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 07:53:02 by pacda-si          #+#    #+#             */
-/*   Updated: 2026/01/03 15:01:47 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/03 15:43:50 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,56 @@ static unsigned int	make_final_color(unsigned int floor_color,
 	return (final_color);
 }
 
+static void	init_step_side_dist(t_data *data)
+{
+	if (data->raycast->raydirx < 0)
+	{
+		data->raycast->stepx = -1;
+		data->raycast->sidedistx = (data->player->px - data->raycast->mapx)
+			* data->raycast->delta_dist_x;
+	}
+	else
+	{
+		data->raycast->stepx = 1;
+		data->raycast->sidedistx = (data->raycast->mapx + 1.0
+				- data->player->px) * data->raycast->delta_dist_x;
+	}
+	if (data->raycast->raydiry < 0)
+	{
+		data->raycast->stepy = -1;
+		data->raycast->side_dist_y = (data->player->py - data->raycast->mapy)
+			* data->raycast->delta_dist_y;
+	}
+	else
+	{
+		data->raycast->stepy = 1;
+		data->raycast->side_dist_y = (data->raycast->mapy + 1.0
+				- data->player->py) * data->raycast->delta_dist_y;
+	}
+}
+
+static void	init_raycasting(t_data *data, int x)
+{
+	data->raycast->camerax = 2 * x / (double)WIDTH - 1;
+	// calcul dir rayon chaque colonne
+	data->raycast->raydirx = data->player->pdirx + data->player->planex
+		* data->raycast->camerax;
+	data->raycast->raydiry = data->player->pdiry + data->player->planey
+		* data->raycast->camerax;
+	if (data->raycast->raydirx == 0)
+		data->raycast->raydirx = 0.001;
+	if (data->raycast->raydiry == 0)
+		data->raycast->raydiry = 0.001;
+	data->raycast->mapx = (int)data->player->px;
+	// convert pos joeurs coordonne case map
+	data->raycast->mapy = (int)data->player->py;
+	data->raycast->delta_dist_x = fabs(1 / data->raycast->raydirx);
+	// distance rayon parcourus jusqua ligne map
+	data->raycast->delta_dist_y = fabs(1 / data->raycast->raydiry);
+	// fabs = valeur positivie
+	init_step_side_dist(data);
+}
+
 static void	drawRays2D(t_data *data)
 {
 	int			x;
@@ -143,46 +193,7 @@ static void	drawRays2D(t_data *data)
 	skip = false;
 	while (x < WIDTH)
 	{
-		data->raycast->camerax = 2 * x / (double)WIDTH - 1;
-		// calcul dir rayon chaque colonne
-		data->raycast->raydirx = data->player->pdirx + data->player->planex
-			* data->raycast->camerax;
-		data->raycast->raydiry = data->player->pdiry + data->player->planey
-			* data->raycast->camerax;
-		if (data->raycast->raydirx == 0)
-			data->raycast->raydirx = 0.001;
-		if (data->raycast->raydiry == 0)
-			data->raycast->raydiry = 0.001;
-		data->raycast->mapx = (int)data->player->px;
-		data->raycast->mapy = (int)data->player->py;
-		data->raycast->delta_dist_x = fabs(1 / data->raycast->raydirx);
-		// distance rayon parcourus jusqua ligne map
-		data->raycast->delta_dist_y = fabs(1 / data->raycast->raydiry);
-		// fabs = valeur positivie
-		if (data->raycast->raydirx < 0)
-		{
-			data->raycast->stepx = -1;
-			data->raycast->sidedistx = (data->player->px - data->raycast->mapx)
-				* data->raycast->delta_dist_x;
-		}
-		else
-		{
-			data->raycast->stepx = 1;
-			data->raycast->sidedistx = (data->raycast->mapx + 1.0
-					- data->player->px) * data->raycast->delta_dist_x;
-		}
-		if (data->raycast->raydiry < 0) // algo DDA pour avacer rayon de la map
-		{
-			data->raycast->stepy = -1;
-			data->raycast->side_dist_y = (data->player->py
-					- data->raycast->mapy) * data->raycast->delta_dist_y;
-		}
-		else
-		{
-			data->raycast->stepy = 1;
-			data->raycast->side_dist_y = (data->raycast->mapy + 1.0
-					- data->player->py) * data->raycast->delta_dist_y;
-		}
+		init_raycasting(data, x);
 		data->raycast->hit = 0;
 		while (data->raycast->hit == 0) // 0 = vertical
 		{
@@ -254,13 +265,11 @@ static void	drawRays2D(t_data *data)
 				{
 					skip = true;
 					data->raycast->hit = 0;
-					continue ;
 				}
 			}
 			skip = false;
-			break ;
 		}
-		// draw_line( data);
+
 		tex_x = (int)(wall_x * (double)texture->width);
 		if ((data->raycast->side == 0 && data->raycast->raydirx > 0)
 			|| (data->raycast->side == 1 && data->raycast->raydiry < 0))
