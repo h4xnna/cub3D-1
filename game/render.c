@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 07:53:02 by pacda-si          #+#    #+#             */
-/*   Updated: 2026/01/03 17:53:09 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/03 17:59:41 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -399,35 +399,44 @@ static void	drawRays2D(t_data *data)
 	}
 }
 
-int	render(t_data *data)
+static void	update_animations(t_data *data)
 {
-	static double last_time = 0;
-	double current_time = get_time_seconds();
-	data->player->delta_time = current_time - last_time;
-	if (data->player->delta_time >= 1)
-		data->player->delta_time = 0.016;
-	last_time = current_time;
-
-	double fps = 1.0 / data->player->delta_time;
-
-	clear_window(data->win);
-
-	draw_skybox(data);
-	drawRays2D(data);
-	draw_map(data);
-	player_position(data);
-	rotate_player(data, data->player->mouse_x);
-	update_doors(data, data->player->delta_time);
 	update_animation(data->knife_anim, data->player->delta_time);
 	update_animation(data->deploy_anim, data->player->delta_time);
 	update_animation(data->lmb_anim, data->player->delta_time);
 	update_animation(data->rmb_anim, data->player->delta_time);
+}
+
+static t_animation	*switch_anim(t_data *data)
+{
+	if (data->deploy_anim->playing || data->knife_anim->playing
+		|| data->lmb_anim->playing || data->rmb_anim->playing)
+	{
+		if (data->deploy_anim->playing)
+			return (data->deploy_anim);
+		if (data->knife_anim->playing)
+			return (data->knife_anim);
+		if (data->lmb_anim->playing)
+			return (data->lmb_anim);
+		if (data->rmb_anim->playing)
+			return (data->rmb_anim);
+	}
+	else
+		draw_image_to_buffer(data->win,
+			data->deploy_anim->frames[data->deploy_anim->frame_count - 1],
+			0, 0);
+}
+
+static void	display_overlay(t_data *data)
+{
+	t_animation *anim;
 
 	if (data->player->show_knife)
 	{
 		if (data->deploy_anim->playing || data->knife_anim->playing
 			|| data->lmb_anim->playing || data->rmb_anim->playing)
 		{
+			anim = switch_anim(data);
 			if (data->deploy_anim->playing)
 				draw_image_to_buffer(data->win,
 					data->deploy_anim->frames[data->deploy_anim->current_frame],
@@ -450,6 +459,29 @@ int	render(t_data *data)
 				data->deploy_anim->frames[data->deploy_anim->frame_count - 1],
 				0, 0);
 	}
+}
+
+int	render(t_data *data)
+{
+	static double last_time = 0;
+	double current_time = get_time_seconds();
+	data->player->delta_time = current_time - last_time;
+	if (data->player->delta_time >= 1)
+		data->player->delta_time = 0.016;
+	last_time = current_time;
+
+	double fps = 1.0 / data->player->delta_time;
+
+	clear_window(data->win);
+
+	draw_skybox(data);
+	drawRays2D(data);
+	draw_map(data);
+	player_position(data);
+	rotate_player(data, data->player->mouse_x);
+	update_doors(data, data->player->delta_time);
+	update_animations(data);
+	display_overlay(data);
 
 	mlx_put_image_to_window(data->win->mlx, data->win->win, data->win->img, 0,
 		0);
