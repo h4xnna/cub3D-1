@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/02 18:44:50 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/03 17:36:02 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,12 @@ typedef struct s_color
 	uint8_t				g;
 	uint8_t				b;
 }						t_color;
+
+typedef struct s_point
+{
+	double	x;
+	double	y;
+}	t_point;
 
 typedef struct s_info_pars
 {
@@ -182,6 +188,8 @@ typedef struct s_raycast
 	int					line_height;
 	int					draw_start;
 	int					draw_end;
+	t_img				*texture;
+	bool				skip;
 }						t_raycast;
 
 typedef struct s_texture

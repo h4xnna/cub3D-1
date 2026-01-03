@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 07:53:02 by pacda-si          #+#    #+#             */
-/*   Updated: 2026/01/03 17:00:48 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/03 17:53:09 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,7 +159,7 @@ static void	init_raycasting(t_data *data, int x)
 	init_step_side_dist(data);
 }
 
-static void	draw_wall(t_data *data, int x, double wall_x, t_img *texture)
+static void	draw_wall(t_data *data, int x, double wall_x)
 {
 	int				tex_x;
 	int				tex_y;
@@ -167,18 +167,20 @@ static void	draw_wall(t_data *data, int x, double wall_x, t_img *texture)
 	int				d;
 	unsigned int	color;
 
-	tex_x = (int)(wall_x * (double)texture->width);
+	tex_x = (int)(wall_x * (double)data->raycast->texture->width);
 	if ((data->raycast->side == 0 && data->raycast->raydirx > 0)
 		|| (data->raycast->side == 1 && data->raycast->raydiry < 0))
-		tex_x = texture->width - tex_x - 1;
+		tex_x = data->raycast->texture->width - tex_x - 1;
 	y = data->raycast->draw_start;
 	while (y <= data->raycast->draw_end)
 	{
 		d = y * 256 - HEIGHT * 128 + data->raycast->line_height * 128;
-		tex_y = ((d * texture->height) / data->raycast->line_height) / 256;
+		tex_y = ((d * data->raycast->texture->height)
+				/ data->raycast->line_height) / 256;
 		if (tex_y < 0)
 			tex_y = 0;
-		color = ((int *)texture->addr)[texture->height * tex_y + tex_x];
+		color = ((int *)data->raycast->texture->addr)[data->raycast->texture->height
+			* tex_y + tex_x];
 		color = apply_shading(data->raycast->perpwall_dist / 2, color);
 		my_mlx_pixel_put(data->win, x, y, color);
 		if ((y + (data->raycast->draw_end - y) * 2) < HEIGHT)
@@ -190,21 +192,21 @@ static void	draw_wall(t_data *data, int x, double wall_x, t_img *texture)
 	}
 }
 
-static void	choose_texture(t_data *data, t_img **texture)
+static void	choose_texture(t_data *data)
 {
 	if (data->raycast->side == 0)
 	{
 		if (data->raycast->raydirx > 0)
-			*texture = data->texture->text_west;
+			data->raycast->texture = data->texture->text_west;
 		else
-			*texture = data->texture->text_east;
+			data->raycast->texture = data->texture->text_east;
 	}
 	else
 	{
 		if (data->raycast->raydiry > 0)
-			*texture = data->texture->text_north;
+			data->raycast->texture = data->texture->text_north;
 		else
-			*texture = data->texture->text_south;
+			data->raycast->texture = data->texture->text_south;
 	}
 }
 
@@ -225,7 +227,7 @@ static void	init_drawing(t_data *data)
 		data->raycast->draw_end = HEIGHT - 1;
 }
 
-static void	get_wall_x(t_data *data, double *wall_x, bool *skip)
+static void	get_wall_x(t_data *data, double *wall_x)
 {
 	t_door	*door;
 
@@ -237,13 +239,13 @@ static void	get_wall_x(t_data *data, double *wall_x, bool *skip)
 			* data->raycast->raydirx;
 	*wall_x -= floor(*wall_x);
 	if (data->map_pars->map[data->raycast->mapy][data->raycast->mapx] == 'D'
-		&& *skip == false)
+		&& data->raycast->skip == false)
 	{
 		door = find_door(data->doors, data->raycast->mapy, data->raycast->mapx);
 		*wall_x -= door->opening;
 		if (*wall_x <= 0.0)
 		{
-			*skip = true;
+			data->raycast->skip = true;
 			data->raycast->hit = 0;
 		}
 	}
@@ -265,11 +267,9 @@ static void	step_through(t_data *data)
 	}
 }
 
-static void	perform_dda(t_data *data, t_img **texture, double *wall_x)
+static void	perform_dda(t_data *data, double *wall_x)
 {
-	bool	skip;
-
-	skip = false;
+	data->raycast->skip = false;
 	data->raycast->hit = 0;
 	while (data->raycast->hit == 0)
 	{
@@ -277,105 +277,92 @@ static void	perform_dda(t_data *data, t_img **texture, double *wall_x)
 		if (data->map_pars->map[data->raycast->mapy]
 			&& (data->map_pars->map[data->raycast->mapy][data->raycast->mapx] == '1'
 				|| (data->map_pars->map[data->raycast->mapy][data->raycast->mapx] == 'D'
-					&& skip == false)))
+					&& data->raycast->skip == false)))
 			data->raycast->hit = 1;
 		else
 			continue ;
 		init_drawing(data);
-		choose_texture(data, texture);
-		get_wall_x(data, wall_x, &skip);
-		skip = false;
+		choose_texture(data);
+		get_wall_x(data, wall_x);
+		data->raycast->skip = false;
 	}
 }
 
 static void	compute_floor_wall_coords(t_data *data, double wall_x,
-		double *floor_x_wall, double *floor_y_wall)
+		t_point *floor_coords)
 {
 	if (data->raycast->side == 0 && data->raycast->raydirx > 0)
 	{
-		*floor_x_wall = data->raycast->mapx;
-		*floor_y_wall = data->raycast->mapy + wall_x;
+		floor_coords->x = data->raycast->mapx;
+		floor_coords->y = data->raycast->mapy + wall_x;
 	}
 	else if (data->raycast->side == 0 && data->raycast->raydirx < 0)
 	{
-		*floor_x_wall = data->raycast->mapx + 1.0;
-		*floor_y_wall = data->raycast->mapy + wall_x;
+		floor_coords->x = data->raycast->mapx + 1.0;
+		floor_coords->y = data->raycast->mapy + wall_x;
 	}
 	else if (data->raycast->side == 1 && data->raycast->raydiry > 0)
 	{
-		*floor_x_wall = data->raycast->mapx + wall_x;
-		*floor_y_wall = data->raycast->mapy;
+		floor_coords->x = data->raycast->mapx + wall_x;
+		floor_coords->y = data->raycast->mapy;
 	}
 	else
 	{
-		*floor_x_wall = data->raycast->mapx + wall_x;
-		*floor_y_wall = data->raycast->mapy + 1.0;
+		floor_coords->x = data->raycast->mapx + wall_x;
+		floor_coords->y = data->raycast->mapy + 1.0;
 	}
 }
 
-static void	compute_floor_coords(t_data *data, int p, double floor_x_wall,
-		double floor_y_wall, double *current_dist, double *weight,
-		double *current_floor_x, double *current_floor_y)
+static void	compute_floor_coords(t_data *data, int p, t_point floor_coords,
+		t_point *current_floor_coords)
 {
-	*current_dist = HEIGHT / (2.0 * p - HEIGHT);
-	*weight = *current_dist / data->raycast->perpwall_dist;
-	*current_floor_x = *weight * floor_x_wall + (1.0 - *weight)
+	double	weight;
+
+	weight = (HEIGHT / (2.0 * p - HEIGHT)) / data->raycast->perpwall_dist;
+	current_floor_coords->x = weight * floor_coords.x + (1.0 - weight)
 		* data->player->px;
-	*current_floor_y = *weight * floor_y_wall + (1.0 - *weight)
+	current_floor_coords->y = weight * floor_coords.y + (1.0 - weight)
 		* data->player->py;
 }
 
-static int	sample_floor_color(t_data *data, double current_floor_x,
-		double current_floor_y, int *is_floor)
+static int	sample_floor_color(t_data *data, t_point f_coords, int *is_floor)
 {
-	t_img	*floor_texture;
-	int		floortex_x;
-	int		floortex_y;
+	t_img	*ftex;
+	int		ftex_x;
+	int		ftex_y;
 	int		floor_color;
 	t_color	exit_color;
 
-	if ((current_floor_y > 0 && current_floor_y < data->map_pars->height)
-		&& data->map_pars->map[(int)current_floor_y][(int)current_floor_x] == 'L')
+	if ((f_coords.y > 0 && f_coords.y < data->map_pars->height)
+		&& data->map_pars->map[(int)f_coords.y][(int)f_coords.x] == 'L')
 	{
-		floor_texture = data->texture->exit;
-		floortex_x = (int)(current_floor_x * floor_texture->width)
-			% floor_texture->width;
-		floortex_y = (int)(current_floor_y * floor_texture->height)
-			% floor_texture->height;
-		floor_color = ((int *)floor_texture->addr)[floor_texture->width
-			* floortex_y + floortex_x];
+		ftex = data->texture->exit;
+		ftex_x = (int)(f_coords.x * ftex->width) % ftex->width;
+		ftex_y = (int)(f_coords.y * ftex->height) % ftex->height;
+		floor_color = ((int *)ftex->addr)[ftex->width * ftex_y + ftex_x];
 		exit_color.g = (floor_color >> 8) & 0xFF;
 		if (exit_color.g > 0)
-			floor_texture = data->texture->floor;
+			ftex = data->texture->floor;
 	}
 	else
-		floor_texture = data->texture->floor;
-	floortex_x = (int)(current_floor_x * floor_texture->width)
-		% floor_texture->width;
-	floortex_y = (int)(current_floor_y * floor_texture->height)
-		% floor_texture->height;
-	floor_color = ((int *)floor_texture->addr)[floor_texture->width * floortex_y
-		+ floortex_x];
-	*is_floor = (floor_texture == data->texture->floor);
+		ftex = data->texture->floor;
+	ftex_x = (int)(f_coords.x * ftex->width) % ftex->width;
+	ftex_y = (int)(f_coords.y * ftex->height) % ftex->height;
+	floor_color = ((int *)ftex->addr)[ftex->width * ftex_y + ftex_x];
+	*is_floor = (ftex == data->texture->floor);
 	return (floor_color);
 }
 
-static void	render_floor_pixel(t_data *data, int x, int p, double floor_x_wall,
-		double floor_y_wall)
+static void	render_floor_pixel(t_data *data, int x, int p, t_point floor_coords)
 {
-	double	current_dist;
-	double	weight;
-	double	current_floor_x;
-	double	current_floor_y;
+	t_point	current_floor_coords;
 	int		floor_color;
 	int		is_floor;
 	int		reflected_color;
 	int		wall_color;
 
-	compute_floor_coords(data, p, floor_x_wall, floor_y_wall, &current_dist,
-		&weight, &current_floor_x, &current_floor_y);
-	floor_color = sample_floor_color(data, current_floor_x, current_floor_y,
-			&is_floor);
+	compute_floor_coords(data, p, floor_coords, &current_floor_coords);
+	floor_color = sample_floor_color(data, current_floor_coords, &is_floor);
 	reflected_color = 0;
 	wall_color = 0;
 	if (is_floor)
@@ -383,8 +370,9 @@ static void	render_floor_pixel(t_data *data, int x, int p, double floor_x_wall,
 		reflected_color = get_window_pixel(data->win, x, HEIGHT - p);
 		wall_color = get_window_pixel(data->win, x, p);
 	}
-	my_mlx_pixel_put(data->win, x, p, apply_shading(current_dist / 2,
-			make_final_color(floor_color, reflected_color, wall_color)));
+	my_mlx_pixel_put(data->win, x, p, apply_shading((HEIGHT / (2.0 * p
+					- HEIGHT)) / 2, make_final_color(floor_color,
+				reflected_color, wall_color)));
 }
 
 static void	drawRays2D(t_data *data)
@@ -392,23 +380,19 @@ static void	drawRays2D(t_data *data)
 	int		x;
 	int		p;
 	double	wall_x;
-	bool	skip;
-	t_img	*texture;
-	double	floor_x_wall;
-	double	floor_y_wall;
+	t_point	floor_coords;
 
 	x = 0;
-	skip = false;
 	while (x < WIDTH)
 	{
 		init_raycasting(data, x);
-		perform_dda(data, &texture, &wall_x);
-		draw_wall(data, x, wall_x, texture);
-		compute_floor_wall_coords(data, wall_x, &floor_x_wall, &floor_y_wall);
+		perform_dda(data, &wall_x);
+		draw_wall(data, x, wall_x);
+		compute_floor_wall_coords(data, wall_x, &floor_coords);
 		p = data->raycast->draw_end;
 		while (p < HEIGHT)
 		{
-			render_floor_pixel(data, x, p, floor_x_wall, floor_y_wall);
+			render_floor_pixel(data, x, p, floor_coords);
 			p++;
 		}
 		x++;
