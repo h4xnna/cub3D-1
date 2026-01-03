@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 07:53:02 by pacda-si          #+#    #+#             */
-/*   Updated: 2026/01/02 20:13:47 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/03 15:01:47 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,34 @@ void	update_animation(t_animation *anim, double delta_time)
 	}
 }
 
+static unsigned int	make_final_color(unsigned int floor_color,
+		unsigned int reflected_color, unsigned int wall_color)
+{
+	t_color			floort;
+	t_color			wall;
+	t_color			reflect;
+	t_color			final;
+	unsigned int	final_color;
+
+	floort.r = (floor_color >> 16) & 0xFF;
+	floort.g = (floor_color >> 8) & 0xFF;
+	floort.b = floor_color & 0xFF;
+	reflect.r = (reflected_color >> 16) & 0xFF;
+	reflect.g = (reflected_color >> 8) & 0xFF;
+	reflect.b = reflected_color & 0xFF;
+	wall.r = (wall_color >> 16) & 0xFF;
+	wall.g = (wall_color >> 8) & 0xFF;
+	wall.b = wall_color & 0xFF;
+	final.r = (uint8_t)((floort.r * (1.0 - REFLECTIONSTRENGTH * 3) + reflect.r
+				* REFLECTIONSTRENGTH + wall.r * REFLECTIONSTRENGTH * 2));
+	final.g = (uint8_t)((floort.g * (1.0 - REFLECTIONSTRENGTH * 3) + reflect.g
+				* REFLECTIONSTRENGTH + wall.g * REFLECTIONSTRENGTH * 2));
+	final.b = (uint8_t)((floort.b * (1.0 - REFLECTIONSTRENGTH * 3) + reflect.b
+				* REFLECTIONSTRENGTH + wall.b * REFLECTIONSTRENGTH * 2));
+	final_color = (final.r << 16) | (final.g << 8) | final.b;
+	return (final_color);
+}
+
 static void	drawRays2D(t_data *data)
 {
 	int			x;
@@ -102,15 +130,10 @@ static void	drawRays2D(t_data *data)
 	int			reflected_y;
 	int			reflected_color;
 	int			wall_color;
-	int			final_color;
 	bool		skip;
 	t_img		*texture;
 	t_img		*floor_texture;
 	t_door		*door;
-	t_color		floort;
-	t_color		wall;
-	t_color		reflect;
-	t_color		final;
 	t_color		exit_color;
 	double		floor_x_wall;
 	double		floor_y_wall;
@@ -245,16 +268,14 @@ static void	drawRays2D(t_data *data)
 		y = data->raycast->draw_start;
 		while (y <= data->raycast->draw_end)
 		{
-			d = y * 256 - HEIGHT * 128
-				+ data->raycast->line_height * 128;
+			d = y * 256 - HEIGHT * 128 + data->raycast->line_height * 128;
 			tex_y = ((d * texture->height) / data->raycast->line_height) / 256;
 			if (tex_y < 0)
 				tex_y = 0;
 			color = ((int *)texture->addr)[texture->height * tex_y + tex_x];
 			color = apply_shading(data->raycast->perpwall_dist / 2, color);
 			my_mlx_pixel_put(data->win, x, y, color);
-			if ((y + (data->raycast->draw_end - y)
-					* 2) < HEIGHT)
+			if ((y + (data->raycast->draw_end - y) * 2) < HEIGHT)
 			{
 				my_mlx_pixel_put(data->win, x, y + (data->raycast->draw_end - y)
 					* 2, color);
@@ -318,8 +339,7 @@ static void	drawRays2D(t_data *data)
 			reflected_y = HEIGHT - p;
 			if (floor_texture == data->texture->floor)
 			{
-				reflected_color = get_window_pixel(data->win, x,
-						reflected_y);
+				reflected_color = get_window_pixel(data->win, x, reflected_y);
 				wall_color = get_window_pixel(data->win, x, p);
 			}
 			else
@@ -327,27 +347,8 @@ static void	drawRays2D(t_data *data)
 				reflected_color = 0;
 				wall_color = 0;
 			}
-			floort.r = (floor_color >> 16) & 0xFF;
-			floort.g = (floor_color >> 8) & 0xFF;
-			floort.b = floor_color & 0xFF;
-			reflect.r = (reflected_color >> 16) & 0xFF;
-			reflect.g = (reflected_color >> 8) & 0xFF;
-			reflect.b = reflected_color & 0xFF;
-			wall.r = (wall_color >> 16) & 0xFF;
-			wall.g = (wall_color >> 8) & 0xFF;
-			wall.b = wall_color & 0xFF;
-			final.r = (uint8_t)((floort.r * (1.0 - REFLECTIONSTRENGTH * 3)
-						+ reflect.r * REFLECTIONSTRENGTH + wall.r
-						* REFLECTIONSTRENGTH * 2));
-			final.g = (uint8_t)((floort.g * (1.0 - REFLECTIONSTRENGTH * 3)
-						+ reflect.g * REFLECTIONSTRENGTH + wall.g
-						* REFLECTIONSTRENGTH * 2));
-			final.b = (uint8_t)((floort.b * (1.0 - REFLECTIONSTRENGTH * 3)
-						+ reflect.b * REFLECTIONSTRENGTH + wall.b
-						* REFLECTIONSTRENGTH * 2));
-			final_color = (final.r << 16) | (final.g << 8) | final.b;
-			my_mlx_pixel_put(data->win, x, p, apply_shading(current_dist
-					/ 2, final_color));
+			my_mlx_pixel_put(data->win, x, p, apply_shading(current_dist / 2,
+					make_final_color(floor_color, reflected_color, wall_color)));
 			p++;
 		}
 		x++;
