@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 07:53:02 by pacda-si          #+#    #+#             */
-/*   Updated: 2026/01/03 17:59:41 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/03 18:11:18 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -409,27 +409,20 @@ static void	update_animations(t_data *data)
 
 static t_animation	*switch_anim(t_data *data)
 {
-	if (data->deploy_anim->playing || data->knife_anim->playing
-		|| data->lmb_anim->playing || data->rmb_anim->playing)
-	{
-		if (data->deploy_anim->playing)
-			return (data->deploy_anim);
-		if (data->knife_anim->playing)
-			return (data->knife_anim);
-		if (data->lmb_anim->playing)
-			return (data->lmb_anim);
-		if (data->rmb_anim->playing)
-			return (data->rmb_anim);
-	}
-	else
-		draw_image_to_buffer(data->win,
-			data->deploy_anim->frames[data->deploy_anim->frame_count - 1],
-			0, 0);
+	if (data->deploy_anim->playing)
+		return (data->deploy_anim);
+	if (data->knife_anim->playing)
+		return (data->knife_anim);
+	if (data->lmb_anim->playing)
+		return (data->lmb_anim);
+	if (data->rmb_anim->playing)
+		return (data->rmb_anim);
+	return (data->deploy_anim);
 }
 
 static void	display_overlay(t_data *data)
 {
-	t_animation *anim;
+	t_animation	*anim;
 
 	if (data->player->show_knife)
 	{
@@ -437,22 +430,8 @@ static void	display_overlay(t_data *data)
 			|| data->lmb_anim->playing || data->rmb_anim->playing)
 		{
 			anim = switch_anim(data);
-			if (data->deploy_anim->playing)
-				draw_image_to_buffer(data->win,
-					data->deploy_anim->frames[data->deploy_anim->current_frame],
-					0, 0);
-			if (data->knife_anim->playing)
-				draw_image_to_buffer(data->win,
-					data->knife_anim->frames[data->knife_anim->current_frame],
-					0, 0);
-			if (data->lmb_anim->playing)
-				draw_image_to_buffer(data->win,
-					data->lmb_anim->frames[data->lmb_anim->current_frame], 0,
-					0);
-			if (data->rmb_anim->playing)
-				draw_image_to_buffer(data->win,
-					data->rmb_anim->frames[data->rmb_anim->current_frame], 0,
-					0);
+			draw_image_to_buffer(data->win, anim->frames[anim->current_frame],
+				0, 0);
 		}
 		else
 			draw_image_to_buffer(data->win,
@@ -463,17 +442,17 @@ static void	display_overlay(t_data *data)
 
 int	render(t_data *data)
 {
-	static double last_time = 0;
-	double current_time = get_time_seconds();
+	static double	last_time = 0;
+	double			current_time;
+	double			fps;
+
+	current_time = get_time_seconds();
 	data->player->delta_time = current_time - last_time;
 	if (data->player->delta_time >= 1)
 		data->player->delta_time = 0.016;
 	last_time = current_time;
-
-	double fps = 1.0 / data->player->delta_time;
-
+	fps = 1.0 / data->player->delta_time;
 	clear_window(data->win);
-
 	draw_skybox(data);
 	drawRays2D(data);
 	draw_map(data);
@@ -482,11 +461,9 @@ int	render(t_data *data)
 	update_doors(data, data->player->delta_time);
 	update_animations(data);
 	display_overlay(data);
-
 	mlx_put_image_to_window(data->win->mlx, data->win->win, data->win->img, 0,
 		0);
 	mlx_string_put(data->win->mlx, data->win->win, WIDTH - 20, 20, 0xFFFFFF,
 		ft_itoa((int)fps));
-
 	return (0);
 }
