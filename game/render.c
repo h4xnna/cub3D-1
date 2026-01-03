@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 07:53:02 by pacda-si          #+#    #+#             */
-/*   Updated: 2026/01/03 15:52:47 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/03 17:00:48 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,179 +190,225 @@ static void	draw_wall(t_data *data, int x, double wall_x, t_img *texture)
 	}
 }
 
+static void	choose_texture(t_data *data, t_img **texture)
+{
+	if (data->raycast->side == 0)
+	{
+		if (data->raycast->raydirx > 0)
+			*texture = data->texture->text_west;
+		else
+			*texture = data->texture->text_east;
+	}
+	else
+	{
+		if (data->raycast->raydiry > 0)
+			*texture = data->texture->text_north;
+		else
+			*texture = data->texture->text_south;
+	}
+}
+
+static void	init_drawing(t_data *data)
+{
+	if (data->raycast->side == 0)
+		data->raycast->perpwall_dist = data->raycast->sidedistx
+			- data->raycast->delta_dist_x;
+	else
+		data->raycast->perpwall_dist = data->raycast->side_dist_y
+			- data->raycast->delta_dist_y; // fish eyes fix
+	data->raycast->line_height = (int)(HEIGHT / data->raycast->perpwall_dist);
+	data->raycast->draw_start = -data->raycast->line_height / 2 + HEIGHT / 2;
+	if (data->raycast->draw_start < 0)
+		data->raycast->draw_start = 0;
+	data->raycast->draw_end = data->raycast->line_height / 2 + HEIGHT / 2;
+	if (data->raycast->draw_end >= HEIGHT)
+		data->raycast->draw_end = HEIGHT - 1;
+}
+
+static void	get_wall_x(t_data *data, double *wall_x, bool *skip)
+{
+	t_door	*door;
+
+	if (data->raycast->side == 0)
+		*wall_x = data->player->py + data->raycast->perpwall_dist
+			* data->raycast->raydiry;
+	else
+		*wall_x = data->player->px + data->raycast->perpwall_dist
+			* data->raycast->raydirx;
+	*wall_x -= floor(*wall_x);
+	if (data->map_pars->map[data->raycast->mapy][data->raycast->mapx] == 'D'
+		&& *skip == false)
+	{
+		door = find_door(data->doors, data->raycast->mapy, data->raycast->mapx);
+		*wall_x -= door->opening;
+		if (*wall_x <= 0.0)
+		{
+			*skip = true;
+			data->raycast->hit = 0;
+		}
+	}
+}
+
+static void	step_through(t_data *data)
+{
+	if (data->raycast->sidedistx < data->raycast->side_dist_y)
+	{
+		data->raycast->sidedistx += data->raycast->delta_dist_x;
+		data->raycast->mapx += data->raycast->stepx;
+		data->raycast->side = 0;
+	}
+	else
+	{
+		data->raycast->side_dist_y += data->raycast->delta_dist_y;
+		data->raycast->mapy += data->raycast->stepy;
+		data->raycast->side = 1;
+	}
+}
+
+static void	perform_dda(t_data *data, t_img **texture, double *wall_x)
+{
+	bool	skip;
+
+	skip = false;
+	data->raycast->hit = 0;
+	while (data->raycast->hit == 0)
+	{
+		step_through(data);
+		if (data->map_pars->map[data->raycast->mapy]
+			&& (data->map_pars->map[data->raycast->mapy][data->raycast->mapx] == '1'
+				|| (data->map_pars->map[data->raycast->mapy][data->raycast->mapx] == 'D'
+					&& skip == false)))
+			data->raycast->hit = 1;
+		else
+			continue ;
+		init_drawing(data);
+		choose_texture(data, texture);
+		get_wall_x(data, wall_x, &skip);
+		skip = false;
+	}
+}
+
+static void	compute_floor_wall_coords(t_data *data, double wall_x,
+		double *floor_x_wall, double *floor_y_wall)
+{
+	if (data->raycast->side == 0 && data->raycast->raydirx > 0)
+	{
+		*floor_x_wall = data->raycast->mapx;
+		*floor_y_wall = data->raycast->mapy + wall_x;
+	}
+	else if (data->raycast->side == 0 && data->raycast->raydirx < 0)
+	{
+		*floor_x_wall = data->raycast->mapx + 1.0;
+		*floor_y_wall = data->raycast->mapy + wall_x;
+	}
+	else if (data->raycast->side == 1 && data->raycast->raydiry > 0)
+	{
+		*floor_x_wall = data->raycast->mapx + wall_x;
+		*floor_y_wall = data->raycast->mapy;
+	}
+	else
+	{
+		*floor_x_wall = data->raycast->mapx + wall_x;
+		*floor_y_wall = data->raycast->mapy + 1.0;
+	}
+}
+
+static void	compute_floor_coords(t_data *data, int p, double floor_x_wall,
+		double floor_y_wall, double *current_dist, double *weight,
+		double *current_floor_x, double *current_floor_y)
+{
+	*current_dist = HEIGHT / (2.0 * p - HEIGHT);
+	*weight = *current_dist / data->raycast->perpwall_dist;
+	*current_floor_x = *weight * floor_x_wall + (1.0 - *weight)
+		* data->player->px;
+	*current_floor_y = *weight * floor_y_wall + (1.0 - *weight)
+		* data->player->py;
+}
+
+static int	sample_floor_color(t_data *data, double current_floor_x,
+		double current_floor_y, int *is_floor)
+{
+	t_img	*floor_texture;
+	int		floortex_x;
+	int		floortex_y;
+	int		floor_color;
+	t_color	exit_color;
+
+	if ((current_floor_y > 0 && current_floor_y < data->map_pars->height)
+		&& data->map_pars->map[(int)current_floor_y][(int)current_floor_x] == 'L')
+	{
+		floor_texture = data->texture->exit;
+		floortex_x = (int)(current_floor_x * floor_texture->width)
+			% floor_texture->width;
+		floortex_y = (int)(current_floor_y * floor_texture->height)
+			% floor_texture->height;
+		floor_color = ((int *)floor_texture->addr)[floor_texture->width
+			* floortex_y + floortex_x];
+		exit_color.g = (floor_color >> 8) & 0xFF;
+		if (exit_color.g > 0)
+			floor_texture = data->texture->floor;
+	}
+	else
+		floor_texture = data->texture->floor;
+	floortex_x = (int)(current_floor_x * floor_texture->width)
+		% floor_texture->width;
+	floortex_y = (int)(current_floor_y * floor_texture->height)
+		% floor_texture->height;
+	floor_color = ((int *)floor_texture->addr)[floor_texture->width * floortex_y
+		+ floortex_x];
+	*is_floor = (floor_texture == data->texture->floor);
+	return (floor_color);
+}
+
+static void	render_floor_pixel(t_data *data, int x, int p, double floor_x_wall,
+		double floor_y_wall)
+{
+	double	current_dist;
+	double	weight;
+	double	current_floor_x;
+	double	current_floor_y;
+	int		floor_color;
+	int		is_floor;
+	int		reflected_color;
+	int		wall_color;
+
+	compute_floor_coords(data, p, floor_x_wall, floor_y_wall, &current_dist,
+		&weight, &current_floor_x, &current_floor_y);
+	floor_color = sample_floor_color(data, current_floor_x, current_floor_y,
+			&is_floor);
+	reflected_color = 0;
+	wall_color = 0;
+	if (is_floor)
+	{
+		reflected_color = get_window_pixel(data->win, x, HEIGHT - p);
+		wall_color = get_window_pixel(data->win, x, p);
+	}
+	my_mlx_pixel_put(data->win, x, p, apply_shading(current_dist / 2,
+			make_final_color(floor_color, reflected_color, wall_color)));
+}
+
 static void	drawRays2D(t_data *data)
 {
-	int			x;
-	int			p;
-	double		wall_x;
-	double		current_dist;
-	double		weight;
-	double		current_floor_x;
-	double		current_floor_y;
-	int			floortex_x;
-	int			floortex_y;
-	int			floor_color;
-	int			reflected_y;
-	int			reflected_color;
-	int			wall_color;
-	bool		skip;
-	t_img		*texture;
-	t_img		*floor_texture;
-	t_door		*door;
-	t_color		exit_color;
-	double		floor_x_wall;
-	double		floor_y_wall;
+	int		x;
+	int		p;
+	double	wall_x;
+	bool	skip;
+	t_img	*texture;
+	double	floor_x_wall;
+	double	floor_y_wall;
 
 	x = 0;
 	skip = false;
 	while (x < WIDTH)
 	{
 		init_raycasting(data, x);
-		data->raycast->hit = 0;
-		while (data->raycast->hit == 0) // 0 = vertical
-		{
-			if (data->raycast->sidedistx < data->raycast->side_dist_y)
-			// si rayon a frapper un mur vertical ou horizontal
-			{
-				data->raycast->sidedistx += data->raycast->delta_dist_x;
-				data->raycast->mapx += data->raycast->stepx;
-				data->raycast->side = 0;
-			}
-			else
-			{
-				data->raycast->side_dist_y += data->raycast->delta_dist_y;
-				data->raycast->mapy += data->raycast->stepy;
-				data->raycast->side = 1;
-			}
-			if (data->map_pars->map[data->raycast->mapy]
-				&& (data->map_pars->map[data->raycast->mapy][data->raycast->mapx] == '1'
-					|| (data->map_pars->map[data->raycast->mapy][data->raycast->mapx] == 'D'
-						&& skip == false))) // si mur stop DDA
-				data->raycast->hit = 1;
-			else
-				continue ;
-			if (data->raycast->side == 0)
-				data->raycast->perpwall_dist = data->raycast->sidedistx
-					- data->raycast->delta_dist_x;
-			else
-				data->raycast->perpwall_dist = data->raycast->side_dist_y
-					- data->raycast->delta_dist_y; // fish eyes fix
-			data->raycast->line_height = (int)(HEIGHT
-					/ data->raycast->perpwall_dist);
-			data->raycast->draw_start = -data->raycast->line_height / 2
-				+ HEIGHT / 2;
-			if (data->raycast->draw_start < 0)
-				data->raycast->draw_start = 0;
-			data->raycast->draw_end = data->raycast->line_height / 2
-				+ HEIGHT / 2;
-			if (data->raycast->draw_end >= HEIGHT)
-				data->raycast->draw_end = HEIGHT - 1;
-			//  calcul hauteur de la colonne a dessiner a lecran
-			if (data->raycast->side == 0)
-			{
-				if (data->raycast->raydirx > 0)
-					texture = data->texture->text_west;
-				else
-					texture = data->texture->text_east;
-			}
-			else
-			{
-				if (data->raycast->raydiry > 0)
-					texture = data->texture->text_north;
-				else
-					texture = data->texture->text_south;
-			}
-			if (data->raycast->side == 0)
-				wall_x = data->player->py + data->raycast->perpwall_dist
-					* data->raycast->raydiry;
-			else
-				wall_x = data->player->px + data->raycast->perpwall_dist
-					* data->raycast->raydirx;
-			wall_x -= floor(wall_x);
-			if (data->map_pars->map[data->raycast->mapy][data->raycast->mapx] == 'D'
-				&& !skip)
-			{
-				door = find_door(data->doors, data->raycast->mapy,
-						data->raycast->mapx);
-				wall_x -= door->opening;
-				if (wall_x <= 0.0)
-				{
-					skip = true;
-					data->raycast->hit = 0;
-				}
-			}
-			skip = false;
-		}
-
+		perform_dda(data, &texture, &wall_x);
 		draw_wall(data, x, wall_x, texture);
-
-		if (data->raycast->side == 0 && data->raycast->raydirx > 0)
-		{
-			floor_x_wall = data->raycast->mapx;
-			floor_y_wall = data->raycast->mapy + wall_x;
-		}
-		else if (data->raycast->side == 0 && data->raycast->raydirx < 0)
-		{
-			floor_x_wall = data->raycast->mapx + 1.0;
-			floor_y_wall = data->raycast->mapy + wall_x;
-		}
-		else if (data->raycast->side == 1 && data->raycast->raydiry > 0)
-		{
-			floor_x_wall = data->raycast->mapx + wall_x;
-			floor_y_wall = data->raycast->mapy;
-		}
-		else
-		{
-			floor_x_wall = data->raycast->mapx + wall_x;
-			floor_y_wall = data->raycast->mapy + 1.0;
-		}
+		compute_floor_wall_coords(data, wall_x, &floor_x_wall, &floor_y_wall);
 		p = data->raycast->draw_end;
 		while (p < HEIGHT)
 		{
-			current_dist = HEIGHT / (2.0 * p - HEIGHT);
-			weight = current_dist / data->raycast->perpwall_dist;
-			current_floor_x = weight * floor_x_wall + (1.0 - weight)
-				* data->player->px;
-			current_floor_y = weight * floor_y_wall + (1.0 - weight)
-				* data->player->py;
-			if ((current_floor_y > 0
-					&& current_floor_y < data->map_pars->height)
-				&& data->map_pars->map[(int)current_floor_y][(int)current_floor_x] == 'L')
-			{
-				floor_texture = data->texture->exit;
-				floortex_x = (int)(current_floor_x * floor_texture->width)
-					% floor_texture->width;
-				floortex_y = (int)(current_floor_y * floor_texture->height)
-					% floor_texture->height;
-				floor_color = ((int *)floor_texture->addr)[floor_texture->width
-					* floortex_y + floortex_x];
-				exit_color.g = (floor_color >> 8) & 0xFF;
-				if (exit_color.g > 0)
-				{
-					floor_texture = data->texture->floor;
-				}
-			}
-			else
-				floor_texture = data->texture->floor;
-			floortex_x = (int)(current_floor_x * floor_texture->width)
-				% floor_texture->width;
-			floortex_y = (int)(current_floor_y * floor_texture->height)
-				% floor_texture->height;
-			floor_color = ((int *)floor_texture->addr)[floor_texture->width
-				* floortex_y + floortex_x];
-			reflected_y = HEIGHT - p;
-			if (floor_texture == data->texture->floor)
-			{
-				reflected_color = get_window_pixel(data->win, x, reflected_y);
-				wall_color = get_window_pixel(data->win, x, p);
-			}
-			else
-			{
-				reflected_color = 0;
-				wall_color = 0;
-			}
-			my_mlx_pixel_put(data->win, x, p, apply_shading(current_dist / 2,
-					make_final_color(floor_color, reflected_color, wall_color)));
+			render_floor_pixel(data, x, p, floor_x_wall, floor_y_wall);
 			p++;
 		}
 		x++;
