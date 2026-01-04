@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/04 14:46:58 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/04 21:41:20 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -219,6 +219,7 @@ typedef struct s_data
 	t_animation			*lmb_anim;
 	t_animation			*rmb_anim;
 	int					fd;
+	char				*fps;
 }						t_data;
 
 static inline int	get_window_pixel(t_win *win, int x, int y)

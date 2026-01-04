@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/04 13:48:10 by pacda-si          #+#    #+#             */
-/*   Updated: 2026/01/04 13:48:22 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/04 21:46:40 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,5 @@ void	free_win(t_win *win)
 		mlx_destroy_display(win->mlx);
 		free(win->mlx);
 	}
+	free(win);
 }

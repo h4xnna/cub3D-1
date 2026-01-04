@@ -19,7 +19,7 @@ CYAN_SHOCK      = "\033[38;5;51m"
 
 NAME	= cube
 CC		= cc
-CFLAGS	= -Wall -Werror -Wextra -Ofast -march=native -Wno-error=cast-function-type
+CFLAGS	= -Wall -Werror -Wextra -g3 -Ofast -march=native -Wno-error=cast-function-type
 # CFLAGS	= -Wall -Werror -Wextra -Ofast -march=native
 # CFLAGS	= -Wall -Werror -Wextra  -g3
 
@@ -114,7 +114,7 @@ clean:
 	@echo $(BROWN)clean reussi
 
 leak : all
-	valgrind --leak-check=full ./cube map.cub
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./cube ./assets/maps/map.cub
 
 # fclean: clean
 # 	@rm -rf ${NAME}

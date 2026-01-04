@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:26:45 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/02 18:31:57 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/04 21:23:38 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int	main(int ac, char **av)
 	if (initialize_everything(&data, ac, av) == FAILURE)
 		return (FAILURE);
 	print_char(data->map_pars->map);
-	mlx_mouse_hide(data->win->mlx, data->win->win);
+	// mlx_mouse_hide(data->win->mlx, data->win->win);
 	mlx_mouse_move(data->win->mlx, data->win->win, WIDTH / 2, HEIGHT / 2);
 	mlx_hook(data->win->win, 2, 1L << 0, (int (*)())key_press, data);
 	mlx_hook(data->win->win, 3, 1L << 1, (int (*)())key_release, data);

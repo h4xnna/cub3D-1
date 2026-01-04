@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 10:55:48 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/04 14:44:12 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/04 22:59:54 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ static t_img	*load_one_texture(t_data *data, t_img *tex, char *path)
 	{
 		error_message(" no texur");
 		ft_putstr_red(path);
+		free(tex);
 		clean_exit(data);
 	}
 	tex->addr = mlx_get_data_addr(tex->img, &tex->bits_per_pixel,
