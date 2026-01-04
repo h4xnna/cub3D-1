@@ -18,35 +18,44 @@ CYAN_SHOCK      = "\033[38;5;51m"
 
 
 NAME	= cube
-CC		= cc 
-CFLAGS	= -Wall -Werror -Wextra -Ofast -march=native
+CC		= cc
+CFLAGS	= -Wall -Werror -Wextra -Ofast -march=native -Wno-error=cast-function-type
+# CFLAGS	= -Wall -Werror -Wextra -Ofast -march=native
 # CFLAGS	= -Wall -Werror -Wextra  -g3
 
-PARSING =	parsing/
-GAME	=	game/
+PARSING 	=		parsing/
+GAME		=		game/
+RAYCASTING	=		$(GAME)raycasting/
 
 SRCS	=	libs/gnl/get_next_line.c\
 			main.c \
 			$(PARSING)info_pars1.c\
 			$(PARSING)info_pars2.c\
 			$(PARSING)info_pars3.c\
-			$(PARSING)pars_map.c \
-			$(PARSING)pars_map2.c  \
-			$(PARSING)free_pars1.c \
+			$(PARSING)pars_map.c\
+			$(PARSING)pars_map2.c\
+			$(PARSING)free_pars1.c\
 			$(PARSING)info_pars4.c\
 			$(PARSING)info_pars5.c\
 			$(PARSING)info_pars6.c\
 			$(PARSING)doors.c \
-			$(GAME)events.c\
-			$(GAME)textures.c\
-			$(GAME)window.c\
-			$(GAME)movement.c\
 			$(PARSING)init.c\
-			$(GAME)exit.c\
-			$(GAME)render.c\
-			$(GAME)player.c\
+			$(GAME)animations.c\
+			$(GAME)doors.c\
 			$(GAME)drawing.c\
-			$(GAME)draw_map.c
+			$(GAME)events.c\
+			$(GAME)exit.c\
+			$(GAME)minimap.c\
+			$(GAME)movement.c\
+			$(GAME)player.c\
+			$(GAME)render.c\
+			$(GAME)textures.c\
+			$(GAME)utils.c\
+			$(GAME)window.c\
+			$(RAYCASTING)dda.c\
+			$(RAYCASTING)init.c\
+			$(RAYCASTING)raycasting.c\
+			$(RAYCASTING)render_floor.c
 
 
 # Libraries
@@ -83,7 +92,12 @@ $(MLX_A) :
 	@make -sC $(MLX_PATH) -j
 	@echo $(NEON_GREEN)$(BOLD)"Library Compiled. ✔\n"
 
-${NAME}: $(MLX_PATH) $(MLX_A) $(HEADERS) ${OBJS} $(LIBFT)
+# ${NAME}: $(MLX_PATH) $(MLX_A) $(HEADERS) ${OBJS} $(LIBFT)
+# 	@echo $(LIGHT_GREEN) "Compilation..."$(BOLD)
+# 	@${CC} ${CFLAGS} ${OBJS} $(LIBFT) $(MLX_A) $(MLX_FLAGS) -o ${NAME}
+# 	@echo $(LIGHT_GREEN)"Compilation réussie ✔"$(RESET)
+
+${NAME}: $(HEADERS) ${OBJS} $(LIBFT)
 	@echo $(LIGHT_GREEN) "Compilation..."$(BOLD)
 	@${CC} ${CFLAGS} ${OBJS} $(LIBFT) $(MLX_A) $(MLX_FLAGS) -o ${NAME}
 	@echo $(LIGHT_GREEN)"Compilation réussie ✔"$(RESET)
@@ -100,10 +114,15 @@ clean:
 leak : all
 	valgrind --leak-check=full ./cube map.cub
 
+# fclean: clean
+# 	@rm -rf ${NAME}
+# 	@rm -rf $(LIBFT_NAME)
+# 	@rm -rf $(MLX_PATH)
+# 	@echo $(BROWN)fclean reussi
+
 fclean: clean
 	@rm -rf ${NAME}
 	@rm -rf $(LIBFT_NAME)
-	@rm -rf $(MLX_PATH)
 	@echo $(BROWN)fclean reussi
 
 re: fclean all

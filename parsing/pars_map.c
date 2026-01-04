@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 15:26:04 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/02 18:33:22 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/04 13:18:07 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ int	add_line_to_map(t_map_pars *map, char *line)
 	new_map[i] = ft_strdup(line);
 	new_map[i + 1] = NULL;
 	free_tab(map->map);
+	map->map = NULL;
 	if (!new_map[i])
 		return (free_splif(new_map, i), FAILURE);
 	map->map = new_map;

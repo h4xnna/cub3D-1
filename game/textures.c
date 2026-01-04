@@ -6,13 +6,13 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 10:55:48 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/03 18:12:58 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/04 13:42:25 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
-void	ft_putstr_Red(char *str)
+static void	ft_putstr_red(char *str)
 {
 	int	i;
 
@@ -30,12 +30,14 @@ void	ft_putstr_Red(char *str)
 static t_img	*load_one_texture(t_data *data, t_img *tex, char *path)
 {
 	tex = malloc(sizeof(t_img));
+	if (!tex)
+		clean_exit(data);
 	tex->img = mlx_xpm_file_to_image(data->win->mlx, path, &tex->width,
 			&tex->height);
 	if (!tex->img)
 	{
 		error_message(" no texur");
-		ft_putstr_Red(path);
+		ft_putstr_red(path);
 		clean_exit(data);
 	}
 	tex->addr = mlx_get_data_addr(tex->img, &tex->bits_per_pixel,
@@ -43,37 +45,22 @@ static t_img	*load_one_texture(t_data *data, t_img *tex, char *path)
 	return (tex);
 }
 
-void	load_all_textures(t_data *data)
+static void	init_animation(t_animation *anim, int frame_count, double duration)
 {
-	data->texture->skybox = load_one_texture(data, data->texture->skybox,
-			"./textures/4.xpm");
-	data->texture->floor = load_one_texture(data, data->texture->floor,
-			"./textures/metal.xpm");
-	data->texture->exit = load_one_texture(data, data->texture->floor,
-			"./textures/hole.xpm");
-	data->texture->text_south = load_one_texture(data,
-			data->texture->text_south, data->map_info->south);
-	data->texture->text_north = load_one_texture(data,
-			data->texture->text_north, data->map_info->north);
-	data->texture->text_west = load_one_texture(data, data->texture->text_west,
-			data->map_info->west);
-	data->texture->text_east = load_one_texture(data, data->texture->text_east,
-			data->map_info->east);
-	data->knife_anim = load_animation(data,
-			"./textures/inspect_frames/frame_%03d.xpm", 144, 4.78);
-	data->deploy_anim = load_animation(data,
-			"./textures/deploy_frames/frame_%02d.xpm", 29, 0.96);
-	data->lmb_anim = load_animation(data,
-			"./textures/lmb_frames/frame_%02d.xpm", 33, 1.09);
-	data->rmb_anim = load_animation(data,
-			"./textures/rmb_frames/frame_%02d.xpm", 30, 1.0);
+	anim->frame_count = frame_count;
+	anim->current_frame = 0;
+	anim->frame_time = duration / frame_count;
+	anim->timer = 0.0;
+	anim->duration = duration;
+	anim->playing = 1;
 }
 
-t_animation	*load_animation(t_data *data, char *pattern, int frame_count,
-		double duration)
+static t_animation	*load_animation(t_data *data, char *pattern,
+		int frame_count, double duration)
 {
 	t_animation	*anim;
 	char		path[128];
+	int			i;
 
 	anim = malloc(sizeof(t_animation));
 	if (!anim)
@@ -84,16 +71,39 @@ t_animation	*load_animation(t_data *data, char *pattern, int frame_count,
 		free(anim);
 		clean_exit(data);
 	}
-	anim->frame_count = frame_count;
-	anim->current_frame = 0;
-	anim->duration = duration;
-	anim->frame_time = duration / frame_count;
-	anim->timer = 0;
-	anim->playing = 0;
-	for (int i = 0; i < frame_count; i++)
+	init_animation(anim, frame_count, duration);
+	i = 0;
+	while (i < frame_count)
 	{
 		snprintf(path, sizeof(path), pattern, i + 1);
 		anim->frames[i] = load_one_texture(data, anim->frames[i], path);
+		i++;
 	}
 	return (anim);
+}
+
+void	load_all_textures(t_data *data)
+{
+	data->texture->skybox = load_one_texture(data, data->texture->skybox,
+			"./textures/skies/2.xpm");
+	data->texture->floor = load_one_texture(data, data->texture->floor,
+			"./textures/walls_floors/metal.xpm");
+	data->texture->exit = load_one_texture(data, data->texture->floor,
+			"./textures/exits/hole.xpm");
+	data->texture->text_south = load_one_texture(data,
+			data->texture->text_south, data->map_info->south);
+	data->texture->text_north = load_one_texture(data,
+			data->texture->text_north, data->map_info->north);
+	data->texture->text_west = load_one_texture(data, data->texture->text_west,
+			data->map_info->west);
+	data->texture->text_east = load_one_texture(data, data->texture->text_east,
+			data->map_info->east);
+	data->knife_anim = load_animation(data,
+			"./textures/anims/inspect/frame_%03d.xpm", 144, 4.78);
+	data->deploy_anim = load_animation(data,
+			"./textures/anims/deploy/frame_%02d.xpm", 29, 0.96);
+	data->lmb_anim = load_animation(data,
+			"./textures/anims/left/frame_%02d.xpm", 33, 1.09);
+	data->rmb_anim = load_animation(data,
+			"./textures/anims/right/frame_%02d.xpm", 30, 1.0);
 }

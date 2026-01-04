@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   info_pars4.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
+/*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 12:53:12 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/12/13 10:54:26 by hmimouni         ###   ########.fr       */
+/*   Updated: 2026/01/04 13:17:13 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,11 @@ int	flood_fill(t_map_pars *map)
 	y = map->y_start;
 	error = 0;
 	test_map = clone_map(map->map);
+	if (!test_map)
+	{
+		error_message("Malloc failed for flood fill");
+		return (1);
+	}
 	if (!flood_fill_helper(test_map, x, y))
 		error = 1;
 	free_tab(test_map);

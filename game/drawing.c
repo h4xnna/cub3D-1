@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 08:00:02 by pacda-si          #+#    #+#             */
-/*   Updated: 2026/01/02 20:02:21 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/04 13:56:31 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,45 +28,41 @@ void	draw_image_to_buffer(t_win *win, t_img *src, int x_off, int y_off)
 	int				x;
 	int				y;
 
-	y = 0;
-	while (y < src->height)
+	y = -1;
+	while (++y < src->height)
 	{
 		if (y + y_off < 0 || y + y_off >= HEIGHT)
-		{
-			y++;
 			continue ;
-		}
-		x = 0;
-		while (x < src->width)
+		x = -1;
+		while (++x < src->width)
 		{
 			dst_x = x + x_off;
 			if (dst_x < 0 || dst_x >= WIDTH)
 				continue ;
 			color = *(unsigned int *)(src->addr + y * src->line_length + x
 					* (src->bits_per_pixel / 8));
-			rgb.r = (color >> 16) & 0xFF;
-			rgb.g = (color >> 8) & 0xFF;
-			rgb.b = color & 0xFF;
+			make_color_from_int(color, &rgb);
 			if (!(rgb.g > 100 && rgb.g > rgb.r * 1.5 && rgb.g > rgb.b * 1.5))
 				my_mlx_pixel_put(win, dst_x, y + y_off, color);
-			x++;
 		}
-		y++;
 	}
 }
 
-static void	draw_skybox_pixel(t_data *data, int x, int y, int offset_x)
+static void	draw_skybox_pixel(t_data *data, int y, int offset_x)
 {
 	int	color;
 	int	tex_x;
 	int	tex_y;
+	int	x;
 
 	tex_y = (y * data->texture->skybox->height) / HEIGHT;
-	for (x = 0; x < WIDTH; x++)
+	x = 0;
+	while (x < WIDTH)
 	{
 		tex_x = (offset_x + x) % data->texture->skybox->width;
 		color = get_texture_pixel(data->texture->skybox, tex_x, tex_y);
 		my_mlx_pixel_put(data->win, x, y, color);
+		x++;
 	}
 }
 
@@ -75,10 +71,8 @@ void	draw_skybox(t_data *data)
 	int		start_y;
 	double	player_angle;
 	int		offset_x;
-	int		x;
 	int		y;
 
-	x = 0;
 	y = 0;
 	start_y = HEIGHT / 2;
 	player_angle = atan2(data->player->pdirx, data->player->pdiry);
@@ -86,16 +80,7 @@ void	draw_skybox(t_data *data)
 					* PI)));
 	while (y < start_y)
 	{
-		draw_skybox_pixel(data, x, y, offset_x);
+		draw_skybox_pixel(data, y, offset_x);
 		y++;
 	}
-}
-
-int	is_wall(t_data *data, float ray_x, float ray_y)
-{
-	if (data->map_pars->map[(int)(ray_y / SIZE_SQUARE)][(int)(ray_x
-			/ SIZE_SQUARE)] && data->map_pars->map[(int)(ray_y
-			/ SIZE_SQUARE)][(int)(ray_x / SIZE_SQUARE)] == '1')
-		return (1);
-	return (0);
 }

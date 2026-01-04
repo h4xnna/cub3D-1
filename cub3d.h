@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/03 18:26:32 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/04 13:50:23 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@
 # define LEFT_KEY 65361
 # define RIGHT_KEY 65363
 # define ESC_KEY 65307
-# define SIZE_SQUARE 15
+# define SQUARE_SIZE 15
 # define BLANC 0xFFFFFF
 # define NOIR 0x000000
 # define ROUGE 0xFF0000
@@ -57,9 +57,9 @@ typedef struct s_color
 
 typedef struct s_point
 {
-	double	x;
-	double	y;
-}	t_point;
+	double				x;
+	double				y;
+}						t_point;
 
 typedef struct s_info_pars
 {
@@ -263,12 +263,6 @@ static inline uint32_t	apply_shading(double distance, uint32_t color)
 	new_rgb.r = (uint8_t)(rgb.r * factor);
 	new_rgb.g = (uint8_t)(rgb.g * factor);
 	new_rgb.b = (uint8_t)(rgb.b * factor);
-	if (new_rgb.r > 255)
-		new_rgb.r = 255;
-	if (new_rgb.g > 255)
-		new_rgb.g = 255;
-	if (new_rgb.b > 255)
-		new_rgb.b = 255;
 	new_color = (new_rgb.r << 16) | (new_rgb.g << 8) | new_rgb.b;
 	return (new_color);
 }
@@ -284,6 +278,10 @@ static inline int	get_texture_pixel(t_img *img, int x, int y)
 }
 
 // utils_pars1
+void					update_doors(t_data *data);
+t_door					*find_door(t_door *doors, int y, int x);
+void					update_animations(t_data *data);
+void					display_overlay(t_data *data);
 void					free_textures(t_data *data);
 void					free_data(t_data *data);
 void					clean_exit(t_data *data);
@@ -291,13 +289,11 @@ void					clean_exit(t_data *data);
 int						init_data(t_data **data, int fd);
 void					draw_skybox(t_data *data);
 void					draw_image_to_buffer(t_win *win, t_img *src, int x_off,
-						int y_off);
+							int y_off);
 void					rotate_player(t_data *data, int mouse_x);
 void					print_doors(t_door *doors);
 void					make_doors(t_data *data);
 t_door					*find_door(t_door *doors, int y, int x);
-t_animation				*load_animation(t_data *data, char *pattern,
-						int frame_count, double duration);
 int						mouse_hook(int keycode, int x, int y, t_data *data);
 int						len_tab(char **tab);
 char					*remove_newline(char *line);
@@ -309,9 +305,9 @@ void					free_splif(char **out, int i);
 // utils_pars2
 void					print_info(t_map_info info, t_map_pars map);
 void					fill_struct(t_map_info *infos, char *direction,
-						char *path);
+							char *path);
 void					stock_colors(t_map_info *infos, t_info_pars *pars,
-						int nb, int i);
+							int nb, int i);
 int						allouer_colors(t_info_pars *pars, t_map_info *infos);
 void					print_char(char **str);
 
@@ -358,8 +354,11 @@ void					buttons_w(t_player *player, t_map_pars *map);
 void					buttons_s(t_player *player, t_map_pars *map);
 
 // draw_map2D
-void					draw_map(t_data *data);
-int						is_wall(t_data *data, float ray_x, float ray_y);
+void					draw_minimap(t_data *data);
+bool					is_walkable(char c);
+double					get_time_seconds(void);
+void					make_color_from_int(unsigned int color, t_color *rgb);
+void					reset_all_animations(t_data *data);
 
 // player_position
 void					set_player_direction(t_player *player, char direction);
@@ -372,17 +371,22 @@ void					load_all_textures(t_data *data);
 void					clear_window(t_win *win);
 t_win					*init_win(void);
 void					free_win(t_win *win);
+void					raycasting(t_data *data);
 
 // utils_main
+void					perform_dda(t_data *data, double *wall_x);
+void					init_raycasting(t_data *data, int x);
+void					render_floor_pixel(t_data *data, int x, int p,
+							t_point floor_coords);
 int						init_structs(t_map_pars **map, t_map_info **infos,
-						t_info_pars **pars, int *fd, t_data **data);
+							t_info_pars **pars, int *fd, t_data **data);
 int						parse_info_line(char *line, t_info_pars *pars,
-						t_map_info *infos);
+							t_map_info *infos);
 int						parse_error(t_map_pars *map, t_map_info *infos,
-						t_info_pars *pars, char *msg);
+							t_info_pars *pars, char *msg);
 int						final_checks(t_map_info *infos, t_map_pars *map);
 int						parse_file(int fd, t_map_pars *map, t_map_info *infos,
-						t_info_pars *pars);
+							t_info_pars *pars);
 
 // utils_main2
 int						render(t_data *data);

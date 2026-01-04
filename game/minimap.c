@@ -1,28 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   draw_map.c                                         :+:      :+:    :+:   */
+/*   minimap.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/02 19:21:09 by pacda-si          #+#    #+#             */
-/*   Updated: 2026/01/02 19:25:26 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/04 13:53:26 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
-static void	draw_square(t_data *data, int x, int y, int color, int square_size)
+static void	draw_square(t_data *data, int x, int y, int color)
 {
 	int	i;
 	int	j;
 
 	i = 0;
 	j = 0;
-	while (i < square_size)
+	while (i < SQUARE_SIZE)
 	{
 		j = 0;
-		while (j < square_size)
+		while (j < SQUARE_SIZE)
 		{
 			my_mlx_pixel_put(data->win, x + j, y + i, color);
 			j++;
@@ -63,13 +63,13 @@ static void	draw_case(t_data *data, int cases_x, int cases_y)
 	if ((map_y >= 0 && map_y < data->map_pars->height) && map_x >= 0
 		&& data->map_pars->map[map_y] && data->map_pars->map[map_y][map_x])
 		tile = data->map_pars->map[map_y][map_x];
-	draw_x = cases_x * SIZE_SQUARE + SIZE_SQUARE;
-	draw_y = cases_y * SIZE_SQUARE + SIZE_SQUARE;
-	draw_square(data, draw_x, draw_y, switch_tile(tile), SIZE_SQUARE);
+	draw_x = cases_x * SQUARE_SIZE + SQUARE_SIZE;
+	draw_y = cases_y * SQUARE_SIZE + SQUARE_SIZE;
+	draw_square(data, draw_x, draw_y, switch_tile(tile));
 	cases_x++;
 }
 
-void	draw_map(t_data *data)
+void	draw_minimap(t_data *data)
 {
 	int	player_x;
 	int	player_y;
@@ -87,9 +87,7 @@ void	draw_map(t_data *data)
 		}
 		cases_y++;
 	}
-	player_x = (MINIMAP_RADIUS / 2) * SIZE_SQUARE + SIZE_SQUARE / 4
-		+ SIZE_SQUARE;
-	player_y = (MINIMAP_RADIUS / 2) * SIZE_SQUARE + SIZE_SQUARE / 4
-		+ SIZE_SQUARE;
-	draw_square(data, player_x, player_y, ROUGE, SIZE_SQUARE / 2);
+	player_x = (MINIMAP_RADIUS / 2) * SQUARE_SIZE + SQUARE_SIZE;
+	player_y = (MINIMAP_RADIUS / 2) * SQUARE_SIZE + SQUARE_SIZE;
+	draw_square(data, player_x, player_y, ROUGE);
 }

@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/18 16:51:35 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/02 18:39:11 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/04 13:35:56 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,14 +41,29 @@ void	set_player_direction(t_player *player, char direction)
 	}
 }
 
+void	rotate_matrix(t_data *data, double current_speed)
+{
+	double	old_dir_x;
+	double	old_plane_x;
+
+	old_dir_x = data->player->pdirx;
+	data->player->pdirx = data->player->pdirx * cos(current_speed)
+		- data->player->pdiry * sin(current_speed);
+	data->player->pdiry = old_dir_x * sin(current_speed) + data->player->pdiry
+		* cos(current_speed);
+	old_plane_x = data->player->planex;
+	data->player->planex = data->player->planex * cos(current_speed)
+		- data->player->planey * sin(current_speed);
+	data->player->planey = old_plane_x * sin(current_speed)
+		+ data->player->planey * cos(current_speed);
+}
+
 void	rotate_player(t_data *data, int mouse_x)
 {
 	static double	current_speed = 0.0;
 	double			max_speed;
 	double			target_speed;
 	double			accel;
-	double			old_dir_x;
-	double			old_plane_x;
 
 	max_speed = 0.15;
 	if (data->player->rotate_right)
@@ -63,16 +78,7 @@ void	rotate_player(t_data *data, int mouse_x)
 	accel = 15.0;
 	current_speed += (target_speed - current_speed) * accel
 		* data->player->delta_time;
-	old_dir_x = data->player->pdirx;
-	data->player->pdirx = data->player->pdirx * cos(current_speed)
-		- data->player->pdiry * sin(current_speed);
-	data->player->pdiry = old_dir_x * sin(current_speed) + data->player->pdiry
-		* cos(current_speed);
-	old_plane_x = data->player->planex;
-	data->player->planex = data->player->planex * cos(current_speed)
-		- data->player->planey * sin(current_speed);
-	data->player->planey = old_plane_x * sin(current_speed)
-		+ data->player->planey * cos(current_speed);
+	rotate_matrix(data, current_speed);
 	normalize_vector(&data->player->pdirx, &data->player->pdiry);
 	normalize_vector(&data->player->planex, &data->player->planey);
 	mlx_mouse_move(data->win->mlx, data->win->win, WIDTH / 2, HEIGHT / 2);
@@ -104,24 +110,24 @@ void	player_position(t_data *data)
 	}
 }
 
-int	rgb_to_hex_int(t_data *data, int *rgb)
-{
-	int	r;
-	int	g;
-	int	b;
+// int	rgb_to_hex_int(t_data *data, int *rgb)
+// {
+// 	int	r;
+// 	int	g;
+// 	int	b;
 
-	if (!rgb)
-	{
-		error_message(" RGB pointer is NULL.");
-		clean_exit(data);
-	}
-	r = rgb[0];
-	g = rgb[1];
-	b = rgb[2];
-	if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
-	{
-		error_message("Valeur RGB invalide.");
-		clean_exit(data);
-	}
-	return ((r << 16) | (g << 8) | b);
-}
+// 	if (!rgb)
+// 	{
+// 		error_message(" RGB pointer is NULL.");
+// 		clean_exit(data);
+// 	}
+// 	r = rgb[0];
+// 	g = rgb[1];
+// 	b = rgb[2];
+// 	if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
+// 	{
+// 		error_message("Valeur RGB invalide.");
+// 		clean_exit(data);
+// 	}
+// 	return ((r << 16) | (g << 8) | b);
+// }

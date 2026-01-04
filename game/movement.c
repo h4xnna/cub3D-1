@@ -6,26 +6,11 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/04 16:43:22 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/02 18:34:28 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/04 13:35:26 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
-
-bool	is_walkable(char c)
-{
-	char	walkalbles[3] = "0L";
-	int		i;
-
-	i = 0;
-	while (walkalbles[i])
-	{
-		if (c == walkalbles[i])
-			return (true);
-		i++;
-	}
-	return (false);
-}
 
 void	buttons_a(t_player *player, t_map_pars *map)
 {
@@ -35,7 +20,7 @@ void	buttons_a(t_player *player, t_map_pars *map)
 	strafe_x = player->pdiry;
 	strafe_y = -player->pdirx;
 	if (is_walkable(map->map[(int)player->py][(int)(player->px + strafe_x
-				* 0.2)]))
+			* 0.2)]))
 		player->px += strafe_x * MOVE_SPEED * player->delta_time;
 	if (is_walkable(map->map[(int)(player->py + strafe_y
 				* 0.2)][(int)player->px]))
@@ -50,7 +35,7 @@ void	buttons_d(t_player *player, t_map_pars *map)
 	strafe_x = -player->pdiry;
 	strafe_y = player->pdirx;
 	if (is_walkable(map->map[(int)player->py][(int)(player->px + strafe_x
-				* 0.2)]))
+			* 0.2)]))
 		player->px += strafe_x * MOVE_SPEED * player->delta_time;
 	if (is_walkable(map->map[(int)(player->py + strafe_y
 				* 0.2)][(int)player->px]))
@@ -60,7 +45,7 @@ void	buttons_d(t_player *player, t_map_pars *map)
 void	buttons_w(t_player *player, t_map_pars *map)
 {
 	if (is_walkable(map->map[(int)player->py][(int)(player->px + player->pdirx
-				* 0.2)]))
+			* 0.2)]))
 		player->px += player->pdirx * MOVE_SPEED * player->delta_time;
 	if (is_walkable(map->map[(int)(player->py + player->pdiry
 				* 0.2)][(int)(player->px)]))
@@ -70,7 +55,7 @@ void	buttons_w(t_player *player, t_map_pars *map)
 void	buttons_s(t_player *player, t_map_pars *map)
 {
 	if (is_walkable(map->map[(int)player->py][(int)(player->px - player->pdirx
-				* 0.2)]))
+			* 0.2)]))
 		player->px -= player->pdirx * MOVE_SPEED * player->delta_time;
 	if (is_walkable(map->map[(int)(player->py - player->pdiry
 				* 0.2)][(int)(player->px)]))

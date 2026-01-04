@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   util_win->c                                         :+:      :+:    :+:   */
+/*   window.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
+/*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/26 14:30:00 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/26 16:29:48 by hmimouni         ###   ########.fr       */
+/*   Created: 2026/01/04 13:48:10 by pacda-si          #+#    #+#             */
+/*   Updated: 2026/01/04 13:48:22 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	clear_window(t_win *win)
 {
 	ft_bzero(win->addr, WIDTH * HEIGHT * (win->bits_per_pixel / 8));
 }
+
 t_win	*init_win(void)
 {
 	t_win	*win;
@@ -44,6 +45,7 @@ t_win	*init_win(void)
 	mlx_put_image_to_window(win->mlx, win->win, win->img, 0, 0);
 	return (win);
 }
+
 void	free_win(t_win *win)
 {
 	if (win->img)
