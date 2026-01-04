@@ -26,25 +26,22 @@ CFLAGS	= -Wall -Werror -Wextra -Ofast -march=native -Wno-error=cast-function-typ
 PARSING 	=		parsing/
 GAME		=		game/
 RAYCASTING	=		$(GAME)raycasting/
+UTILS 		=		utils/
 
 SRCS	=	libs/gnl/get_next_line.c\
 			main.c \
-			$(PARSING)info_pars1.c\
-			$(PARSING)info_pars2.c\
-			$(PARSING)info_pars3.c\
-			$(PARSING)pars_map.c\
-			$(PARSING)pars_map2.c\
-			$(PARSING)free_pars1.c\
-			$(PARSING)info_pars4.c\
-			$(PARSING)info_pars5.c\
-			$(PARSING)info_pars6.c\
+			$(PARSING)checker.c\
+			$(PARSING)file_parsing.c\
+			$(PARSING)flood_fill.c\
+			$(PARSING)map_parsing.c\
+			$(PARSING)parsing_utils.c\
+			$(PARSING)parsing_utils2.c\
+			$(PARSING)storage.c\
 			$(PARSING)doors.c \
-			$(PARSING)init.c\
 			$(GAME)animations.c\
 			$(GAME)doors.c\
 			$(GAME)drawing.c\
 			$(GAME)events.c\
-			$(GAME)exit.c\
 			$(GAME)minimap.c\
 			$(GAME)movement.c\
 			$(GAME)player.c\
@@ -55,7 +52,11 @@ SRCS	=	libs/gnl/get_next_line.c\
 			$(RAYCASTING)dda.c\
 			$(RAYCASTING)init.c\
 			$(RAYCASTING)raycasting.c\
-			$(RAYCASTING)render_floor.c
+			$(RAYCASTING)render_floor.c\
+			$(UTILS)exit.c\
+			$(UTILS)free.c\
+			$(UTILS)print_utils.c
+
 
 
 # Libraries

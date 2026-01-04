@@ -1,35 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   info_pars2.c                                       :+:      :+:    :+:   */
+/*   storage.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
+/*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 19:07:05 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/10/26 17:21:26 by hmimouni         ###   ########.fr       */
+/*   Updated: 2025/12/30 10:17:05 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-void	print_info(t_map_info info, t_map_pars map)
-{
-	printf("NORD : %s\n", info.north);
-	printf("SUD : %s\n", info.south);
-	printf("WEST : %s\n", info.west);
-	printf("EAST : %s\n", info.east);
-	printf("F : ");
-	if (info.floor)
-		print_tab(info.floor);
-	printf("\nC : ");
-	if (info.ceiling)
-		print_tab(info.ceiling);
-	printf("\ncount : %d\n", info.count_info);
-	print_char(map.map);
-	printf("position map: %c\n", map.position);
-	printf("start_x = %i\n", map.x_start);
-	printf("start_y = %i\n", map.y_start);
-}
 
 void	fill_struct(t_map_info *infos, char *direction, char *path)
 {
@@ -68,4 +49,26 @@ int	allouer_colors(t_info_pars *pars, t_map_info *infos)
 		return (SUCCESS);
 	}
 	return (FAILURE);
+}
+
+int	remplir_colors(t_info_pars *pars, t_map_info *infos)
+{
+	int	i;
+
+	i = 0;
+	while (pars->colors[i])
+	{
+		if (ft_atoll(pars->colors[i]) >= 0 && ft_atoll(pars->colors[i]) <= 255)
+		{
+			stock_colors(infos, pars, ft_atoll(pars->colors[i]), i);
+			i++;
+		}
+		else
+		{
+			free_tab(pars->colors);
+			pars->colors = NULL;
+			return (FAILURE);
+		}
+	}
+	return (SUCCESS);
 }

@@ -5,12 +5,22 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/26 14:54:11 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/04 13:34:50 by pacda-si         ###   ########.fr       */
+/*   Created: 2025/12/29 18:19:57 by pacda-si          #+#    #+#             */
+/*   Updated: 2025/12/30 10:11:55 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
+
+void	free_splif(char **out, int i)
+{
+	while (i > 0)
+	{
+		free(out[i]);
+		i--;
+	}
+	free(out);
+}
 
 static void	free_texture(t_img *texture, void *mlx)
 {

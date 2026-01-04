@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pars_map.c                                         :+:      :+:    :+:   */
+/*   map_parsing.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 15:26:04 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/04 13:18:07 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/04 14:27:57 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,6 @@ int	check_char(char *line, t_map_pars *map)
 	if (bouboule == 0)
 		return (FAILURE);
 	return (SUCCESS);
-}
-
-void	free_splif(char **out, int i)
-{
-	while (i > 0)
-	{
-		free(out[i]);
-		i--;
-	}
-	free(out);
 }
 
 int	check_positions(t_map_pars *map, char *line)
@@ -113,4 +103,21 @@ int	is_full_of_spaces(char *line)
 		i++;
 	}
 	return (SUCCESS);
+}
+
+void	*ft_realloc(void *ptr, size_t new_size)
+{
+	void	*new_ptr;
+
+	if (!ptr)
+		return (malloc(new_size));
+	if (new_size == 0)
+	{
+		free(ptr);
+		return (NULL);
+	}
+	new_ptr = malloc(new_size);
+	if (!new_ptr)
+		return (NULL);
+	return (new_ptr);
 }

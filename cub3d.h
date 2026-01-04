@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/04 13:50:23 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/04 14:33:53 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -289,7 +289,7 @@ void					clean_exit(t_data *data);
 int						init_data(t_data **data, int fd);
 void					draw_skybox(t_data *data);
 void					draw_image_to_buffer(t_win *win, t_img *src, int x_off,
-							int y_off);
+						int y_off);
 void					rotate_player(t_data *data, int mouse_x);
 void					print_doors(t_door *doors);
 void					make_doors(t_data *data);
@@ -305,9 +305,9 @@ void					free_splif(char **out, int i);
 // utils_pars2
 void					print_info(t_map_info info, t_map_pars map);
 void					fill_struct(t_map_info *infos, char *direction,
-							char *path);
+						char *path);
 void					stock_colors(t_map_info *infos, t_info_pars *pars,
-							int nb, int i);
+						int nb, int i);
 int						allouer_colors(t_info_pars *pars, t_map_info *infos);
 void					print_char(char **str);
 
@@ -377,16 +377,13 @@ void					raycasting(t_data *data);
 void					perform_dda(t_data *data, double *wall_x);
 void					init_raycasting(t_data *data, int x);
 void					render_floor_pixel(t_data *data, int x, int p,
-							t_point floor_coords);
-int						init_structs(t_map_pars **map, t_map_info **infos,
-							t_info_pars **pars, int *fd, t_data **data);
+						t_point floor_coords);
 int						parse_info_line(char *line, t_info_pars *pars,
-							t_map_info *infos);
-int						parse_error(t_map_pars *map, t_map_info *infos,
-							t_info_pars *pars, char *msg);
+						t_map_info *infos);
+int						parse_error(char *msg);
 int						final_checks(t_map_info *infos, t_map_pars *map);
 int						parse_file(int fd, t_map_pars *map, t_map_info *infos,
-							t_info_pars *pars);
+						t_info_pars *pars);
 
 // utils_main2
 int						render(t_data *data);
