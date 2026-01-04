@@ -6,15 +6,15 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/04 14:33:53 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/04 14:46:58 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
-# include "libs/gnl/get_next_line.h"
-# include "libs/libft/libft.h"
-# include "libs/minilibx-linux/mlx.h"
+# include "assets/libs/gnl/get_next_line.h"
+# include "assets/libs/libft/libft.h"
+# include "assets/libs/minilibx-linux/mlx.h"
 # include <math.h>
 # include <stdbool.h>
 # include <stdint.h>

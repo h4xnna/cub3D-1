@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 10:55:48 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/04 14:09:02 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/04 14:44:12 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,11 +85,11 @@ static t_animation	*load_animation(t_data *data, char *pattern,
 void	load_all_textures(t_data *data)
 {
 	data->texture->skybox = load_one_texture(data, data->texture->skybox,
-			"./textures/skies/2.xpm");
+			"./assets/textures/skies/2.xpm");
 	data->texture->floor = load_one_texture(data, data->texture->floor,
-			"./textures/walls_floors/metal.xpm");
+			"./assets/textures/walls_floors/metal.xpm");
 	data->texture->exit = load_one_texture(data, data->texture->floor,
-			"./textures/exits/hole.xpm");
+			"./assets/textures/exits/hole.xpm");
 	data->texture->text_south = load_one_texture(data,
 			data->texture->text_south, data->map_info->south);
 	data->texture->text_north = load_one_texture(data,
@@ -99,11 +99,11 @@ void	load_all_textures(t_data *data)
 	data->texture->text_east = load_one_texture(data, data->texture->text_east,
 			data->map_info->east);
 	data->knife_anim = load_animation(data,
-			"./textures/anims/inspect/frame_%03d.xpm", 144, 4.78);
+			"./assets/textures/anims/inspect/frame_%03d.xpm", 144, 4.78);
 	data->deploy_anim = load_animation(data,
-			"./textures/anims/deploy/frame_%02d.xpm", 29, 0.96);
+			"./assets/textures/anims/deploy/frame_%02d.xpm", 29, 0.96);
 	data->lmb_anim = load_animation(data,
-			"./textures/anims/left/frame_%02d.xpm", 33, 1.09);
+			"./assets/textures/anims/left/frame_%02d.xpm", 33, 1.09);
 	data->rmb_anim = load_animation(data,
-			"./textures/anims/right/frame_%02d.xpm", 30, 1.0);
+			"./assets/textures/anims/right/frame_%02d.xpm", 30, 1.0);
 }

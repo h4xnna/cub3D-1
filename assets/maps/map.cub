@@ -1,7 +1,7 @@
-NO ./textures/walls_floors/wall.xpm
-SO ./textures/walls_floors/wall.xpm
-WE ./textures/walls_floors/wall.xpm
-EA  ./textures/walls_floors/wall.xpm
+NO ./assets/textures/walls_floors/wall.xpm
+SO ./assets/textures/walls_floors/wall.xpm
+WE ./assets/textures/walls_floors/wall.xpm
+EA  ./assets/textures/walls_floors/wall.xpm
 
 F   255,255,255
 C 	169,234,254
