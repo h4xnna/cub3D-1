@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 18:01:37 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/30 10:10:54 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/06 11:53:53 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,13 @@ t_win	*init_win(void)
 	win->endian = 0;
 	win->mlx = mlx_init();
 	if (!win->mlx)
-		return (NULL);
+		return (free_win(win), NULL);
 	win->win = mlx_new_window(win->mlx, WIDTH, HEIGHT, "damn");
 	if (!win->win)
-		return (NULL);
+		return (free_win(win), NULL);
 	win->img = mlx_new_image(win->mlx, WIDTH, HEIGHT);
 	if (!win->img)
-		return (NULL);
+		return (free_win(win), NULL);
 	win->addr = mlx_get_data_addr(win->img, &win->bits_per_pixel,
 			&win->line_length, &win->endian);
 	mlx_put_image_to_window(win->mlx, win->win, win->img, 0, 0);

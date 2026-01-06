@@ -25,7 +25,7 @@ PARSING =	parsing/
 EXEC	=	exec/
 UTILS	=	utils/
 
-SRCS	=	libs/gnl/get_next_line.c\
+SRCS	=	./assets/libs/gnl/get_next_line.c\
 			main.c \
 			$(PARSING)checker.c\
 			$(PARSING)file_parsing.c\
@@ -48,16 +48,16 @@ SRCS	=	libs/gnl/get_next_line.c\
 
 
 # Libraries
-MLX         = libs/minilibx-linux/
+MLX         = ./assets/libs/minilibx-linux/
 MLX_A       = $(MLX_PATH)libmlx.a
-MLX_PATH    = ./libs/minilibx-linux/
+MLX_PATH    = ./assets/libs/minilibx-linux/
 MLX_FLAGS   = -lm -lbsd -lXext -lX11
  
 
-INCL	=	-I. -Ilibs/libft 
+INCL	=	-I. -I./assets/libs/libft 
 
 
-LIBFT_PATH        = libs/libft/
+LIBFT_PATH        = ./assets/libs/libft/
 LIBFT_NAME        = libft.a
 LIBFT            = $(LIBFT_PATH)$(LIBFT_NAME)
 
@@ -74,7 +74,7 @@ $(OBJ_DIR)/%.o: %.c
 	@$(CC) $(CFLAGS) -I. -c $< -o $@ $(INCL)
 
 $(MLX_PATH) : 
-	@if [ ! -d $(MLX_PATH) ]; then git clone https://github.com/42Paris/minilibx-linux.git ./libs/minilibx-linux; fi;
+	@if [ ! -d $(MLX_PATH) ]; then git clone https://github.com/42Paris/minilibx-linux.git ./assets/libs/minilibx-linux; fi;
 
 $(MLX_A) :
 	@echo $(LIGHT_CYAN)$(BOLD)"\nCompiling MiniLibX..."

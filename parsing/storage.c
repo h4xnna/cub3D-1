@@ -6,11 +6,11 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 19:07:05 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/12/30 10:17:05 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/06 11:56:09 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "../cub3d.h"
 
 void	fill_struct(t_map_info *infos, char *direction, char *path)
 {

@@ -6,11 +6,11 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 14:11:06 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/12/30 10:08:57 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/06 11:56:36 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "../cub3d.h"
 
 static void	free_info_textures(t_map_info *info)
 {
