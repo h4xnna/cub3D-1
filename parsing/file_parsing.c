@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 14:38:55 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/12/30 10:14:47 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/06 11:48:36 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	parse_file(int fd, t_map_pars *map, t_map_info *infos, t_info_pars *pars)
 		else if (!check_char(line, map) && !check_positions(map, line))
 			add_line_to_map(map, line);
 		else
-			return (free(line), parse_error(" parsing map"));
+			return (free(line), parse_error("Map parsing"));
 		free(line);
 		free_pars(pars);
 		line = get_next_line(fd);

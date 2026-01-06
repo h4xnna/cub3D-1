@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:26:45 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/06 11:32:51 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/06 11:44:25 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,10 @@ int	initialize_everything(t_data **data, int ac, char **av)
 	}
 	if (parse_file(fd, (*data)->map_pars, (*data)->map_info, (*data)->info_pars)
 		|| final_checks((*data)->map_info, (*data)->map_pars))
+	{
+		get_next_line(-1);
 		return (free_data(*data), FAILURE);
+	}
 	if (flood_fill((*data)->map_pars))
 	{
 		error_message("Map is not closed");

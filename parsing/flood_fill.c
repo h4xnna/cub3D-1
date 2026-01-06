@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 12:53:12 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/04 14:26:06 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/06 11:47:06 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,8 @@ int	flood_fill(t_map_pars *map)
 	y = map->y_start;
 	error = 0;
 	test_map = clone_map(map->map);
+	if (!test_map)
+		return (FAILURE);
 	if (!flood_fill_helper(test_map, x, y))
 		error = 1;
 	free_tab(test_map);
