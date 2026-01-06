@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 10:55:48 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/04 22:59:54 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/06 11:25:02 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,18 @@ static t_img	*load_one_texture(t_data *data, t_img *tex, char *path)
 {
 	tex = malloc(sizeof(t_img));
 	if (!tex)
-		clean_exit(data);
+	{
+		error_message("Texture malloc failed");
+		return (NULL);
+	}
 	tex->img = mlx_xpm_file_to_image(data->win->mlx, path, &tex->width,
 			&tex->height);
 	if (!tex->img)
 	{
-		error_message(" no texur");
+		error_message("No such texture");
 		ft_putstr_red(path);
 		free(tex);
-		clean_exit(data);
+		return (NULL);
 	}
 	tex->addr = mlx_get_data_addr(tex->img, &tex->bits_per_pixel,
 			&tex->line_length, &tex->endian);
@@ -56,16 +59,40 @@ static void	init_animation(t_animation *anim, int frame_count, double duration)
 	anim->playing = 1;
 }
 
+static void	load_anim_textures(t_data *data, t_animation **anim, char *pattern,
+		int frame_count)
+{
+	int		i;
+	char	path[128];
+
+	i = 0;
+	while (i < frame_count)
+	{
+		snprintf(path, sizeof(path), pattern, i + 1);
+		(*anim)->frames[i] = load_one_texture(data, (*anim)->frames[i], path);
+		if (!(*anim)->frames[i])
+		{
+			while (--i >= 0)
+				free_texture((*anim)->frames[i], data->win->mlx);
+			free((*anim)->frames);
+			free(*anim);
+			clean_exit(data);
+		}
+		i++;
+	}
+}
+
 static t_animation	*load_animation(t_data *data, char *pattern,
 		int frame_count, double duration)
 {
 	t_animation	*anim;
-	char		path[128];
-	int			i;
 
 	anim = malloc(sizeof(t_animation));
 	if (!anim)
+	{
+		error_message("Animation malloc failed");
 		clean_exit(data);
+	}
 	anim->frames = malloc(sizeof(t_img *) * frame_count);
 	if (!anim->frames)
 	{
@@ -73,17 +100,11 @@ static t_animation	*load_animation(t_data *data, char *pattern,
 		clean_exit(data);
 	}
 	init_animation(anim, frame_count, duration);
-	i = 0;
-	while (i < frame_count)
-	{
-		snprintf(path, sizeof(path), pattern, i + 1);
-		anim->frames[i] = load_one_texture(data, anim->frames[i], path);
-		i++;
-	}
+	load_anim_textures(data, &anim, pattern, frame_count);
 	return (anim);
 }
 
-void	load_all_textures(t_data *data)
+void	load_textures(t_data *data)
 {
 	data->texture->skybox = load_one_texture(data, data->texture->skybox,
 			"./assets/textures/skies/2.xpm");
@@ -99,6 +120,14 @@ void	load_all_textures(t_data *data)
 			data->map_info->west);
 	data->texture->text_east = load_one_texture(data, data->texture->text_east,
 			data->map_info->east);
+	if (!data->texture->skybox || !data->texture->floor || !data->texture->exit
+		|| !data->texture->text_south || !data->texture->text_north
+		|| !data->texture->text_west || !data->texture->text_east)
+		clean_exit(data);
+}
+
+void	load_animations(t_data *data)
+{
 	data->knife_anim = load_animation(data,
 			"./assets/textures/anims/inspect/frame_%03d.xpm", 144, 4.78);
 	data->deploy_anim = load_animation(data,

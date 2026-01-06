@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/04 13:48:10 by pacda-si          #+#    #+#             */
-/*   Updated: 2026/01/04 21:46:40 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/06 10:31:40 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,13 @@ t_win	*init_win(void)
 	win->endian = 0;
 	win->mlx = mlx_init();
 	if (!win->mlx)
-		return (NULL);
+		return (free_win(win), NULL);
 	win->win = mlx_new_window(win->mlx, WIDTH, HEIGHT, "damn");
 	if (!win->win)
-		return (NULL);
+		return (free_win(win), NULL);
 	win->img = mlx_new_image(win->mlx, WIDTH, HEIGHT);
 	if (!win->img)
-		return (NULL);
+		return (free_win(win), NULL);
 	win->addr = mlx_get_data_addr(win->img, &win->bits_per_pixel,
 			&win->line_length, &win->endian);
 	mlx_put_image_to_window(win->mlx, win->win, win->img, 0, 0);
@@ -48,12 +48,12 @@ t_win	*init_win(void)
 
 void	free_win(t_win *win)
 {
-	if (win->img)
-		mlx_destroy_image(win->mlx, win->img);
-	if (win->win)
-		mlx_destroy_window(win->mlx, win->win);
 	if (win->mlx)
 	{
+		if (win->img)
+			mlx_destroy_image(win->mlx, win->img);
+		if (win->win)
+			mlx_destroy_window(win->mlx, win->win);
 		mlx_destroy_display(win->mlx);
 		free(win->mlx);
 	}

@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/04 21:41:20 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/06 11:21:41 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -286,6 +286,7 @@ void					display_overlay(t_data *data);
 void					free_textures(t_data *data);
 void					free_data(t_data *data);
 void					clean_exit(t_data *data);
+void					free_texture(t_img *texture, void *mlx);
 
 int						init_data(t_data **data, int fd);
 void					draw_skybox(t_data *data);
@@ -366,7 +367,8 @@ void					set_player_direction(t_player *player, char direction);
 int						rgb_to_hex_int(t_data *data, int *rgb);
 
 // exec../texture
-void					load_all_textures(t_data *data);
+void					load_animations(t_data *data);
+void					load_textures(t_data *data);
 
 // exec../ util_win
 void					clear_window(t_win *win);

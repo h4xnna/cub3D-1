@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 15:17:32 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/12/29 18:28:30 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/06 11:35:56 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	error_message(char *error)
 {
 	write(2, RED, sizeof(RED) - 1);
-	write(2, "🚨 ERROR : ", 12);
+	write(2, "🚨 ERROR : ", 13);
 	while (*error)
 		write(2, error++, 1);
 	write(2, "\n", 1);
@@ -69,7 +69,7 @@ int	check_fd(int *fd, char **av)
 	*fd = open((av[1]), O_RDONLY);
 	if (*fd == -1)
 	{
-		error_message("Aucun fichier a ce nom");
+		error_message("No such file");
 		return (FAILURE);
 	}
 	return (SUCCESS);
