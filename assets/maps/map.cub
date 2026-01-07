@@ -5,8 +5,8 @@ EA ./assets/textures/walls_floors/wall.xpm
 
 D ./assets/textures/walls_floors/wall.xpm
 L ./assets/textures/exits/hole.xpm
-skybox #FF0000
-floor #FF0000
+skybox #0000FF
+floor #FFFFFF
 
                  111111111
              11110000111

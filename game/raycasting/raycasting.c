@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/04 12:11:42 by pacda-si          #+#    #+#             */
-/*   Updated: 2026/01/07 16:28:51 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/07 16:35:40 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,22 +82,10 @@ static void	render_floor(t_data *data, int x, double wall_x)
 	int	p;
 
 	p = data->raycast->draw_end;
-	if (data->map_info->has_floor)
+	while (p < HEIGHT)
 	{
-		while (p < HEIGHT)
-		{
-			render_floor_pixel(data, x, p, compute_floor_wall_coords(data,
-					wall_x));
-			p++;
-		}
-	}
-	else
-	{
-		while (p < HEIGHT)
-		{
-			my_mlx_pixel_put(data->win, x, p, data->texture->floor_color);
-			p++;
-		}
+		render_floor_pixel(data, x, p, compute_floor_wall_coords(data, wall_x));
+		p++;
 	}
 }
 

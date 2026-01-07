@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/04 12:23:04 by pacda-si          #+#    #+#             */
-/*   Updated: 2026/01/04 13:11:56 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/07 16:42:18 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ static unsigned int	make_final_color(unsigned int floor_color,
 	return (final_color);
 }
 
-static int	sample_floor_color(t_data *data, t_point f_coords, int *is_floor)
+static unsigned int	sample_floor_color(t_data *data, t_point f_coords,
+		int *is_floor)
 {
 	t_img	*ftex;
 	int		ftex_x;
@@ -82,14 +83,20 @@ static void	compute_floor_coords(t_data *data, int p, t_point floor_coords,
 
 void	render_floor_pixel(t_data *data, int x, int p, t_point floor_coords)
 {
-	t_point	current_floor_coords;
-	int		floor_color;
-	int		is_floor;
-	int		reflected_color;
-	int		wall_color;
+	t_point			current_floor_coords;
+	unsigned int	floor_color;
+	int				is_floor;
+	int				reflected_color;
+	int				wall_color;
 
-	compute_floor_coords(data, p, floor_coords, &current_floor_coords);
-	floor_color = sample_floor_color(data, current_floor_coords, &is_floor);
+	is_floor = true;
+	if (data->map_info->has_floor)
+	{
+		compute_floor_coords(data, p, floor_coords, &current_floor_coords);
+		floor_color = sample_floor_color(data, current_floor_coords, &is_floor);
+	}
+	else
+		floor_color = data->texture->floor_color;
 	reflected_color = 0;
 	wall_color = 0;
 	if (is_floor)
