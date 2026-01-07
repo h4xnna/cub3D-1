@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 15:17:32 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/06 11:35:56 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/07 13:55:57 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,9 @@ void	error_message(char *error)
 
 int	check_infos(t_map_info *info)
 {
-	if (info->ceiling == NULL || info->east == NULL || info->floor == NULL
-		|| info->north == NULL || info->south == NULL || info->west == NULL)
+	if (info->east == NULL || info->north == NULL || info->south == NULL
+		|| info->west == NULL || info->exit == NULL || info->skybox == NULL
+		|| info->door == NULL)
 		return (FAILURE);
 	return (SUCCESS);
 }

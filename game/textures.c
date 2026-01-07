@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 10:55:48 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/07 12:37:22 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/07 13:54:32 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,7 @@ void	load_textures(t_data *data)
 	data->texture->floor = load_one_texture(data, data->texture->floor,
 			"./assets/textures/walls_floors/metal.xpm");
 	data->texture->exit = load_one_texture(data, data->texture->exit,
-			"./assets/textures/exits/hole.xpm");
+			data->map_info->exit);
 	data->texture->text_south = load_one_texture(data,
 			data->texture->text_south, data->map_info->south);
 	data->texture->text_north = load_one_texture(data,

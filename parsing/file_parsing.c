@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 14:38:55 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/07 12:16:51 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/07 13:55:33 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	final_checks(t_map_info *infos, t_map_pars *map)
 {
 	if (map->position == 0)
 		return (parse_error("No starting position"));
-	if (infos->count_info != 6 || check_infos(infos))
+	if (infos->count_info != 7 || check_infos(infos))
 		return (parse_error("Not enough infos, or wrong ones"));
 	return (SUCCESS);
 }
@@ -52,7 +52,7 @@ int	parse_file(int fd, t_map_pars *map, t_map_info *infos, t_info_pars *pars)
 		line = remove_newline(line);
 		if (!line)
 			return (parse_error("Line reading failed"));
-		if (infos->count_info < 6)
+		if (infos->count_info < 7)
 		{
 			if (parse_info_line(line, pars, infos))
 				return (free(line), parse_error("Info parsing failed"));

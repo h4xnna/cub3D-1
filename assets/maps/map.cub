@@ -3,8 +3,9 @@ SO ./assets/textures/walls_floors/wall.xpm
 WE ./assets/textures/walls_floors/wall.xpm
 EA ./assets/textures/walls_floors/wall.xpm
 
-F   255,255,255
-C 	169,234,254
+D ./assets/textures/walls_floors/wall.xpm
+L ./assets/textures/exits/hole.xpm
+skybox ./assets/textures/skies/2.xpm
 
                  111111111
              11110000111

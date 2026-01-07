@@ -6,54 +6,16 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 12:53:12 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/07 12:33:39 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/07 13:56:35 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	count_coma(char *line)
-{
-	int	i;
-	int	j;
-	int	len;
-
-	i = 0;
-	j = 0;
-	len = ft_strlen(line);
-	while (i < len)
-	{
-		if (line[i] == ',')
-			j++;
-		i++;
-	}
-	if (j != 2)
-		return (FAILURE);
-	return (SUCCESS);
-}
-
-static int	handle_floor_ceiling(t_info_pars *pars, t_map_info *infos)
-{
-	if (allouer_colors(pars, infos) || count_coma(pars->line_split[1]))
-		return (FAILURE);
-	pars->colors = ft_split(pars->line_split[1], ',');
-	if (!pars->colors || len_tab(pars->colors) != 3)
-		return (FAILURE);
-	if (remplir_colors(pars, infos))
-		return (FAILURE);
-	return (SUCCESS);
-}
-
 int	pars_info(t_info_pars *pars, t_map_info *infos)
 {
 	if (!is_prefix(pars->line_split[0]) && !is_fichier(pars->line_split[1]))
 		fill_struct(infos, pars->line_split[0], pars->line_split[1]);
-	else if (!ft_strcmp(pars->line_split[0], "F")
-		|| !ft_strcmp(pars->line_split[0], "C"))
-	{
-		if (handle_floor_ceiling(pars, infos) == FAILURE)
-			return (FAILURE);
-	}
 	infos->count_info += 1;
 	return (SUCCESS);
 }

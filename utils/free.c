@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 14:11:06 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/07 12:34:57 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/07 13:58:52 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,24 +51,9 @@ static void	free_info_textures(t_map_info *info)
 	}
 }
 
-static void	free_info_colors(t_map_info *info)
-{
-	if (info->ceiling)
-	{
-		free(info->ceiling);
-		info->ceiling = NULL;
-	}
-	if (info->floor)
-	{
-		free(info->floor);
-		info->floor = NULL;
-	}
-}
-
 void	free_info(t_map_info *info)
 {
 	free_info_textures(info);
-	free_info_colors(info);
 	free(info);
 }
 

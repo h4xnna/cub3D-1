@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/07 12:34:27 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/07 13:55:48 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,8 +120,6 @@ typedef struct s_map_info
 	char				*west;
 	char				*east;
 	char				*north;
-	int					*floor;
-	int					*ceiling;
 	char				*door;
 	char				*exit;
 	int					count_info;

@@ -20,8 +20,8 @@ CYAN_SHOCK      = "\033[38;5;51m"
 NAME	= cube
 CC		= cc
 # CFLAGS	= -Wall -Werror -Wextra -g3 -Ofast -march=native -Wno-error=cast-function-type
-# CFLAGS	= -Wall -Werror -Wextra -Ofast -march=native
-CFLAGS	= -Wall -Werror -Wextra  -g3
+CFLAGS	= -Wall -Wextra -Werror -O3 -march=native -ffast-math
+# CFLAGS	= -Wall -Werror -Wextra  -g3
 
 PARSING 	=		parsing/
 GAME		=		game/

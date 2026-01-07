@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 10:16:16 by pacda-si          #+#    #+#             */
-/*   Updated: 2026/01/02 17:24:39 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/07 13:59:04 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,6 @@ void	print_info(t_map_info info, t_map_pars map)
 	printf("SUD : %s\n", info.south);
 	printf("WEST : %s\n", info.west);
 	printf("EAST : %s\n", info.east);
-	printf("F : ");
-	if (info.floor)
-		print_tab(info.floor);
-	printf("\nC : ");
-	if (info.ceiling)
-		print_tab(info.ceiling);
 	printf("\ncount : %d\n", info.count_info);
 	print_char(map.map);
 	printf("position map: %c\n", map.position);
