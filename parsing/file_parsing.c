@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 14:38:55 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/06 11:48:36 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/07 12:16:51 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,11 @@ int	parse_info_line(char *line, t_info_pars *pars, t_map_info *infos)
 	pars->line_split = ft_split(line, ' ');
 	if (!pars->line_split)
 		return (FAILURE);
+	if (!pars->line_split || (len_tab(pars->line_split) != 2
+			&& pars->line_split[0]))
+		return (FAILURE);
+	if (!pars->line_split[0])
+		return (SUCCESS);
 	if (pars_info(pars, infos))
 		return (FAILURE);
 	return (SUCCESS);
@@ -31,9 +36,9 @@ int	parse_error(char *msg)
 int	final_checks(t_map_info *infos, t_map_pars *map)
 {
 	if (map->position == 0)
-		return (parse_error("Final checks failed"));
+		return (parse_error("No starting position"));
 	if (infos->count_info != 6 || check_infos(infos))
-		return (parse_error("Final checks failed"));
+		return (parse_error("Not enough infos, or wrong ones"));
 	return (SUCCESS);
 }
 

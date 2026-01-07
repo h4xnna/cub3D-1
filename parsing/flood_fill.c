@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 12:53:12 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/06 11:47:06 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/07 12:33:39 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,28 +32,26 @@ int	count_coma(char *line)
 	return (SUCCESS);
 }
 
+static int	handle_floor_ceiling(t_info_pars *pars, t_map_info *infos)
+{
+	if (allouer_colors(pars, infos) || count_coma(pars->line_split[1]))
+		return (FAILURE);
+	pars->colors = ft_split(pars->line_split[1], ',');
+	if (!pars->colors || len_tab(pars->colors) != 3)
+		return (FAILURE);
+	if (remplir_colors(pars, infos))
+		return (FAILURE);
+	return (SUCCESS);
+}
+
 int	pars_info(t_info_pars *pars, t_map_info *infos)
 {
-	if (!pars->line_split || (len_tab(pars->line_split) != 2
-			&& pars->line_split[0]))
-		return (FAILURE);
-	if (!pars->line_split[0])
-		return (SUCCESS);
-	if (!is_direction(pars->line_split[0]) && !is_fichier(pars->line_split[1]))
-	{
+	if (!is_prefix(pars->line_split[0]) && !is_fichier(pars->line_split[1]))
 		fill_struct(infos, pars->line_split[0], pars->line_split[1]);
-		infos->count_info += 1;
-		return (SUCCESS);
-	}
 	else if (!ft_strcmp(pars->line_split[0], "F")
 		|| !ft_strcmp(pars->line_split[0], "C"))
 	{
-		if (allouer_colors(pars, infos) || count_coma(pars->line_split[1]))
-			return (FAILURE);
-		pars->colors = ft_split(pars->line_split[1], ',');
-		if (!pars->colors || len_tab(pars->colors) != 3)
-			return (FAILURE);
-		if (remplir_colors(pars, infos))
+		if (handle_floor_ceiling(pars, infos) == FAILURE)
 			return (FAILURE);
 	}
 	infos->count_info += 1;

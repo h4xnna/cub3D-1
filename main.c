@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:26:45 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/06 11:44:25 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/07 12:01:10 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,12 +22,45 @@ void	final_initializations(t_data *data)
 	data->player->pitch = 0;
 	data->player->show_knife = false;
 	data->map_pars->height = len_tab(data->map_pars->map);
-	make_doors(data);
 	load_textures(data);
 	load_animations(data);
 	set_player_direction(data->player, data->map_pars->position);
 	normalize_vector(&data->player->pdirx, &data->player->pdiry);
 	normalize_vector(&data->player->planex, &data->player->planey);
+}
+
+static int	is_enclosed(t_door *door, char **map)
+{
+	if (map[door->y][door->x + 1] == '1' && map[door->y][door->x - 1] == '1'
+		&& map[door->y + 1][door->x] == '0' && map[door->y
+			- 1][door->x] == '0')
+			return (SUCCESS);
+	else if (map[door->y][door->x + 1] == '0' && map[door->y][door->x - 1] == '0'
+		&& map[door->y + 1][door->x] == '1' && map[door->y
+			- 1][door->x] == '1')
+			return (SUCCESS);
+	return (FAILURE);
+}
+
+// D ./assets/textures/walls_floors/wall.xpm
+// L ./assets/textures/exits/kirby.xpm
+// skybox off
+void	check_doors(t_data *data)
+{
+	char	**map;
+	t_door	*door;
+
+	map = data->map_pars->map;
+	door = data->doors;
+	while (door)
+	{
+		if (is_enclosed(door, map) == FAILURE)
+		{
+			error_message("Doors aren't setup the right way");
+			clean_exit(data);
+		}
+		door = door->next;
+	}
 }
 
 int	initialize_everything(t_data **data, int ac, char **av)
@@ -52,6 +85,8 @@ int	initialize_everything(t_data **data, int ac, char **av)
 		error_message("Map is not closed");
 		return (free_data(*data), FAILURE);
 	}
+	make_doors(*data);
+	check_doors(*data);
 	final_initializations((*data));
 	return (SUCCESS);
 }
@@ -81,6 +116,7 @@ int	init_data(t_data **data, int fd)
 	return (SUCCESS);
 }
 
+// mlx_mouse_hide(data->win->mlx, data->win->win);
 int	main(int ac, char **av)
 {
 	t_data	*data;
@@ -89,7 +125,6 @@ int	main(int ac, char **av)
 	if (initialize_everything(&data, ac, av) == FAILURE)
 		return (FAILURE);
 	print_char(data->map_pars->map);
-	// mlx_mouse_hide(data->win->mlx, data->win->win);
 	mlx_mouse_move(data->win->mlx, data->win->win, WIDTH / 2, HEIGHT / 2);
 	mlx_hook(data->win->win, 2, 1L << 0, (int (*)())key_press, data);
 	mlx_hook(data->win->win, 3, 1L << 1, (int (*)())key_release, data);

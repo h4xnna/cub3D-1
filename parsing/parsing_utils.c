@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   info_pars1.c                                       :+:      :+:    :+:   */
+/*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hmimouni <hmimouni@>                       +#+  +:+       +#+        */
+/*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 13:25:35 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/09/28 18:48:54 by hmimouni         ###   ########.fr       */
+/*   Updated: 2026/01/07 12:37:55 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,11 @@ int	is_fichier(char *path)
 	return (FAILURE);
 }
 
-int	is_direction(char *str)
+int	is_prefix(char *str)
 {
 	if (!ft_strcmp(str, "NO") || !ft_strcmp(str, "EA") || !ft_strcmp(str, "SO")
-		|| !ft_strcmp(str, "WE"))
+		|| !ft_strcmp(str, "WE") || !ft_strcmp(str, "D") || !ft_strcmp(str, "L")
+		|| !ft_strcmp(str, "skybox") || !ft_strcmp(str, "FT"))
 		return (SUCCESS);
 	return (FAILURE);
 }

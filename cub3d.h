@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/06 11:21:41 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/07 12:34:27 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,10 @@ typedef struct s_map_info
 	char				*north;
 	int					*floor;
 	int					*ceiling;
+	char				*door;
+	char				*exit;
 	int					count_info;
+	char				*skybox;
 }						t_map_info;
 
 typedef struct s_win
@@ -301,7 +304,7 @@ int						len_tab(char **tab);
 char					*remove_newline(char *line);
 int						ft_strcmp(char *str, char *str2);
 int						is_fichier(char *path);
-int						is_direction(char *str);
+int						is_prefix(char *str);
 void					free_splif(char **out, int i);
 
 // utils_pars2

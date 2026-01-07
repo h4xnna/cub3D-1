@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 10:55:48 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/06 11:25:02 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/07 12:37:22 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,10 +107,10 @@ static t_animation	*load_animation(t_data *data, char *pattern,
 void	load_textures(t_data *data)
 {
 	data->texture->skybox = load_one_texture(data, data->texture->skybox,
-			"./assets/textures/skies/2.xpm");
+			data->map_info->skybox);
 	data->texture->floor = load_one_texture(data, data->texture->floor,
 			"./assets/textures/walls_floors/metal.xpm");
-	data->texture->exit = load_one_texture(data, data->texture->floor,
+	data->texture->exit = load_one_texture(data, data->texture->exit,
 			"./assets/textures/exits/hole.xpm");
 	data->texture->text_south = load_one_texture(data,
 			data->texture->text_south, data->map_info->south);
