@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 19:07:05 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/07 13:58:28 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/07 15:43:32 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,5 +27,8 @@ void	fill_struct(t_map_info *infos, char *prefix, char *path)
 	else if (!ft_strcmp(prefix, "D") && !infos->door)
 		infos->door = ft_strdup(path);
 	else if (!ft_strcmp(prefix, "skybox") && !infos->skybox)
+	{
 		infos->skybox = ft_strdup(path);
+		infos->has_skybox = true;
+	}
 }

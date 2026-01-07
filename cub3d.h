@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/07 13:55:48 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/07 15:47:36 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,7 @@ typedef struct s_map_info
 	char				*exit;
 	int					count_info;
 	char				*skybox;
+	bool				has_skybox;
 }						t_map_info;
 
 typedef struct s_win
@@ -203,6 +204,7 @@ typedef struct s_texture
 	t_img				*text_north;
 	t_img				*text_west;
 	t_img				*text_east;
+	unsigned int		skycolor;
 }						t_texture;
 
 typedef struct s_data

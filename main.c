@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:26:45 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/07 12:01:10 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/07 15:26:51 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,6 @@ static int	is_enclosed(t_door *door, char **map)
 	return (FAILURE);
 }
 
-// D ./assets/textures/walls_floors/wall.xpm
-// L ./assets/textures/exits/kirby.xpm
-// skybox off
 void	check_doors(t_data *data)
 {
 	char	**map;

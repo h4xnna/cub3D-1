@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 10:55:48 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/07 13:54:32 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/07 15:51:08 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,10 +104,37 @@ static t_animation	*load_animation(t_data *data, char *pattern,
 	return (anim);
 }
 
+unsigned int	get_color_from_html(char *color)
+{
+	unsigned int	value;
+	char			c;
+
+	value = 0;
+	int i = 1;
+	while (i <= 6)
+	{
+		c = color[i];
+		value <<= 4;
+		if (c >= '0' && c <= '9')
+			value |= (c - '0');
+		else if (c >= 'A' && c <= 'F')
+			value |= (c - 'A' + 10);
+		else if (c >= 'a' && c <= 'f')
+			value |= (c - 'a' + 10);
+		else
+			return (0);
+		i++;
+	}
+	return (value);
+}
+
 void	load_textures(t_data *data)
 {
-	data->texture->skybox = load_one_texture(data, data->texture->skybox,
-			data->map_info->skybox);
+	if (data->map_info->has_skybox)
+		data->texture->skybox = load_one_texture(data, data->texture->skybox,
+				data->map_info->skybox);
+	else
+		data->texture->skycolor = get_color_from_html(data->map_info->skybox);
 	data->texture->floor = load_one_texture(data, data->texture->floor,
 			"./assets/textures/walls_floors/metal.xpm");
 	data->texture->exit = load_one_texture(data, data->texture->exit,
