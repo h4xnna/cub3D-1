@@ -6,35 +6,37 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/04 12:11:42 by pacda-si          #+#    #+#             */
-/*   Updated: 2026/01/04 13:57:24 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/07 16:28:51 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../cub3d.h"
 
-static void	compute_floor_wall_coords(t_data *data, double wall_x,
-		t_point *floor_coords)
+static t_point	compute_floor_wall_coords(t_data *data, double wall_x)
 {
+	t_point	floor_coords;
+
 	if (data->raycast->side == 0 && data->raycast->raydirx > 0)
 	{
-		floor_coords->x = data->raycast->mapx;
-		floor_coords->y = data->raycast->mapy + wall_x;
+		floor_coords.x = data->raycast->mapx;
+		floor_coords.y = data->raycast->mapy + wall_x;
 	}
 	else if (data->raycast->side == 0 && data->raycast->raydirx < 0)
 	{
-		floor_coords->x = data->raycast->mapx + 1.0;
-		floor_coords->y = data->raycast->mapy + wall_x;
+		floor_coords.x = data->raycast->mapx + 1.0;
+		floor_coords.y = data->raycast->mapy + wall_x;
 	}
 	else if (data->raycast->side == 1 && data->raycast->raydiry > 0)
 	{
-		floor_coords->x = data->raycast->mapx + wall_x;
-		floor_coords->y = data->raycast->mapy;
+		floor_coords.x = data->raycast->mapx + wall_x;
+		floor_coords.y = data->raycast->mapy;
 	}
 	else
 	{
-		floor_coords->x = data->raycast->mapx + wall_x;
-		floor_coords->y = data->raycast->mapy + 1.0;
+		floor_coords.x = data->raycast->mapx + wall_x;
+		floor_coords.y = data->raycast->mapy + 1.0;
 	}
+	return (floor_coords);
 }
 
 static void	render_wall_pixels(t_data *data, int x, int y, unsigned int color)
@@ -42,8 +44,8 @@ static void	render_wall_pixels(t_data *data, int x, int y, unsigned int color)
 	my_mlx_pixel_put(data->win, x, y, color);
 	if ((y + (data->raycast->draw_end - y) * 2) < HEIGHT)
 	{
-		my_mlx_pixel_put(data->win, x, y + (data->raycast->draw_end - y)
-			* 2, color);
+		my_mlx_pixel_put(data->win, x, y + (data->raycast->draw_end - y) * 2,
+			color);
 	}
 }
 
@@ -75,12 +77,34 @@ static void	draw_wall(t_data *data, int x, double wall_x)
 	}
 }
 
+static void	render_floor(t_data *data, int x, double wall_x)
+{
+	int	p;
+
+	p = data->raycast->draw_end;
+	if (data->map_info->has_floor)
+	{
+		while (p < HEIGHT)
+		{
+			render_floor_pixel(data, x, p, compute_floor_wall_coords(data,
+					wall_x));
+			p++;
+		}
+	}
+	else
+	{
+		while (p < HEIGHT)
+		{
+			my_mlx_pixel_put(data->win, x, p, data->texture->floor_color);
+			p++;
+		}
+	}
+}
+
 void	raycasting(t_data *data)
 {
 	int		x;
-	int		p;
 	double	wall_x;
-	t_point	floor_coords;
 
 	x = 0;
 	wall_x = 0.0;
@@ -89,13 +113,7 @@ void	raycasting(t_data *data)
 		init_raycasting(data, x);
 		perform_dda(data, &wall_x);
 		draw_wall(data, x, wall_x);
-		compute_floor_wall_coords(data, wall_x, &floor_coords);
-		p = data->raycast->draw_end;
-		while (p < HEIGHT)
-		{
-			render_floor_pixel(data, x, p, floor_coords);
-			p++;
-		}
+		render_floor(data, x, wall_x);
 		x++;
 	}
 }

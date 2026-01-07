@@ -6,11 +6,11 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 14:11:06 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/07 13:58:52 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/07 16:29:36 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "../cub3d.h"
 
 static void	free_info_textures(t_map_info *info)
 {
@@ -45,6 +45,11 @@ static void	free_info_textures(t_map_info *info)
 		info->door = NULL;
 	}
 	if (info->skybox)
+	{
+		free(info->skybox);
+		info->skybox = NULL;
+	}
+	if (info->floor)
 	{
 		free(info->skybox);
 		info->skybox = NULL;

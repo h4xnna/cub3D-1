@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 10:55:48 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/07 15:51:08 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/07 16:18:53 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,9 +108,10 @@ unsigned int	get_color_from_html(char *color)
 {
 	unsigned int	value;
 	char			c;
+	int				i;
 
 	value = 0;
-	int i = 1;
+	i = 1;
 	while (i <= 6)
 	{
 		c = color[i];
@@ -128,17 +129,8 @@ unsigned int	get_color_from_html(char *color)
 	return (value);
 }
 
-void	load_textures(t_data *data)
+static void	load_wall_textures(t_data *data)
 {
-	if (data->map_info->has_skybox)
-		data->texture->skybox = load_one_texture(data, data->texture->skybox,
-				data->map_info->skybox);
-	else
-		data->texture->skycolor = get_color_from_html(data->map_info->skybox);
-	data->texture->floor = load_one_texture(data, data->texture->floor,
-			"./assets/textures/walls_floors/metal.xpm");
-	data->texture->exit = load_one_texture(data, data->texture->exit,
-			data->map_info->exit);
 	data->texture->text_south = load_one_texture(data,
 			data->texture->text_south, data->map_info->south);
 	data->texture->text_north = load_one_texture(data,
@@ -147,9 +139,34 @@ void	load_textures(t_data *data)
 			data->map_info->west);
 	data->texture->text_east = load_one_texture(data, data->texture->text_east,
 			data->map_info->east);
-	if (!data->texture->skybox || !data->texture->floor || !data->texture->exit
-		|| !data->texture->text_south || !data->texture->text_north
-		|| !data->texture->text_west || !data->texture->text_east)
+}
+
+void	load_textures(t_data *data)
+{
+	if (data->map_info->has_skybox)
+	{
+		data->texture->skybox = load_one_texture(data, data->texture->skybox,
+				data->map_info->skybox);
+		if (!data->texture->skybox)
+			clean_exit(data);
+	}
+	else
+		data->texture->skycolor = get_color_from_html(data->map_info->skybox);
+	if (data->map_info->has_floor)
+	{
+		data->texture->floor = load_one_texture(data, data->texture->floor,
+				data->map_info->floor);
+		if (!data->texture->floor)
+			clean_exit(data);
+	}
+	else
+		data->texture->floor_color = get_color_from_html(data->map_info->floor);
+	data->texture->exit = load_one_texture(data, data->texture->exit,
+			data->map_info->exit);
+	load_wall_textures(data);
+	if (!data->texture->exit || !data->texture->text_south
+		|| !data->texture->text_north || !data->texture->text_west
+		|| !data->texture->text_east)
 		clean_exit(data);
 }
 

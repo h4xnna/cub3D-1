@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 07:53:02 by pacda-si          #+#    #+#             */
-/*   Updated: 2026/01/07 15:52:21 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/07 15:56:26 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,22 @@ static void	get_delta_time(t_data *data)
 	last_time = current_time;
 }
 
-void	draw_skycolor(data);
+void	draw_skycolor(t_data *data)
 {
-	
+	int	x;
+	int	y;
+
+	x = 0;
+	while (x < WIDTH)
+	{
+		y = 0;
+		while (y <= HEIGHT / 2)
+		{
+			my_mlx_pixel_put(data->win, x, y, data->texture->skycolor);
+			y++;
+		}
+		x++;
+	}
 }
 
 static void	draw_sky(t_data *data)
@@ -44,8 +57,7 @@ int	render(t_data *data)
 	if (!data->fps)
 		clean_exit(data);
 	clear_window(data->win);
-
-	draw_skybox(data);
+	draw_sky(data);
 	raycasting(data);
 	draw_minimap(data);
 	player_position(data);

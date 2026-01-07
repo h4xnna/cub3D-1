@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 13:25:35 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/07 12:37:55 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/07 16:19:37 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	is_prefix(char *str)
 {
 	if (!ft_strcmp(str, "NO") || !ft_strcmp(str, "EA") || !ft_strcmp(str, "SO")
 		|| !ft_strcmp(str, "WE") || !ft_strcmp(str, "D") || !ft_strcmp(str, "L")
-		|| !ft_strcmp(str, "skybox") || !ft_strcmp(str, "FT"))
+		|| !ft_strcmp(str, "skybox") || !ft_strcmp(str, "floor"))
 		return (SUCCESS);
 	return (FAILURE);
 }

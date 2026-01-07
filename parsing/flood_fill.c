@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 12:53:12 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/07 15:43:06 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/07 16:19:19 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,12 @@ int	pars_info(t_info_pars *pars, t_map_info *infos)
 	{
 		infos->skybox = ft_strdup(pars->line_split[1]);
 		infos->has_skybox = false;
+	}
+	if (!infos->floor && !ft_strcmp(pars->line_split[0], "floor")
+		&& is_html_color(pars->line_split[1]) == SUCCESS)
+	{
+		infos->floor = ft_strdup(pars->line_split[1]);
+		infos->has_floor = false;
 	}
 	infos->count_info += 1;
 	return (SUCCESS);
