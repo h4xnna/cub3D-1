@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/07 16:36:14 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/08 10:46:52 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,10 @@
 # define RED "\033[1;31m"
 # define RESET "\033[0m"
 # define MOVE_SPEED 3
+# define FLOOR_W   0.50f
+# define REFLECT_W 0.25f
+# define WALL_W    0.25f
+
 
 typedef struct s_color
 {

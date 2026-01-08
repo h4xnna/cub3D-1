@@ -6,11 +6,24 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/04 12:23:04 by pacda-si          #+#    #+#             */
-/*   Updated: 2026/01/07 16:42:18 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/08 10:51:06 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../cub3d.h"
+
+static void	splice_colors(t_color *floort, t_color *wall, t_color *reflect)
+{
+	floort->r = (floor_color >> 16) & 0xFF;
+	floort->g = (floor_color >> 8) & 0xFF;
+	floort->b = floor_color & 0xFF;
+	reflect->r = (reflected_color >> 16) & 0xFF;
+	reflect->g = (reflected_color >> 8) & 0xFF;
+	reflect->b = reflected_color & 0xFF;
+	wall->r = (wall_color >> 16) & 0xFF;
+	wall->g = (wall_color >> 8) & 0xFF;
+	wall->b = wall_color & 0xFF;
+}
 
 static unsigned int	make_final_color(unsigned int floor_color,
 		unsigned int reflected_color, unsigned int wall_color)
@@ -21,21 +34,13 @@ static unsigned int	make_final_color(unsigned int floor_color,
 	t_color			final;
 	unsigned int	final_color;
 
-	floort.r = (floor_color >> 16) & 0xFF;
-	floort.g = (floor_color >> 8) & 0xFF;
-	floort.b = floor_color & 0xFF;
-	reflect.r = (reflected_color >> 16) & 0xFF;
-	reflect.g = (reflected_color >> 8) & 0xFF;
-	reflect.b = reflected_color & 0xFF;
-	wall.r = (wall_color >> 16) & 0xFF;
-	wall.g = (wall_color >> 8) & 0xFF;
-	wall.b = wall_color & 0xFF;
-	final.r = (uint8_t)((floort.r * (1.0 - REFLECTIONSTRENGTH * 3) + reflect.r
-				* REFLECTIONSTRENGTH + wall.r * REFLECTIONSTRENGTH * 2));
-	final.g = (uint8_t)((floort.g * (1.0 - REFLECTIONSTRENGTH * 3) + reflect.g
-				* REFLECTIONSTRENGTH + wall.g * REFLECTIONSTRENGTH * 2));
-	final.b = (uint8_t)((floort.b * (1.0 - REFLECTIONSTRENGTH * 3) + reflect.b
-				* REFLECTIONSTRENGTH + wall.b * REFLECTIONSTRENGTH * 2));
+	splice_colors(&floort, &wall, &reflect);
+	final.r = (uint8_t)((floort.r * FLOOR_W + reflect.r
+				* REFLECT_W + wall.r * WALL_W));
+	final.g = (uint8_t)((floort.g * FLOOR_W + reflect.g
+				* REFLECT_W + wall.g * WALL_W));
+	final.b = (uint8_t)((floort.b * FLOOR_W + reflect.b
+				* REFLECT_W + wall.b * WALL_W));
 	final_color = (final.r << 16) | (final.g << 8) | final.b;
 	return (final_color);
 }
