@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 12:53:12 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/07 16:19:19 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/08 10:42:17 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ static int	is_html_color(char *color)
 		return (FAILURE);
 	while (color[i])
 	{
-		if (!(color[i] >= '0' && color[i] <= '9') && !(color[i] >= 'A' && color[i] <= 'F'))
+		if (!(color[i] >= '0' && color[i] <= '9') && !(color[i] >= 'A' && color[i] <= 'F')
+			&& !(color[i] >= 'a' && color[i] <= 'f'))
 			return(FAILURE);
 		i++;
 	}
