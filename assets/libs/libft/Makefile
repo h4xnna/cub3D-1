@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: hmimouni <hmimouni@student.42.fr>          +#+  +:+       +#+         #
+#    By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/15 18:49:03 by hmimouni          #+#    #+#              #
-#    Updated: 2024/11/18 14:34:13 by hmimouni         ###   ########.fr        #
+#    Updated: 2026/01/10 16:25:47 by pacda-si         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,7 @@ CFLAGS = -I${INCLUDES} -Wall -Wextra -Werror
 INCLUDES =	./
 OBJS =		${SRCS:.c=.o}
 SRCS =		./ft_atoi.c					\
+			./ft_atoll.c				\
 			./ft_bzero.c				\
 			./ft_calloc.c				\
 			./ft_isalnum.c				\
@@ -35,8 +36,10 @@ SRCS =		./ft_atoi.c					\
 			./ft_putendl_fd.c			\
 			./ft_putnbr_fd.c			\
 			./ft_putstr_fd.c			\
+			./ft_realloc.c				\
 			./ft_split.c				\
 			./ft_strchr.c				\
+			./ft_strcmp.c				\
 			./ft_strdup.c				\
 			./ft_striteri.c				\
 			./ft_strjoin.c				\

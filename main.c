@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:26:45 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/07 15:26:51 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/10 15:55:16 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,35 +29,29 @@ void	final_initializations(t_data *data)
 	normalize_vector(&data->player->planex, &data->player->planey);
 }
 
-static int	is_enclosed(t_door *door, char **map)
+int	init_data(t_data **data, int fd)
 {
-	if (map[door->y][door->x + 1] == '1' && map[door->y][door->x - 1] == '1'
-		&& map[door->y + 1][door->x] == '0' && map[door->y
-			- 1][door->x] == '0')
-			return (SUCCESS);
-	else if (map[door->y][door->x + 1] == '0' && map[door->y][door->x - 1] == '0'
-		&& map[door->y + 1][door->x] == '1' && map[door->y
-			- 1][door->x] == '1')
-			return (SUCCESS);
-	return (FAILURE);
-}
-
-void	check_doors(t_data *data)
-{
-	char	**map;
-	t_door	*door;
-
-	map = data->map_pars->map;
-	door = data->doors;
-	while (door)
-	{
-		if (is_enclosed(door, map) == FAILURE)
-		{
-			error_message("Doors aren't setup the right way");
-			clean_exit(data);
-		}
-		door = door->next;
-	}
+	(*data) = ft_calloc(1, sizeof(t_data));
+	if (!*data)
+		return (close(fd), FAILURE);
+	(*data)->fd = fd;
+	(*data)->map_pars = ft_calloc(1, sizeof(t_map_pars));
+	(*data)->map_info = ft_calloc(1, sizeof(t_map_info));
+	(*data)->info_pars = ft_calloc(1, sizeof(t_info_pars));
+	if (!(*data)->map_pars || !(*data)->map_info || !(*data)->info_pars)
+		return (FAILURE);
+	(*data)->map_pars->map = ft_calloc(1, sizeof(char *));
+	if (!(*data)->map_pars->map)
+		return (FAILURE);
+	(*data)->player = ft_calloc(1, sizeof(t_player));
+	(*data)->raycast = ft_calloc(1, sizeof(t_raycast));
+	(*data)->texture = ft_calloc(1, sizeof(t_texture));
+	if (!(*data)->player || !(*data)->raycast || !(*data)->texture)
+		return (FAILURE);
+	(*data)->win = init_win();
+	if (!(*data)->win)
+		return (FAILURE);
+	return (SUCCESS);
 }
 
 int	initialize_everything(t_data **data, int ac, char **av)
@@ -85,31 +79,6 @@ int	initialize_everything(t_data **data, int ac, char **av)
 	make_doors(*data);
 	check_doors(*data);
 	final_initializations((*data));
-	return (SUCCESS);
-}
-
-int	init_data(t_data **data, int fd)
-{
-	(*data) = ft_calloc(1, sizeof(t_data));
-	if (!*data)
-		return (close(fd), FAILURE);
-	(*data)->fd = fd;
-	(*data)->map_pars = ft_calloc(1, sizeof(t_map_pars));
-	(*data)->map_info = ft_calloc(1, sizeof(t_map_info));
-	(*data)->info_pars = ft_calloc(1, sizeof(t_info_pars));
-	if (!(*data)->map_pars || !(*data)->map_info || !(*data)->info_pars)
-		return (FAILURE);
-	(*data)->map_pars->map = ft_calloc(1, sizeof(char *));
-	if (!(*data)->map_pars->map)
-		return (FAILURE);
-	(*data)->player = ft_calloc(1, sizeof(t_player));
-	(*data)->raycast = ft_calloc(1, sizeof(t_raycast));
-	(*data)->texture = ft_calloc(1, sizeof(t_texture));
-	if (!(*data)->player || !(*data)->raycast || !(*data)->texture)
-		return (FAILURE);
-	(*data)->win = init_win();
-	if (!(*data)->win)
-		return (FAILURE);
 	return (SUCCESS);
 }
 

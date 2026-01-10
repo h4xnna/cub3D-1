@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 08:00:02 by pacda-si          #+#    #+#             */
-/*   Updated: 2026/01/08 14:39:37 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/10 16:48:59 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,5 +82,23 @@ void	draw_skybox(t_data *data)
 	{
 		draw_skybox_pixel(data, y, offset_x);
 		y++;
+	}
+}
+
+void	draw_skycolor(t_data *data)
+{
+	int	x;
+	int	y;
+
+	x = 0;
+	while (x < WIDTH)
+	{
+		y = 0;
+		while (y <= HEIGHT / 2)
+		{
+			my_mlx_pixel_put(data->win, x, y, data->texture->skycolor);
+			y++;
+		}
+		x++;
 	}
 }

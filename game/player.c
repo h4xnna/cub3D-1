@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/18 16:51:35 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/08 18:12:13 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/10 16:47:47 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	set_player_direction(t_player *player, char direction)
 	}
 }
 
-void	rotate_matrix(t_data *data, double current_speed)
+static void	rotate_matrix(t_data *data, double current_speed)
 {
 	double	old_dir_x;
 	double	old_plane_x;
@@ -101,25 +101,3 @@ void	player_position(t_data *data)
 			data->player->exited = 1;
 	}
 }
-
-// int	rgb_to_hex_int(t_data *data, int *rgb)
-// {
-// 	int	r;
-// 	int	g;
-// 	int	b;
-
-// 	if (!rgb)
-// 	{
-// 		error_message(" RGB pointer is NULL.");
-// 		clean_exit(data);
-// 	}
-// 	r = rgb[0];
-// 	g = rgb[1];
-// 	b = rgb[2];
-// 	if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
-// 	{
-// 		error_message("Valeur RGB invalide.");
-// 		clean_exit(data);
-// 	}
-// 	return ((r << 16) | (g << 8) | b);
-// }

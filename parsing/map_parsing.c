@@ -6,11 +6,21 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 15:26:04 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/06 11:33:56 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/10 16:20:36 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+static int	skip_space(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i])
+		i++;
+	return (i);
+}
 
 int	check_char(char *line, t_map_pars *map)
 {
@@ -89,35 +99,4 @@ int	add_line_to_map(t_map_pars *map, char *line)
 		return (free_splif(new_map, i), FAILURE);
 	map->map = new_map;
 	return (SUCCESS);
-}
-
-int	is_full_of_spaces(char *line)
-{
-	int	i;
-
-	i = 0;
-	while (line[i])
-	{
-		if (line[i] != ' ' && line[i] != '\t')
-			return (FAILURE);
-		i++;
-	}
-	return (SUCCESS);
-}
-
-void	*ft_realloc(void *ptr, size_t new_size)
-{
-	void	*new_ptr;
-
-	if (!ptr)
-		return (malloc(new_size));
-	if (new_size == 0)
-	{
-		free(ptr);
-		return (NULL);
-	}
-	new_ptr = malloc(new_size);
-	if (!new_ptr)
-		return (NULL);
-	return (new_ptr);
 }

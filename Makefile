@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2026/01/10 17:00:05 by pacda-si          #+#    #+#              #
+#    Updated: 2026/01/10 17:01:07 by pacda-si         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 BOLD            = "\033[1m"
 RESET           = "\033[0m"
 GREEN           = "\033[0;32m"
@@ -16,13 +28,10 @@ DEEP_ORANGE     = "\033[38;5;208m"
 PURPLE_RAVE     = "\033[38;5;129m"
 CYAN_SHOCK      = "\033[38;5;51m"
 
-
-NAME	= cube
+NAME	= cub3D
 CC		= cc
-# CFLAGS	= -Wall -Werror -Wextra -g3 -Wno-error=cast-function-type
-CFLAGS	= -Wall -Werror -Wextra -g3 -Ofast -march=native -ffast-math -Wno-error=cast-function-type
+CFLAGS	= -Wall -Werror -Wextra -g3 -Ofast -march=native -ffast-math -Wno-cast-function-type
 # CFLAGS	= -Wall -Wextra -Werror -O3 -march=native -ffast-math
-# CFLAGS	= -Wall -Werror -Wextra  -g3
 
 PARSING 	=		parsing/
 GAME		=		game/
@@ -97,12 +106,7 @@ $(MLX_A) :
 	@make -sC $(MLX_PATH) -j
 	@echo $(NEON_GREEN)$(BOLD)"Library Compiled. ✔\n"
 
-# ${NAME}: $(MLX_PATH) $(MLX_A) $(HEADERS) ${OBJS} $(LIBFT)
-# 	@echo $(LIGHT_GREEN) "Compilation..."$(BOLD)
-# 	@${CC} ${CFLAGS} ${OBJS} $(LIBFT) $(MLX_A) $(MLX_FLAGS) -o ${NAME}
-# 	@echo $(LIGHT_GREEN)"Compilation réussie ✔"$(RESET)
-
-${NAME}: $(HEADERS) ${OBJS} $(LIBFT)
+${NAME}: $(MLX_PATH) $(MLX_A) $(HEADERS) ${OBJS} $(LIBFT)
 	@echo $(LIGHT_GREEN) "Compilation..."$(BOLD)
 	@${CC} ${CFLAGS} ${OBJS} $(LIBFT) $(MLX_A) $(MLX_FLAGS) -o ${NAME}
 	@echo $(LIGHT_GREEN)"Compilation réussie ✔"$(RESET)
@@ -119,15 +123,10 @@ clean:
 leak : all
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./cube ./assets/maps/map.cub
 
-# fclean: clean
-# 	@rm -rf ${NAME}
-# 	@rm -rf $(LIBFT_NAME)
-# 	@rm -rf $(MLX_PATH)
-# 	@echo $(BROWN)fclean reussi
-
 fclean: clean
 	@rm -rf ${NAME}
-	@rm -rf $(LIBFT_NAME)
+	@rm -rf $(LIBFT)
+	@rm -rf $(MLX_PATH)
 	@echo $(BROWN)fclean reussi
 
 re: fclean all

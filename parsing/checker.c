@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 15:17:32 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/08 17:24:37 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/10 16:14:21 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ int	check_infos(t_map_info *info)
 	return (SUCCESS);
 }
 
-int	check_cub(char *str)
+static int	check_cub(char *str)
 {
 	int	i;
 

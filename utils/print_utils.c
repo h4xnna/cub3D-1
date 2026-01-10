@@ -6,11 +6,24 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/30 10:16:16 by pacda-si          #+#    #+#             */
-/*   Updated: 2026/01/07 13:59:04 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/10 16:13:22 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
+
+void	print_doors(t_door *doors)
+{
+	int	i;
+
+	i = 1;
+	while (doors)
+	{
+		printf("Door [%d], x : %d, y : %d\n", i, doors->x, doors->y);
+		doors = doors->next;
+		i++;
+	}
+}
 
 void	print_char(char **str)
 {

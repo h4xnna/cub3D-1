@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 07:53:02 by pacda-si          #+#    #+#             */
-/*   Updated: 2026/01/08 17:40:35 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/10 16:48:44 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,24 +22,6 @@ static void	get_delta_time(t_data *data)
 	if (data->player->delta_time >= 1)
 		data->player->delta_time = 0.016;
 	last_time = current_time;
-}
-
-void	draw_skycolor(t_data *data)
-{
-	int	x;
-	int	y;
-
-	x = 0;
-	while (x < WIDTH)
-	{
-		y = 0;
-		while (y <= HEIGHT / 2)
-		{
-			my_mlx_pixel_put(data->win, x, y, data->texture->skycolor);
-			y++;
-		}
-		x++;
-	}
 }
 
 static void	draw_sky(t_data *data)

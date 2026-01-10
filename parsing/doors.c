@@ -6,26 +6,43 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 16:16:44 by pacda-si          #+#    #+#             */
-/*   Updated: 2026/01/07 11:44:12 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/10 16:14:07 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
-void	print_doors(t_door *doors)
+static int	is_enclosed(t_door *door, char **map)
 {
-	int	i;
+	if (map[door->y][door->x + 1] == '1' && map[door->y][door->x - 1] == '1'
+		&& map[door->y + 1][door->x] == '0' && map[door->y - 1][door->x] == '0')
+		return (SUCCESS);
+	else if (map[door->y][door->x + 1] == '0' && map[door->y][door->x
+		- 1] == '0' && map[door->y + 1][door->x] == '1' && map[door->y
+		- 1][door->x] == '1')
+		return (SUCCESS);
+	return (FAILURE);
+}
 
-	i = 1;
-	while (doors)
+void	check_doors(t_data *data)
+{
+	char	**map;
+	t_door	*door;
+
+	map = data->map_pars->map;
+	door = data->doors;
+	while (door)
 	{
-		printf("Door [%d], x : %d, y : %d\n", i, doors->x, doors->y);
-		doors = doors->next;
-		i++;
+		if (is_enclosed(door, map) == FAILURE)
+		{
+			error_message("Doors aren't setup the right way");
+			clean_exit(data);
+		}
+		door = door->next;
 	}
 }
 
-void	doors_add_back(t_door **doors, t_door *new)
+static void	doors_add_back(t_door **doors, t_door *new)
 {
 	t_door	*head;
 
@@ -42,7 +59,7 @@ void	doors_add_back(t_door **doors, t_door *new)
 	head->next = new;
 }
 
-t_door	*new_door(int x, int y)
+static t_door	*new_door(int x, int y)
 {
 	t_door	*new;
 

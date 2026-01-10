@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 13:25:35 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/08 17:32:57 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/10 16:22:43 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,6 @@ int	len_tab(char **tab)
 	return (i);
 }
 
-int	ft_strcmp(char *str, char *str2)
-{
-	int	i;
-
-	i = 0;
-	while (str[i] && str2[i] && str[i] == str2[i])
-		i++;
-	return (str[i] - str2[i]);
-}
-
 char	*remove_newline(char *line)
 {
 	int	len;
@@ -42,7 +32,7 @@ char	*remove_newline(char *line)
 	return (line);
 }
 
-int	is_fichier(char *path)
+int	is_file(char *path)
 {
 	if ((path[0] == '.' && path[1] == '/') || (path[0] == '.' && path[1] == '.'
 			&& path[2] == '/'))

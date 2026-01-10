@@ -6,12 +6,15 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/08 19:33:20 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/10 16:58:20 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
+
+//!----------------------INCLUDES-----------------------//
+
 # include "./assets/libs/gnl/get_next_line.h"
 # include "./assets/libs/libft/libft.h"
 # include "./assets/libs/minilibx-linux/mlx.h"
@@ -22,6 +25,10 @@
 # include <stdlib.h>
 # include <sys/time.h>
 # include <time.h>
+
+//!-----------------------------------------------------//
+
+//!----------------------DEFINES------------------------//
 
 # define PI 3.1415926535
 # define WIDTH 1280
@@ -47,10 +54,13 @@
 # define RED "\033[1;31m"
 # define RESET "\033[0m"
 # define MOVE_SPEED 3
-# define FLOOR_W   0.70f
+# define FLOOR_W 0.70f
 # define REFLECT_W 0.15f
-# define WALL_W    0.15f
+# define WALL_W 0.15f
 
+//!-----------------------------------------------------//
+
+//!----------------------STRUCTURES---------------------//
 
 typedef struct s_color
 {
@@ -83,15 +93,6 @@ typedef struct s_map_pars
 	int					y_start;
 	int					map_started;
 }						t_map_pars;
-
-// typedef struct s_init
-// {
-// 	t_map_pars			**map;
-// 	t_map_info			**infos;
-// 	t_info_pars			**pars;
-// 	t_data				**data;
-// 	int					*fd;
-// }	t_init;
 
 typedef struct s_player
 {
@@ -234,6 +235,12 @@ typedef struct s_data
 	char				*fps;
 }						t_data;
 
+//!-----------------------------------------------------//
+
+//!----------------FUNCTIONS PROTOTYPES-----------------//
+
+//*-------------INLINE FUNCTIONS----------------//
+
 static inline int	get_window_pixel(t_win *win, int x, int y)
 {
 	char	*dst;
@@ -290,128 +297,180 @@ static inline int	get_texture_pixel(t_img *img, int x, int y)
 	return (*(unsigned int *)dst);
 }
 
-// utils_pars1
-t_img					*load_one_texture(t_data *data, t_img *tex, char *path);
-unsigned int			get_color_from_html(char *color);
-void					free_doors(t_data *data);
-void					free_animations(t_data *data);
+//*---------------------------------------------//
+
+//*--------------------GAME---------------------//
+
+//*-------RAYCASTING-------//
+
+// dda.c
+
+void					perform_dda(t_data *data, double *wall_x);
+
+// init.c
+
+void					init_raycasting(t_data *data, int x);
+
+// raycasting.c
+
+void					raycasting(t_data *data);
+
+// render_floor.c
+
+void					render_floor_pixel(t_data *data, int x, int p,
+						t_point floor_coords);
+
+//*-----------------------//
+
+// animation_loading.c
+
+void					load_animations(t_data *data);
+
+// animations.c
+
+void					display_overlay(t_data *data);
+void					update_animations(t_data *data);
+void					reset_all_animations(t_data *data);
+
+// doors.c
+
 void					update_doors(t_data *data);
 t_door					*find_door(t_door *doors, int y, int x);
-void					update_animations(t_data *data);
-void					display_overlay(t_data *data);
-void					free_textures(t_data *data);
-void					free_data(t_data *data);
-void					clean_exit(t_data *data);
-void					free_texture(t_img *texture, void *mlx);
 
-int						init_data(t_data **data, int fd);
+// drawing.c
+
 void					draw_skybox(t_data *data);
 void					draw_image_to_buffer(t_win *win, t_img *src, int x_off,
 						int y_off);
-void					rotate_player(t_data *data, int mouse_x);
-void					print_doors(t_door *doors);
-void					make_doors(t_data *data);
-t_door					*find_door(t_door *doors, int y, int x);
+void					draw_animation(t_data *data, t_animation *anim, int x,
+						int y);
+void					draw_skycolor(t_data *data);
+
+// events.c
+
+int						mouse_info(int x, int y, t_data *data);
 int						mouse_hook(int keycode, int x, int y, t_data *data);
-int						len_tab(char **tab);
-char					*remove_newline(char *line);
-int						ft_strcmp(char *str, char *str2);
-int						is_fichier(char *path);
-int						is_prefix(char *str);
-void					free_splif(char **out, int i);
+int						key_release(int keycode, t_data *data);
+int						key_press(int keycode, t_data *data);
 
-// utils_pars2
-void					print_info(t_map_info info, t_map_pars map);
-void					fill_struct(t_map_info *infos, char *direction,
-						char *path);
-void					stock_colors(t_map_info *infos, t_info_pars *pars,
-						int nb, int i);
-int						allouer_colors(t_info_pars *pars, t_map_info *infos);
-void					print_char(char **str);
+// minimap.c
 
-// utils_pars3
-void					error_message(char *error);
-int						check_infos(t_map_info *info);
-int						check_cub(char *str);
-int						checks_args(int ac, char **av);
-void					*ft_realloc(void *ptr, size_t new_size);
-
-// pars_map
-int						check_positions(t_map_pars *map, char *line);
-int						add_line_to_map(t_map_pars *map, char *line);
-int						check_char(char *line, t_map_pars *map);
-int						is_full_of_spaces(char *line);
-int						check_fd(int *fd, char **av);
-void					player_position(t_data *data);
-
-// free_pars1
-void					free_info(t_map_info *info);
-void					free_tab(char **tab);
-void					free_pars(t_info_pars *pars);
-
-// pars_map2
-void					print_char(char **str);
-int						print_tab(int *tab);
-int						skip_space(char *line);
-long long				ft_atoll(const char *nptr);
-
-// info_pars4
-int						pars_info(t_info_pars *pars, t_map_info *infos);
-int						flood_fill(t_map_pars *map);
-int						count_coma(char *line);
-int						remplir_colors(t_info_pars *pars, t_map_info *infos);
-
-// info_pars6
-int						pars_info_else(t_info_pars *pars, t_map_info *infos);
-int						pars_info(t_info_pars *pars, t_map_info *infos);
-
-// buttons
-void					buttons_a(t_player *player, t_map_pars *map);
-void					buttons_d(t_player *player, t_map_pars *map);
-void					buttons_w(t_player *player, t_map_pars *map);
-void					buttons_s(t_player *player, t_map_pars *map);
-
-// draw_map2D
 void					draw_minimap(t_data *data);
-bool					is_walkable(char c);
-double					get_time_seconds(void);
-void					make_color_from_uint(unsigned int color, t_color *rgb);
-void					reset_all_animations(t_data *data);
 
-// player_position
+// movement.c
+
+void					buttons_w(t_player *player, t_map_pars *map);
+void					buttons_a(t_player *player, t_map_pars *map);
+void					buttons_s(t_player *player, t_map_pars *map);
+void					buttons_d(t_player *player, t_map_pars *map);
+
+// player.c
+
+void					player_position(t_data *data);
+void					rotate_player(t_data *data, int mouse_x);
 void					set_player_direction(t_player *player, char direction);
-int						rgb_to_hex_int(t_data *data, int *rgb);
 
-// exec../texture
-void					load_animations(t_data *data);
+// render.c
+
+int						render(t_data *data);
+
+// textures.c
+
 void					load_textures(t_data *data);
+t_img					*load_one_texture(t_data *data, t_img *tex, char *path);
 
-// exec../ util_win
-void					clear_window(t_win *win);
-t_win					*init_win(void);
+// utils.c
+
+void					make_color_from_uint(unsigned int color, t_color *rgb);
+double					get_time_seconds(void);
+bool					is_walkable(char c);
+void					normalize_vector(double *x, double *y);
+unsigned int			get_color_from_html(char *color);
+
+// window.c
+
 void					free_win(t_win *win);
-void					raycasting(t_data *data);
+t_win					*init_win(void);
+void					clear_window(t_win *win);
 
-// utils_main
-void					perform_dda(t_data *data, double *wall_x);
-void					init_raycasting(t_data *data, int x);
-void					render_floor_pixel(t_data *data, int x, int p,
-						t_point floor_coords);
-int						parse_info_line(char *line, t_info_pars *pars,
-						t_map_info *infos);
-int						parse_error(char *msg);
-int						final_checks(t_map_info *infos, t_map_pars *map);
+//*---------------------------------------------//
+
+//*-------------------PARSING-------------------//
+
+//	checker.c
+
+int						check_fd(int *fd, char **av);
+int						checks_args(int ac, char **av);
+int						check_infos(t_map_info *info);
+void					error_message(char *error);
+
+// doors.c
+
+void					make_doors(t_data *data);
+void					check_doors(t_data *data);
+
+// file_parsing.c
+
 int						parse_file(int fd, t_map_pars *map, t_map_info *infos,
 						t_info_pars *pars);
+int						final_checks(t_map_info *infos, t_map_pars *map);
+int						parse_error(char *msg);
 
-// utils_main2
-int						render(t_data *data);
+// flood_fill.c
+
+int						flood_fill(t_map_pars *map);
+int						pars_info(t_info_pars *pars, t_map_info *infos);
+
+// map_parsing.c
+
+int						add_line_to_map(t_map_pars *map, char *line);
+int						check_positions(t_map_pars *map, char *line);
+int						check_char(char *line, t_map_pars *map);
+
+// parsing_utils.c
+
+int						is_prefix(char *str);
+int						is_file(char *path);
+char					*remove_newline(char *line);
+int						len_tab(char **tab);
+
+// parsing_utils2.c
+
+int						is_full_of_spaces(char *line);
+void					pass_chars2(const char *s, int *i, int *minus);
+
+//*---------------------------------------------//
+
+//*--------------------UTILS--------------------//
+
+// exit.c
+
 void					clean_exit(t_data *data);
-int						mouse_info(int x, int y, t_data *data);
-int						key_press(int keycode, t_data *data);
-int						key_release(int keycode, t_data *data);
+void					free_data(t_data *data);
+void					free_textures(t_data *data);
+void					free_texture(t_img *texture, void *mlx);
 
-// animation
-void					normalize_vector(double *x, double *y);
+// free.c
+
+void					free_pars(t_info_pars *pars);
+void					free_tab(char **tab);
+void					free_info(t_map_info *info);
+
+// free2.c
+
+void					free_doors(t_data *data);
+void					free_animations(t_data *data);
+void					free_splif(char **out, int i);
+
+// print_utils.c
+
+void					print_info(t_map_info info, t_map_pars map);
+int						print_tab(int *tab);
+void					print_char(char **str);
+void					print_doors(t_door *doors);
+
+//*---------------------------------------------//
+
+//!-----------------------------------------------------//
 
 #endif
