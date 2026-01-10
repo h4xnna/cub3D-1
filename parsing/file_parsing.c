@@ -6,13 +6,13 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/26 14:38:55 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/06 11:55:56 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/10 17:18:45 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
-int	parse_info_line(char *line, t_info_pars *pars, t_map_info *infos)
+static int	parse_info_line(char *line, t_info_pars *pars, t_map_info *infos)
 {
 	pars->line_split = ft_split(line, ' ');
 	if (!pars->line_split)

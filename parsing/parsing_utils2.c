@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 18:07:44 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/06 11:56:07 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/10 17:23:03 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,27 @@ int	skip_space(char *line)
 	return (i);
 }
 
-int	ft_isspecial2(char c)
+static int	ft_isspecial2(char c)
 {
 	if (c == ' ' || c == '\t' || c == '\n' || c == '\v')
 		return (1);
 	else if (c == '\f' || c == '\r')
 		return (1);
 	return (0);
+}
+
+int	is_full_of_spaces(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i])
+	{
+		if (ft_isspecial2(line[i]) == 0)
+			return (FAILURE);
+		i++;
+	}
+	return (SUCCESS);
 }
 
 void	pass_chars2(const char *s, int *i, int *minus)
@@ -53,23 +67,4 @@ void	pass_chars2(const char *s, int *i, int *minus)
 	}
 	while (s[*i] && s[*i] == '0')
 		*i += 1;
-}
-
-long long	ft_atoll(const char *nptr)
-{
-	long long	out;
-	int			i;
-	int			minus;
-
-	i = 0;
-	out = 0;
-	minus = 1;
-	pass_chars2(nptr, &i, &minus);
-	while (ft_isdigit(nptr[i]))
-	{
-		out *= 10;
-		out += nptr[i] - '0';
-		i++;
-	}
-	return (out * minus);
 }

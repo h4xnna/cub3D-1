@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 18:14:37 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/30 10:12:56 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/10 17:14:05 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,6 @@
 int	render(t_data *data)
 {
 	clear_window(data->win);
-	draw_rays_2d(data);
+	raycasting(data);
 	return (0);
 }

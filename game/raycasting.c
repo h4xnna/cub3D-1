@@ -6,13 +6,13 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/08 13:51:22 by hmimouni          #+#    #+#             */
-/*   Updated: 2025/12/30 10:15:26 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/10 17:25:43 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
-void	init_step_side_dist(t_data *data)
+static void	init_step_side_dist(t_data *data)
 {
 	if (data->raycast->raydirx < 0)
 	{
@@ -43,7 +43,6 @@ void	init_step_side_dist(t_data *data)
 static void	init_raycasting(t_data *data, int x)
 {
 	data->raycast->camerax = 2 * x / (double)WIDTH - 1;
-	// calcul dir rayon chaque colonne
 	data->raycast->raydirx = data->player->pdirx + data->player->planex
 		* data->raycast->camerax;
 	data->raycast->raydiry = data->player->pdiry + data->player->planey
@@ -53,22 +52,18 @@ static void	init_raycasting(t_data *data, int x)
 	if (data->raycast->raydiry == 0)
 		data->raycast->raydiry = 0.001;
 	data->raycast->mapx = (int)data->player->px;
-	// convert pos joeurs coordonne case map
 	data->raycast->mapy = (int)data->player->py;
 	data->raycast->delta_dist_x = fabs(1 / data->raycast->raydirx);
-	// distance rayon parcourus jusqua ligne map
 	data->raycast->delta_dist_y = fabs(1 / data->raycast->raydiry);
-	// fabs = valeur positivie
 	init_step_side_dist(data);
 }
 
 static void	perform_dda(t_data *data)
 {
 	data->raycast->hit = 0;
-	while (data->raycast->hit == 0) // 0 = vertical
+	while (data->raycast->hit == 0)
 	{
 		if (data->raycast->sidedistx < data->raycast->side_dist_y)
-		// si rayon a frapper un mur vertical ou horizontal
 		{
 			data->raycast->sidedistx += data->raycast->delta_dist_x;
 			data->raycast->mapx += data->raycast->stepx;
@@ -83,12 +78,11 @@ static void	perform_dda(t_data *data)
 		if (data->map_pars->map[data->raycast->mapy]
 			&& (data->map_pars->map[data->raycast->mapy][data->raycast->mapx]
 			== '1'))
-			// si mur stop DDA
 			data->raycast->hit = 1;
 	}
 }
 
-void	draw_rays_2d(t_data *data)
+void	raycasting(t_data *data)
 {
 	int		x;
 	int		tex_x;

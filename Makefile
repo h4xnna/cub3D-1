@@ -17,16 +17,24 @@ PURPLE_RAVE     = "\033[38;5;129m"
 CYAN_SHOCK      = "\033[38;5;51m"
 
 
-NAME	= cube
+NAME	= cub3D
 CC		= cc 
 CFLAGS	= -Wall -Werror -Wextra -g3
 
 PARSING =	parsing/
-EXEC	=	exec/
+GAME	=	game/
 UTILS	=	utils/
 
 SRCS	=	./assets/libs/gnl/get_next_line.c\
 			main.c \
+			$(GAME)camera.c\
+			$(GAME)keys.c\
+			$(GAME)player.c\
+			$(GAME)raycasting_helper.c\
+			$(GAME)raycasting.c\
+			$(GAME)render.c\
+			$(GAME)textures.c\
+			$(GAME)window.c\
 			$(PARSING)checker.c\
 			$(PARSING)file_parsing.c\
 			$(PARSING)flood_fill.c\
@@ -34,14 +42,6 @@ SRCS	=	./assets/libs/gnl/get_next_line.c\
 			$(PARSING)parsing_utils.c  \
 			$(PARSING)parsing_utils2.c \
 			$(PARSING)storage.c\
-			$(EXEC)camera.c\
-			$(EXEC)keys.c\
-			$(EXEC)player.c\
-			$(EXEC)raycasting_helper.c\
-			$(EXEC)raycasting.c\
-			$(EXEC)render.c\
-			$(EXEC)texture.c\
-			$(EXEC)window.c\
 			$(UTILS)exit.c\
 			$(UTILS)free.c\
 			$(UTILS)print_utils.c
@@ -53,9 +53,7 @@ MLX_A       = $(MLX_PATH)libmlx.a
 MLX_PATH    = ./assets/libs/minilibx-linux/
 MLX_FLAGS   = -lm -lbsd -lXext -lX11
  
-
 INCL	=	-I. -I./assets/libs/libft 
-
 
 LIBFT_PATH        = ./assets/libs/libft/
 LIBFT_NAME        = libft.a
@@ -86,11 +84,6 @@ ${NAME}: $(MLX_PATH) $(MLX_A) $(HEADERS) ${OBJS} $(LIBFT)
 	@${CC} ${CFLAGS} ${OBJS} $(LIBFT) $(MLX_A) $(MLX_FLAGS) -o ${NAME}
 	@echo $(LIGHT_GREEN)"Compilation réussie ✔"$(RESET)
 
-# ${NAME}: $(HEADERS) ${OBJS} $(LIBFT)
-# 	@echo $(LIGHT_GREEN) "Compilation..."$(BOLD)
-# 	@${CC} ${CFLAGS} ${OBJS} $(LIBFT) $(MLX_A) $(MLX_FLAGS) -o ${NAME}
-# 	@echo $(LIGHT_GREEN)"Compilation réussie ✔"$(RESET)
-
 $(LIBFT):
 	@echo "Making libft..."
 	@make -sC $(LIBFT_PATH)
@@ -105,7 +98,7 @@ leak : all
 
 fclean: clean
 	@rm -rf ${NAME}
-	@rm -rf $(LIBFT_NAME)
+	@rm -rf $(LIBFT)
 	@rm -rf $(MLX_PATH)
 	@echo $(BROWN)fclean reussi
 

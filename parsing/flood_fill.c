@@ -6,13 +6,13 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 12:53:12 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/06 11:56:00 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/10 17:20:50 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
-int	count_coma(char *line)
+static int	count_coma(char *line)
 {
 	int	i;
 	int	j;
@@ -39,7 +39,7 @@ int	pars_info(t_info_pars *pars, t_map_info *infos)
 		return (FAILURE);
 	if (!pars->line_split[0])
 		return (SUCCESS);
-	if (!is_direction(pars->line_split[0]) && !is_fichier(pars->line_split[1]))
+	if (!is_direction(pars->line_split[0]) && !is_file(pars->line_split[1]))
 	{
 		fill_struct(infos, pars->line_split[0], pars->line_split[1]);
 		infos->count_info += 1;
@@ -60,7 +60,7 @@ int	pars_info(t_info_pars *pars, t_map_info *infos)
 	return (SUCCESS);
 }
 
-int	flood_fill_helper(char **map, int x, int y)
+static int	flood_fill_helper(char **map, int x, int y)
 {
 	if (y < 0 || !map[y] || x < 0 || map[y][x] == '\0')
 		return (0);
@@ -85,7 +85,7 @@ int	flood_fill_helper(char **map, int x, int y)
 	return (1);
 }
 
-char	**clone_map(char **map)
+static char	**clone_map(char **map)
 {
 	char	**new_map;
 	int		i;

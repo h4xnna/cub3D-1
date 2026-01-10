@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 18:09:43 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/30 10:13:13 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/10 17:25:56 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	get_perp_wall_dist(t_data *data)
 			- data->raycast->delta_dist_x;
 	else
 		data->raycast->perpwall_dist = data->raycast->side_dist_y
-			- data->raycast->delta_dist_y; // fish eyes fix
+			- data->raycast->delta_dist_y;
 }
 
 void	calculate_line(t_data *data)
@@ -31,7 +31,6 @@ void	calculate_line(t_data *data)
 	data->raycast->draw_end = data->raycast->line_height / 2 + HEIGHT / 2;
 	if (data->raycast->draw_end >= HEIGHT)
 		data->raycast->draw_end = HEIGHT - 1;
-	//  calcul hauteur de la colonne a dessiner a lecran
 }
 
 void	get_wall_texture(t_data *data, t_img **texture)

@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/29 18:19:57 by pacda-si          #+#    #+#             */
-/*   Updated: 2025/12/30 10:11:55 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/10 17:23:26 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	free_splif(char **out, int i)
 	free(out);
 }
 
-static void	free_texture(t_img *texture, void *mlx)
+void	free_texture(t_img *texture, void *mlx)
 {
 	if (texture)
 	{
