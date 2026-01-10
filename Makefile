@@ -6,7 +6,7 @@
 #    By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/10 17:00:05 by pacda-si          #+#    #+#              #
-#    Updated: 2026/01/10 17:01:07 by pacda-si         ###   ########.fr        #
+#    Updated: 2026/01/10 17:26:23 by pacda-si         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ DEEP_ORANGE     = "\033[38;5;208m"
 PURPLE_RAVE     = "\033[38;5;129m"
 CYAN_SHOCK      = "\033[38;5;51m"
 
-NAME	= cub3D
+NAME	= cub3D_bonus
 CC		= cc
 CFLAGS	= -Wall -Werror -Wextra -g3 -Ofast -march=native -ffast-math -Wno-cast-function-type
 # CFLAGS	= -Wall -Wextra -Werror -O3 -march=native -ffast-math
