@@ -6,54 +6,39 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/28 14:11:06 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/07 16:29:36 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/08 19:24:33 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
+static void	free_and_null(void **ptr)
+{
+	if (ptr && *ptr)
+	{
+		free(*ptr);
+		*ptr = NULL;
+	}
+}
+
 static void	free_info_textures(t_map_info *info)
 {
 	if (info->east)
-	{
-		free(info->east);
-		info->east = NULL;
-	}
+		free_and_null((void **)&info->east);
 	if (info->south)
-	{
-		free(info->south);
-		info->south = NULL;
-	}
+		free_and_null((void **)&info->south);
 	if (info->west)
-	{
-		free(info->west);
-		info->west = NULL;
-	}
+		free_and_null((void **)&info->west);
 	if (info->north)
-	{
-		free(info->north);
-		info->north = NULL;
-	}
+		free_and_null((void **)&info->north);
 	if (info->exit)
-	{
-		free(info->exit);
-		info->exit = NULL;
-	}
+		free_and_null((void **)&info->exit);
 	if (info->door)
-	{
-		free(info->door);
-		info->door = NULL;
-	}
+		free_and_null((void **)&info->door);
 	if (info->skybox)
-	{
-		free(info->skybox);
-		info->skybox = NULL;
-	}
+		free_and_null((void **)&info->skybox);
 	if (info->floor)
-	{
-		free(info->skybox);
-		info->skybox = NULL;
-	}
+		free_and_null((void **)&info->floor);
 }
 
 void	free_info(t_map_info *info)

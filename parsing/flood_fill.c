@@ -6,11 +6,11 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 12:53:12 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/08 10:42:17 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/08 19:56:24 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3d.h"
+#include "../cub3d.h"
 
 static int	is_html_color(char *color)
 {
@@ -21,9 +21,9 @@ static int	is_html_color(char *color)
 		return (FAILURE);
 	while (color[i])
 	{
-		if (!(color[i] >= '0' && color[i] <= '9') && !(color[i] >= 'A' && color[i] <= 'F')
-			&& !(color[i] >= 'a' && color[i] <= 'f'))
-			return(FAILURE);
+		if (!(color[i] >= '0' && color[i] <= '9') && !(color[i] >= 'A'
+				&& color[i] <= 'F') && !(color[i] >= 'a' && color[i] <= 'f'))
+			return (FAILURE);
 		i++;
 	}
 	return (SUCCESS);
@@ -33,7 +33,7 @@ int	pars_info(t_info_pars *pars, t_map_info *infos)
 {
 	if (!is_prefix(pars->line_split[0]) && !is_fichier(pars->line_split[1]))
 		fill_struct(infos, pars->line_split[0], pars->line_split[1]);
-	if (!infos->skybox && !ft_strcmp(pars->line_split[0], "skybox")
+	if (!infos->skybox && !ft_strcmp(pars->line_split[0], "sky")
 		&& is_html_color(pars->line_split[1]) == SUCCESS)
 	{
 		infos->skybox = ft_strdup(pars->line_split[1]);

@@ -5,8 +5,8 @@ EA ./assets/textures/walls_floors/wall.xpm
 
 D ./assets/textures/walls_floors/wall.xpm
 L ./assets/textures/exits/hole.xpm
-skybox #0000FF
-floor #FFFFFF
+sky ./assets/textures/skies/1.xpm
+floor ./assets/textures/walls_floors/metal.xpm
 
                  111111111
              11110000111
@@ -28,6 +28,6 @@ floor #FFFFFF
 10000000000000001100000000001
 10000000000000001100000000001
 10000000000000001101010100001
-1100000111010101111101111000111
+11000001110101011111011110001
 11110111 1110101 1011110100L1
 11111111 1111111 111111111111

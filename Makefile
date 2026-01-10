@@ -19,9 +19,10 @@ CYAN_SHOCK      = "\033[38;5;51m"
 
 NAME	= cube
 CC		= cc
-# CFLAGS	= -Wall -Werror -Wextra -g3 -Ofast -march=native -Wno-error=cast-function-type
+# CFLAGS	= -Wall -Werror -Wextra -g3 -Wno-error=cast-function-type
+CFLAGS	= -Wall -Werror -Wextra -g3 -Ofast -march=native -ffast-math -Wno-error=cast-function-type
 # CFLAGS	= -Wall -Wextra -Werror -O3 -march=native -ffast-math
-CFLAGS	= -Wall -Werror -Wextra  -g3
+# CFLAGS	= -Wall -Werror -Wextra  -g3
 
 PARSING 	=		parsing/
 GAME		=		game/
@@ -40,6 +41,7 @@ SRCS	=	$(LIBS)gnl/get_next_line.c\
 			$(PARSING)storage.c\
 			$(PARSING)doors.c \
 			$(GAME)animations.c\
+			$(GAME)animation_loading.c\
 			$(GAME)doors.c\
 			$(GAME)drawing.c\
 			$(GAME)events.c\
@@ -56,6 +58,7 @@ SRCS	=	$(LIBS)gnl/get_next_line.c\
 			$(RAYCASTING)render_floor.c\
 			$(UTILS)exit.c\
 			$(UTILS)free.c\
+			$(UTILS)free2.c\
 			$(UTILS)print_utils.c
 
 
@@ -94,15 +97,15 @@ $(MLX_A) :
 	@make -sC $(MLX_PATH) -j
 	@echo $(NEON_GREEN)$(BOLD)"Library Compiled. ✔\n"
 
-${NAME}: $(MLX_PATH) $(MLX_A) $(HEADERS) ${OBJS} $(LIBFT)
-	@echo $(LIGHT_GREEN) "Compilation..."$(BOLD)
-	@${CC} ${CFLAGS} ${OBJS} $(LIBFT) $(MLX_A) $(MLX_FLAGS) -o ${NAME}
-	@echo $(LIGHT_GREEN)"Compilation réussie ✔"$(RESET)
-
-# ${NAME}: $(HEADERS) ${OBJS} $(LIBFT)
+# ${NAME}: $(MLX_PATH) $(MLX_A) $(HEADERS) ${OBJS} $(LIBFT)
 # 	@echo $(LIGHT_GREEN) "Compilation..."$(BOLD)
 # 	@${CC} ${CFLAGS} ${OBJS} $(LIBFT) $(MLX_A) $(MLX_FLAGS) -o ${NAME}
 # 	@echo $(LIGHT_GREEN)"Compilation réussie ✔"$(RESET)
+
+${NAME}: $(HEADERS) ${OBJS} $(LIBFT)
+	@echo $(LIGHT_GREEN) "Compilation..."$(BOLD)
+	@${CC} ${CFLAGS} ${OBJS} $(LIBFT) $(MLX_A) $(MLX_FLAGS) -o ${NAME}
+	@echo $(LIGHT_GREEN)"Compilation réussie ✔"$(RESET)
 
 $(LIBFT):
 	@echo "Making libft..."
@@ -116,16 +119,16 @@ clean:
 leak : all
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./cube ./assets/maps/map.cub
 
-fclean: clean
-	@rm -rf ${NAME}
-	@rm -rf $(LIBFT_NAME)
-	@rm -rf $(MLX_PATH)
-	@echo $(BROWN)fclean reussi
-
 # fclean: clean
 # 	@rm -rf ${NAME}
 # 	@rm -rf $(LIBFT_NAME)
+# 	@rm -rf $(MLX_PATH)
 # 	@echo $(BROWN)fclean reussi
+
+fclean: clean
+	@rm -rf ${NAME}
+	@rm -rf $(LIBFT_NAME)
+	@echo $(BROWN)fclean reussi
 
 re: fclean all
 

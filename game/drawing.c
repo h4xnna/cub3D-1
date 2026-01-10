@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 08:00:02 by pacda-si          #+#    #+#             */
-/*   Updated: 2026/01/04 13:56:31 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/08 14:39:37 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	draw_image_to_buffer(t_win *win, t_img *src, int x_off, int y_off)
 				continue ;
 			color = *(unsigned int *)(src->addr + y * src->line_length + x
 					* (src->bits_per_pixel / 8));
-			make_color_from_int(color, &rgb);
+			make_color_from_uint(color, &rgb);
 			if (!(rgb.g > 100 && rgb.g > rgb.r * 1.5 && rgb.g > rgb.b * 1.5))
 				my_mlx_pixel_put(win, dst_x, y + y_off, color);
 		}

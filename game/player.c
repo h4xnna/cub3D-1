@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/18 16:51:35 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/04 13:35:56 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/08 18:12:13 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,9 +86,7 @@ void	rotate_player(t_data *data, int mouse_x)
 
 void	player_position(t_data *data)
 {
-	static bool	exited = 0;
-
-	if (!exited)
+	if (!data->player->exited)
 	{
 		if (data->player->moving_left)
 			buttons_a(data->player, data->map_pars);
@@ -100,13 +98,7 @@ void	player_position(t_data *data)
 			buttons_w(data->player, data->map_pars);
 		if (data->map_pars->map[(int)data->player->py][(int)(data->player->px)]
 			== 'L')
-			exited = 1;
-	}
-	else
-	{
-		data->player->pitch -= 50;
-		if (data->player->pitch < -5000)
-			clean_exit(data);
+			data->player->exited = 1;
 	}
 }
 

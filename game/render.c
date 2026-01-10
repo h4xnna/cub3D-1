@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 07:53:02 by pacda-si          #+#    #+#             */
-/*   Updated: 2026/01/07 15:56:26 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/08 17:40:35 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,15 @@ int	render(t_data *data)
 	if (!data->fps)
 		clean_exit(data);
 	clear_window(data->win);
-	draw_sky(data);
-	raycasting(data);
+	if (data->player->exited == false)
+	{
+		draw_sky(data);
+		raycasting(data);
+		update_doors(data);
+	}
 	draw_minimap(data);
 	player_position(data);
 	rotate_player(data, data->player->mouse_x);
-	update_doors(data);
 	update_animations(data);
 	display_overlay(data);
 	mlx_put_image_to_window(data->win->mlx, data->win->win, data->win->img, 0,

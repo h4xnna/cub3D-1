@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/08 10:46:52 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/08 19:33:20 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@
 # define RED "\033[1;31m"
 # define RESET "\033[0m"
 # define MOVE_SPEED 3
-# define FLOOR_W   0.50f
-# define REFLECT_W 0.25f
-# define WALL_W    0.25f
+# define FLOOR_W   0.70f
+# define REFLECT_W 0.15f
+# define WALL_W    0.15f
 
 
 typedef struct s_color
@@ -112,10 +112,13 @@ typedef struct s_player
 	double				sensitivity;
 	double				pitch;
 	double				delta_time;
+	double				vel_x;
+	double				vel_y;
+	double				accel;
 	int					mouse_x;
 	int					mouse_y;
 	bool				show_knife;
-
+	bool				exited;
 }						t_player;
 
 typedef struct s_map_info
@@ -288,6 +291,10 @@ static inline int	get_texture_pixel(t_img *img, int x, int y)
 }
 
 // utils_pars1
+t_img					*load_one_texture(t_data *data, t_img *tex, char *path);
+unsigned int			get_color_from_html(char *color);
+void					free_doors(t_data *data);
+void					free_animations(t_data *data);
 void					update_doors(t_data *data);
 t_door					*find_door(t_door *doors, int y, int x);
 void					update_animations(t_data *data);
@@ -368,7 +375,7 @@ void					buttons_s(t_player *player, t_map_pars *map);
 void					draw_minimap(t_data *data);
 bool					is_walkable(char c);
 double					get_time_seconds(void);
-void					make_color_from_int(unsigned int color, t_color *rgb);
+void					make_color_from_uint(unsigned int color, t_color *rgb);
 void					reset_all_animations(t_data *data);
 
 // player_position
