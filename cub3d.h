@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/10 17:25:11 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/10 19:25:32 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -271,7 +271,6 @@ int						parse_error(char *msg);
 // flood_fill.c
 
 int						flood_fill(t_map_pars *map);
-int						pars_info(t_info_pars *pars, t_map_info *infos);
 
 // map_parsing.c
 
@@ -283,14 +282,21 @@ int						check_char(char *line, t_map_pars *map);
 
 int						is_direction(char *str);
 int						is_file(char *path);
-char					*remove_newline(char *line);
 int						len_tab(char **tab);
+int						pars_info(t_info_pars *pars, t_map_info *infos);
 
 // parsing_utils2.c
 
-void					pass_chars2(const char *s, int *i, int *minus);
 int						is_full_of_spaces(char *line);
 int						skip_space(char *line);
+char					*remove_newline(char *line);
+
+// storage.c
+
+int						fill_colors(t_info_pars *pars, t_map_info *infos);
+int						allocate_colors(t_info_pars *pars, t_map_info *infos);
+void					fill_struct(t_map_info *infos, char *direction,
+						char *path);
 
 //*---------------------------------------------//
 
@@ -308,12 +314,6 @@ void					free_splif(char **out, int i);
 void					free_pars(t_info_pars *pars);
 void					free_tab(char **tab);
 void					free_info(t_map_info *info);
-
-// free2.c
-
-void					free_doors(t_data *data);
-void					free_animations(t_data *data);
-void					free_splif(char **out, int i);
 
 // print_utils.c
 

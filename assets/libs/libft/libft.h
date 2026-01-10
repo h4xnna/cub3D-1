@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 20:01:54 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/10 16:57:26 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/10 19:19:39 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int			ft_isalpha(int c);
 int			ft_isascii(int c);
 int			ft_isdigit(int c);
 int			ft_isprint(int c);
+int			ft_isspecial2(char c);
 char		*ft_itoa(int n);
 void		*ft_memchr(const void *s, int c, size_t n);
 int			ft_memcmp(const void *s1, const void *s2, size_t n);

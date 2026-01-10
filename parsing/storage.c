@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 19:07:05 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/06 11:56:09 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/10 19:15:42 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	fill_struct(t_map_info *infos, char *direction, char *path)
 		infos->west = ft_strdup(path);
 }
 
-void	stock_colors(t_map_info *infos, t_info_pars *pars, int nb, int i)
+static void	stock_colors(t_map_info *infos, t_info_pars *pars, int nb, int i)
 {
 	if (!ft_strcmp(pars->line_split[0], "F"))
 		infos->floor[i] = nb;
@@ -32,7 +32,7 @@ void	stock_colors(t_map_info *infos, t_info_pars *pars, int nb, int i)
 		infos->ceiling[i] = nb;
 }
 
-int	allouer_colors(t_info_pars *pars, t_map_info *infos)
+int	allocate_colors(t_info_pars *pars, t_map_info *infos)
 {
 	if (!ft_strcmp(pars->line_split[0], "F") && infos->floor == NULL)
 	{
@@ -51,7 +51,7 @@ int	allouer_colors(t_info_pars *pars, t_map_info *infos)
 	return (FAILURE);
 }
 
-int	remplir_colors(t_info_pars *pars, t_map_info *infos)
+int	fill_colors(t_info_pars *pars, t_map_info *infos)
 {
 	int	i;
 

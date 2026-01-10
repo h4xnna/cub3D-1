@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 15:26:04 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/10 17:22:22 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/10 19:16:03 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 int	check_char(char *line, t_map_pars *map)
 {
 	int	i;
-	int	bouboule;
+	int	error;
 
 	i = 0;
-	bouboule = 0;
+	error = 0;
 	while (line[i])
 	{
 		if ((line[i] != 'N' && line[i] != 'S' && line[i] != 'E'
@@ -26,11 +26,11 @@ int	check_char(char *line, t_map_pars *map)
 				&& line[i] != ' '))
 			return (FAILURE);
 		if (line[i] == 48 || line[i] == 49)
-			bouboule = 1;
+			error = 1;
 		map->map_started = 1;
 		i++;
 	}
-	if (bouboule == 0)
+	if (error == 0)
 		return (FAILURE);
 	return (SUCCESS);
 }

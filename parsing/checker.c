@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/18 15:17:32 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/10 17:18:23 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/10 19:27:27 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	checks_args(int ac, char **av)
 		error_message("Wrong file extension");
 		return (FAILURE);
 	}
-	if (HEIGHT < 20 || WIDTH <= 0 || HEIGHT > 1440 || WIDTH > 2560)
+	if (HEIGHT < 20 || WIDTH <= 20 || HEIGHT > 1440 || WIDTH > 2560)
 	{
 		error_message("Wrong window size");
 		return (FAILURE);

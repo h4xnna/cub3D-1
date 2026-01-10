@@ -6,13 +6,13 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:26:45 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/06 11:54:22 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/10 19:14:16 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-void	final_initializations(t_data *data)
+static void	final_initializations(t_data *data)
 {
 	data->player->px = data->map_pars->x_start + 0.5;
 	data->player->py = data->map_pars->y_start + 0.5;
@@ -24,7 +24,32 @@ void	final_initializations(t_data *data)
 	normalize_vector(&data->player->planex, &data->player->planey);
 }
 
-int	initialize_everything(t_data **data, int ac, char **av)
+static int	init_data(t_data **data, int fd)
+{
+	(*data) = ft_calloc(1, sizeof(t_data));
+	if (!*data)
+		return (close(fd), FAILURE);
+	(*data)->fd = fd;
+	(*data)->map_pars = ft_calloc(1, sizeof(t_map_pars));
+	(*data)->map_info = ft_calloc(1, sizeof(t_map_info));
+	(*data)->info_pars = ft_calloc(1, sizeof(t_info_pars));
+	if (!(*data)->map_pars || !(*data)->map_info || !(*data)->info_pars)
+		return (FAILURE);
+	(*data)->map_pars->map = ft_calloc(1, sizeof(char *));
+	if (!(*data)->map_pars->map)
+		return (FAILURE);
+	(*data)->player = ft_calloc(1, sizeof(t_player));
+	(*data)->raycast = ft_calloc(1, sizeof(t_raycast));
+	(*data)->texture = ft_calloc(1, sizeof(t_texture));
+	if (!(*data)->player || !(*data)->raycast || !(*data)->texture)
+		return (FAILURE);
+	(*data)->win = init_win();
+	if (!(*data)->win)
+		return (FAILURE);
+	return (SUCCESS);
+}
+
+static int	initialize_everything(t_data **data, int ac, char **av)
 {
 	int	fd;
 
@@ -47,31 +72,6 @@ int	initialize_everything(t_data **data, int ac, char **av)
 		return (free_data(*data), FAILURE);
 	}
 	final_initializations((*data));
-	return (SUCCESS);
-}
-
-int	init_data(t_data **data, int fd)
-{
-	(*data) = ft_calloc(1, sizeof(t_data));
-	if (!*data)
-		return (close(fd), FAILURE);
-	(*data)->fd = fd;
-	(*data)->map_pars = ft_calloc(1, sizeof(t_map_pars));
-	(*data)->map_info = ft_calloc(1, sizeof(t_map_info));
-	(*data)->info_pars = ft_calloc(1, sizeof(t_info_pars));
-	if (!(*data)->map_pars || !(*data)->map_info || !(*data)->info_pars)
-		return (FAILURE);
-	(*data)->map_pars->map = ft_calloc(1, sizeof(char *));
-	if (!(*data)->map_pars->map)
-		return (FAILURE);
-	(*data)->player = ft_calloc(1, sizeof(t_player));
-	(*data)->raycast = ft_calloc(1, sizeof(t_raycast));
-	(*data)->texture = ft_calloc(1, sizeof(t_texture));
-	if (!(*data)->player || !(*data)->raycast || !(*data)->texture)
-		return (FAILURE);
-	(*data)->win = init_win();
-	if (!(*data)->win)
-		return (FAILURE);
 	return (SUCCESS);
 }
 
