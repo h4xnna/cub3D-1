@@ -6,7 +6,7 @@
 #    By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/15 18:49:03 by hmimouni          #+#    #+#              #
-#    Updated: 2026/01/10 16:25:47 by pacda-si         ###   ########.fr        #
+#    Updated: 2026/01/10 19:20:02 by pacda-si         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,7 @@ SRCS =		./ft_atoi.c					\
 			./ft_isascii.c				\
 			./ft_isdigit.c				\
 			./ft_isprint.c				\
+			./ft_isspecial2.c			\
 			./ft_itoa.c					\
 			./ft_memchr.c				\
 			./ft_memcmp.c				\

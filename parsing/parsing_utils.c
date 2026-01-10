@@ -6,11 +6,21 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/17 13:25:35 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/10 16:22:43 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/10 19:42:20 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+int	skip_space(char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i])
+		i++;
+	return (i);
+}
 
 int	len_tab(char **tab)
 {
@@ -32,19 +42,33 @@ char	*remove_newline(char *line)
 	return (line);
 }
 
-int	is_file(char *path)
+int	is_full_of_spaces(char *line)
 {
-	if ((path[0] == '.' && path[1] == '/') || (path[0] == '.' && path[1] == '.'
-			&& path[2] == '/'))
-		return (SUCCESS);
-	return (FAILURE);
+	int	i;
+
+	i = 0;
+	while (line[i])
+	{
+		if (ft_isspecial2(line[i]) == 0)
+			return (FAILURE);
+		i++;
+	}
+	return (SUCCESS);
 }
 
-int	is_prefix(char *str)
+int	is_html_color(char *color)
 {
-	if (!ft_strcmp(str, "NO") || !ft_strcmp(str, "EA") || !ft_strcmp(str, "SO")
-		|| !ft_strcmp(str, "WE") || !ft_strcmp(str, "D") || !ft_strcmp(str, "L")
-		|| !ft_strcmp(str, "sky") || !ft_strcmp(str, "floor"))
-		return (SUCCESS);
-	return (FAILURE);
+	int	i;
+
+	i = 1;
+	if (color[0] != '#' || ft_strlen(color + 1) != 6)
+		return (FAILURE);
+	while (color[i])
+	{
+		if (!(color[i] >= '0' && color[i] <= '9') && !(color[i] >= 'A'
+				&& color[i] <= 'F') && !(color[i] >= 'a' && color[i] <= 'f'))
+			return (FAILURE);
+		i++;
+	}
+	return (SUCCESS);
 }

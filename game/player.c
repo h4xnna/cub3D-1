@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/18 16:51:35 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/10 16:47:47 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/10 19:50:14 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,9 @@ static void	rotate_matrix(t_data *data, double current_speed)
 
 void	rotate_player(t_data *data, int mouse_x)
 {
-	static double	current_speed = 0.0;
-	double			max_speed;
-	double			target_speed;
-	double			accel;
+	double	max_speed;
+	double	target_speed;
+	double	accel;
 
 	max_speed = 0.15;
 	if (data->player->rotate_right)
@@ -76,9 +75,9 @@ void	rotate_player(t_data *data, int mouse_x)
 	if (target_speed < -max_speed)
 		target_speed = -max_speed;
 	accel = 15.0;
-	current_speed += (target_speed - current_speed) * accel
-		* data->player->delta_time;
-	rotate_matrix(data, current_speed);
+	data->player->current_speed += (target_speed - data->player->current_speed)
+		* accel * data->player->delta_time;
+	rotate_matrix(data, data->player->current_speed);
 	normalize_vector(&data->player->pdirx, &data->player->pdiry);
 	normalize_vector(&data->player->planex, &data->player->planey);
 	mlx_mouse_move(data->win->mlx, data->win->win, WIDTH / 2, HEIGHT / 2);

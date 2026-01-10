@@ -6,21 +6,11 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/25 15:26:04 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/10 16:20:36 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/10 19:42:15 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-static int	skip_space(char *line)
-{
-	int	i;
-
-	i = 0;
-	while (line[i])
-		i++;
-	return (i);
-}
 
 int	check_char(char *line, t_map_pars *map)
 {

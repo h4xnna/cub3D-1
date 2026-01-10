@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/04 11:56:14 by pacda-si          #+#    #+#             */
-/*   Updated: 2026/01/08 19:58:25 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/10 19:54:27 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,11 +85,11 @@ void	display_overlay(t_data *data)
 		{
 			anim = switch_anim(data);
 			draw_image_to_buffer(data->win, anim->frames[anim->current_frame],
-				0, 0);
+				0 + data->player->current_speed * 1000, 0);
 		}
 		else
 			draw_image_to_buffer(data->win,
 				data->deploy_anim->frames[data->deploy_anim->frame_count - 1],
-				0, 0);
+				0 + data->player->current_speed * 1000, 0);
 	}
 }

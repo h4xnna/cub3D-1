@@ -6,48 +6,11 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/29 12:53:12 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/10 16:22:08 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/10 19:29:50 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
-
-static int	is_html_color(char *color)
-{
-	int	i;
-
-	i = 1;
-	if (color[0] != '#' || ft_strlen(color + 1) != 6)
-		return (FAILURE);
-	while (color[i])
-	{
-		if (!(color[i] >= '0' && color[i] <= '9') && !(color[i] >= 'A'
-				&& color[i] <= 'F') && !(color[i] >= 'a' && color[i] <= 'f'))
-			return (FAILURE);
-		i++;
-	}
-	return (SUCCESS);
-}
-
-int	pars_info(t_info_pars *pars, t_map_info *infos)
-{
-	if (!is_prefix(pars->line_split[0]) && !is_file(pars->line_split[1]))
-		fill_struct(infos, pars->line_split[0], pars->line_split[1]);
-	if (!infos->skybox && !ft_strcmp(pars->line_split[0], "sky")
-		&& is_html_color(pars->line_split[1]) == SUCCESS)
-	{
-		infos->skybox = ft_strdup(pars->line_split[1]);
-		infos->has_skybox = false;
-	}
-	if (!infos->floor && !ft_strcmp(pars->line_split[0], "floor")
-		&& is_html_color(pars->line_split[1]) == SUCCESS)
-	{
-		infos->floor = ft_strdup(pars->line_split[1]);
-		infos->has_floor = false;
-	}
-	infos->count_info += 1;
-	return (SUCCESS);
-}
 
 static int	flood_fill_helper(char **map, int x, int y)
 {

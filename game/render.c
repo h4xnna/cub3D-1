@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/13 07:53:02 by pacda-si          #+#    #+#             */
-/*   Updated: 2026/01/10 16:48:44 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/10 19:53:56 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ int	render(t_data *data)
 	draw_minimap(data);
 	player_position(data);
 	rotate_player(data, data->player->mouse_x);
-	update_animations(data);
 	display_overlay(data);
+	update_animations(data);
 	mlx_put_image_to_window(data->win->mlx, data->win->win, data->win->img, 0,
 		0);
 	mlx_string_put(data->win->mlx, data->win->win, WIDTH - 20, 20, 0xFFFFFF,

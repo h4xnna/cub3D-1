@@ -6,7 +6,7 @@
 #    By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2026/01/10 17:00:05 by pacda-si          #+#    #+#              #
-#    Updated: 2026/01/10 17:26:23 by pacda-si         ###   ########.fr        #
+#    Updated: 2026/01/10 19:38:52 by pacda-si         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -30,8 +30,8 @@ CYAN_SHOCK      = "\033[38;5;51m"
 
 NAME	= cub3D_bonus
 CC		= cc
-CFLAGS	= -Wall -Werror -Wextra -g3 -Ofast -march=native -ffast-math -Wno-cast-function-type
-# CFLAGS	= -Wall -Wextra -Werror -O3 -march=native -ffast-math
+# CFLAGS	= -Wall -Werror -Wextra -g3 -Ofast -march=native -ffast-math -Wno-error=cast-function-type
+CFLAGS	= -Wall -Wextra -Werror -O3 -march=native -ffast-math
 
 PARSING 	=		parsing/
 GAME		=		game/
@@ -41,14 +41,6 @@ LIBS		=		assets/libs/
 
 SRCS	=	$(LIBS)gnl/get_next_line.c\
 			main.c \
-			$(PARSING)checker.c\
-			$(PARSING)file_parsing.c\
-			$(PARSING)flood_fill.c\
-			$(PARSING)map_parsing.c\
-			$(PARSING)parsing_utils.c\
-			$(PARSING)parsing_utils2.c\
-			$(PARSING)storage.c\
-			$(PARSING)doors.c \
 			$(GAME)animations.c\
 			$(GAME)animation_loading.c\
 			$(GAME)doors.c\
@@ -61,6 +53,14 @@ SRCS	=	$(LIBS)gnl/get_next_line.c\
 			$(GAME)textures.c\
 			$(GAME)utils.c\
 			$(GAME)window.c\
+			$(PARSING)checker.c\
+			$(PARSING)doors.c \
+			$(PARSING)error.c \
+			$(PARSING)file_parsing.c\
+			$(PARSING)flood_fill.c\
+			$(PARSING)map_parsing.c\
+			$(PARSING)parsing_utils.c\
+			$(PARSING)storage.c\
 			$(RAYCASTING)dda.c\
 			$(RAYCASTING)init.c\
 			$(RAYCASTING)raycasting.c\

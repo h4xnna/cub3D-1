@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:24:03 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/10 16:58:20 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/10 19:47:21 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,11 +111,8 @@ typedef struct s_player
 	bool				rotate_left;
 	double				rotate_speed;
 	double				sensitivity;
-	double				pitch;
+	double				current_speed;
 	double				delta_time;
-	double				vel_x;
-	double				vel_y;
-	double				accel;
 	int					mouse_x;
 	int					mouse_y;
 	bool				show_knife;
@@ -399,27 +396,30 @@ void					clear_window(t_win *win);
 
 //	checker.c
 
+int						final_checks(t_map_info *infos, t_map_pars *map);
 int						check_fd(int *fd, char **av);
 int						checks_args(int ac, char **av);
 int						check_infos(t_map_info *info);
-void					error_message(char *error);
 
 // doors.c
 
 void					make_doors(t_data *data);
 void					check_doors(t_data *data);
 
+// error.c
+
+int						parse_error(char *msg);
+void					error_message(char *error);
+
 // file_parsing.c
 
+int						pars_info(t_info_pars *pars, t_map_info *infos);
 int						parse_file(int fd, t_map_pars *map, t_map_info *infos,
 						t_info_pars *pars);
-int						final_checks(t_map_info *infos, t_map_pars *map);
-int						parse_error(char *msg);
 
 // flood_fill.c
 
 int						flood_fill(t_map_pars *map);
-int						pars_info(t_info_pars *pars, t_map_info *infos);
 
 // map_parsing.c
 
@@ -429,15 +429,16 @@ int						check_char(char *line, t_map_pars *map);
 
 // parsing_utils.c
 
-int						is_prefix(char *str);
-int						is_file(char *path);
 char					*remove_newline(char *line);
 int						len_tab(char **tab);
-
-// parsing_utils2.c
-
+int						is_html_color(char *color);
 int						is_full_of_spaces(char *line);
-void					pass_chars2(const char *s, int *i, int *minus);
+int						skip_space(char *line);
+
+// storage.c
+
+void					fill_struct(t_map_info *infos, char *prefix,
+						char *path);
 
 //*---------------------------------------------//
 

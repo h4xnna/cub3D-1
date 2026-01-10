@@ -6,7 +6,7 @@
 /*   By: pacda-si <pacda-si@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/15 15:26:45 by hmimouni          #+#    #+#             */
-/*   Updated: 2026/01/10 15:55:16 by pacda-si         ###   ########.fr       */
+/*   Updated: 2026/01/10 19:44:09 by pacda-si         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void	final_initializations(t_data *data)
 	data->player->sensitivity = 0.001;
 	data->player->delta_time = 0.016;
 	data->player->mouse_x = WIDTH / 2;
-	data->player->pitch = 0;
 	data->player->show_knife = false;
 	data->map_pars->height = len_tab(data->map_pars->map);
 	load_textures(data);
