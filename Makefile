@@ -94,7 +94,7 @@ clean:
 	@echo $(BROWN)clean reussi
 
 leak : all
-	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./cube ./maps/map.cub
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./cub3D assets/maps/map.cub
 
 fclean: clean
 	@rm -rf ${NAME}
