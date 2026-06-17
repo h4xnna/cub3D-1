@@ -3,10 +3,14 @@
 A pseudo-3D rendering engine inspired by Wolfenstein 3D, built in C as part of the 42 school curriculum. The project implements a **raycasting** algorithm to display a 3D-looking environment from a 2D map, complete with textures, colors, and player movement.
 
 > 🏆 Final score: **125/100** — graded project, 42 School
+<img width="689" height="323" alt="Screenshot_20260617_162733" src="https://github.com/user-attachments/assets/1d7c9e75-e53a-4405-af79-f7f2d6c295be" />
 
 ## 🎥 Demo
 
-![cub3D gameplay demo](assets/demo/preview.gif)
+
+
+https://github.com/user-attachments/assets/123e8d83-436a-4472-8493-7c27dea00221
+
 
 A full-length recording of the gameplay is also available: [`assets/demo/gameplay.mp4`](assets/demo/gameplay.mp4)
 
