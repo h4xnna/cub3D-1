@@ -7,12 +7,8 @@ A pseudo-3D rendering engine inspired by Wolfenstein 3D, built in C as part of t
 
 ## 🎥 Demo
 
-
-
 https://github.com/user-attachments/assets/123e8d83-436a-4472-8493-7c27dea00221
 
-
-A full-length recording of the gameplay is also available: [`assets/demo/gameplay.mp4`](assets/demo/gameplay.mp4)
 
 ## 📋 Table of Contents
 
