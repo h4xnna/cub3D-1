@@ -1,96 +1,103 @@
-
-
-https://github.com/user-attachments/assets/65c171d1-08ca-46cb-b0f6-7413933eb371
-
 # cub3D 🏰
 
-Un moteur de rendu en pseudo-3D inspiré du jeu Wolfenstein 3D, développé en C dans le cadre du cursus 42. Le projet implémente un algorithme de **raycasting** pour afficher un environnement en 3D à partir d'une carte 2D, avec gestion des textures, des couleurs et des déplacements du joueur.
+A pseudo-3D rendering engine inspired by Wolfenstein 3D, built in C as part of the 42 school curriculum. The project implements a **raycasting** algorithm to display a 3D-looking environment from a 2D map, complete with textures, colors, and player movement.
 
-## 📋 Sommaire
+> 🏆 Final score: **125/100** — graded project, 42 School
 
-- [Aperçu](#-aperçu)
-- [Fonctionnalités](#-fonctionnalités)
-- [Prérequis](#-prérequis)
+## 🎥 Demo
+
+![cub3D gameplay demo](assets/demo/preview.gif)
+
+A full-length recording of the gameplay is also available: [`assets/demo/gameplay.mp4`](assets/demo/gameplay.mp4)
+
+## 📋 Table of Contents
+
+- [Overview](#-overview)
+- [Features](#-features)
+- [Requirements](#-requirements)
 - [Installation](#-installation)
-- [Utilisation](#-utilisation)
-- [Contrôles](#-contrôles)
-- [Format de la carte (.cub)](#-format-de-la-carte-cub)
-- [Structure du projet](#-structure-du-projet)
-- [Commandes Makefile](#-commandes-makefile)
-- [Auteurs](#-auteurs)
+- [Usage](#-usage)
+- [Controls](#-controls)
+- [Map file format (.cub)](#-map-file-format-cub)
+- [Project structure](#-project-structure)
+- [Makefile commands](#-makefile-commands)
+- [Result](#-result)
+- [Authors](#-authors)
 
-## 🎮 Aperçu
+## 🧭 Overview
 
-cub3D affiche une vue en première personne d'un labyrinthe défini dans un fichier de configuration `.cub`. Le rendu repose sur un algorithme de raycasting qui projette des rayons depuis la position du joueur pour calculer la distance aux murs et déterminer la hauteur des murs affichés à l'écran, donnant l'illusion d'un environnement 3D.
+cub3D renders a first-person view of a maze defined in a `.cub` configuration file. The rendering relies on a raycasting algorithm that casts rays from the player's position to compute the distance to walls and determine the height of the walls drawn on screen, creating the illusion of a 3D environment from a purely 2D map.
 
-## ✨ Fonctionnalités
+## ✨ Features
 
-- Rendu en temps réel par raycasting
-- Textures différentes selon l'orientation des murs (nord, sud, est, ouest)
-- Couleurs personnalisables pour le sol et le plafond
-- Déplacement et rotation fluides du joueur
-- Parsing et validation complète des fichiers de carte `.cub`
-- Vérification de la fermeture de la carte (flood fill)
-- Gestion propre de la fermeture du programme (libération mémoire, fermeture de la fenêtre)
+- Real-time rendering via raycasting
+- Different wall textures depending on orientation (north, south, east, west)
+- Customizable floor and ceiling colors
+- Smooth player movement and rotation
+- Mouse look support (bonus)
+- Full parsing and validation of `.cub` map files
+- Map closure check (flood fill)
+- Clean program exit (memory freeing, window closing)
 
-## 🔧 Prérequis
+## 🔧 Requirements
 
-Le projet a été développé et testé sous **Linux**. Les dépendances suivantes sont nécessaires :
+The project was developed and tested on **Linux**. The following dependencies are needed:
 
-- Un compilateur C (`cc` / `gcc`)
+- A C compiler (`cc` / `gcc`)
 - `make`
-- `git` (pour cloner MiniLibX automatiquement)
-- Les librairies de développement X11 :
+- `git` (to automatically clone MiniLibX)
+- X11 development libraries:
 
 ```bash
 sudo apt-get update
 sudo apt-get install libxext-dev libx11-dev libbsd-dev
 ```
 
-> MiniLibX est cloné et compilé automatiquement par le Makefile, vous n'avez rien à faire manuellement.
+> MiniLibX is automatically cloned and compiled by the Makefile — no manual setup required.
 
 ## 📦 Installation
 
-Clonez le dépôt puis compilez le projet :
+Clone the repository and build the project:
 
 ```bash
-git clone <url-de-votre-repo> cub3D
+git clone <your-repo-url> cub3D
 cd cub3D
 make
 ```
 
-Le Makefile va automatiquement :
-1. Cloner MiniLibX si elle n'est pas déjà présente
-2. Compiler MiniLibX
-3. Compiler libft
-4. Compiler le projet et générer l'exécutable `cub3D`
+The Makefile will automatically:
+1. Clone MiniLibX if it isn't already present
+2. Compile MiniLibX
+3. Compile libft
+4. Compile the project and generate the `cub3D` executable
 
-## 🚀 Utilisation
+## 🚀 Usage
 
-Lancez le programme en lui passant un fichier de carte `.cub` en argument :
+Run the program with a `.cub` map file as argument:
 
 ```bash
 ./cub3D assets/maps/map.cub
 ```
 
-Si le fichier est invalide (carte non fermée, textures manquantes, caractères incorrects, etc.), un message d'erreur explicite sera affiché dans le terminal.
+If the file is invalid (unclosed map, missing textures, wrong characters, etc.), a clear error message is printed to the terminal.
 
-## 🕹️ Contrôles
+## 🕹️ Controls
 
-| Touche | Action |
+| Key | Action |
 |---|---|
-| `W` | Avancer |
-| `S` | Reculer |
-| `A` | Se déplacer à gauche (strafe) |
-| `D` | Se déplacer à droite (strafe) |
-| `←` (flèche gauche) | Tourner la caméra à gauche |
-| `→` (flèche droite) | Tourner la caméra à droite |
-| `ESC` | Quitter le programme |
-| Bouton fermeture fenêtre | Quitter le programme |
+| `W` | Move forward |
+| `S` | Move backward |
+| `A` | Strafe left |
+| `D` | Strafe right |
+| `←` (left arrow) | Rotate camera left |
+| `→` (right arrow) | Rotate camera right |
+| Mouse movement | Look around (bonus) |
+| `ESC` | Quit the program |
+| Window close button | Quit the program |
 
-## 🗺️ Format de la carte (.cub)
+## 🗺️ Map file format (.cub)
 
-Un fichier `.cub` doit contenir, dans n'importe quel ordre avant la carte :
+A `.cub` file must contain, in any order, before the map itself:
 
 ```
 NO ./assets/textures/north.xpm
@@ -101,17 +108,17 @@ F 220,100,0
 C 225,30,0
 ```
 
-- `NO`, `SO`, `WE`, `EA` : chemins vers les textures des murs (nord, sud, ouest, est)
-- `F` : couleur du sol (floor) au format R,G,B
-- `C` : couleur du plafond (ceiling) au format R,G,B
+- `NO`, `SO`, `WE`, `EA`: paths to the wall textures (north, south, west, east)
+- `F`: floor color in R,G,B format
+- `C`: ceiling color in R,G,B format
 
-Puis la carte elle-même, composée de :
-- `1` : mur
-- `0` : espace vide
-- `N`, `S`, `E`, `W` : position et orientation de départ du joueur
-- ` ` (espace) : autorisé uniquement à l'intérieur de la carte (pas en bordure si la carte n'est pas fermée par des murs)
+Followed by the map itself, made up of:
+- `1`: wall
+- `0`: empty space
+- `N`, `S`, `E`, `W`: player's starting position and orientation
+- ` ` (space): allowed only inside the map (not as a border, unless the map is otherwise enclosed by walls)
 
-**Exemple complet :**
+**Full example:**
 
 ```
 NO ./assets/textures/north.xpm
@@ -128,9 +135,9 @@ C 225,30,0
 111111
 ```
 
-> ⚠️ La carte doit être entièrement fermée par des murs, sinon le programme refusera de se lancer.
+> ⚠️ The map must be fully enclosed by walls, otherwise the program will refuse to launch.
 
-## 📁 Structure du projet
+## 📁 Project structure
 
 ```
 .
@@ -138,14 +145,17 @@ C 225,30,0
 ├── main.c
 ├── cub3d.h
 ├── assets/
+│   ├── demo/                  # gameplay video & GIF preview
+│   ├── screenshots/            # screenshots (e.g. final score)
 │   ├── libs/
-│   │   ├── gnl/              # get_next_line
-│   │   ├── libft/            # librairie standard 42
-│   │   └── minilibx-linux/   # MiniLibX (cloné automatiquement)
-│   ├── maps/                 # fichiers .cub d'exemple
-│   └── textures/             # fichiers .xpm
+│   │   ├── gnl/                # get_next_line
+│   │   ├── libft/              # 42's standard library
+│   │   └── minilibx-linux/     # MiniLibX (cloned automatically)
+│   ├── maps/                   # sample .cub files
+│   └── textures/               # .xpm files
 ├── game/
 │   ├── camera.c
+│   ├── events.c
 │   ├── keys.c
 │   ├── player.c
 │   ├── raycasting.c
@@ -167,23 +177,29 @@ C 225,30,0
     └── print_utils.c
 ```
 
-## ⚙️ Commandes Makefile
+## ⚙️ Makefile commands
 
-| Commande | Description |
+| Command | Description |
 |---|---|
-| `make` | Compile le projet (MiniLibX, libft, puis cub3D) |
-| `make clean` | Supprime les fichiers objets |
-| `make fclean` | Supprime les objets, l'exécutable, libft et MiniLibX |
-| `make re` | Recompile entièrement le projet (fclean + all) |
-| `make leak` | Compile puis lance le programme sous Valgrind pour détecter les fuites mémoire |
+| `make` | Builds the project (MiniLibX, libft, then cub3D) |
+| `make clean` | Removes object files |
+| `make fclean` | Removes object files, the executable, libft, and MiniLibX |
+| `make re` | Full rebuild (fclean + all) |
+| `make leak` | Builds and runs the program under Valgrind to detect memory leaks |
 
-## 👥 Auteurs
+## 🏆 Result
 
-Projet réalisé dans le cadre du cursus de l'école **42**.
+![Final evaluation score](assets/screenshots/score.png)
+
+This project was evaluated and graded **125/100** at 42 School (group project, ~280 hours, 5775 XP).
+
+## 👥 Authors
+
+Built as part of the 42 School curriculum.
 
 - hmimouni
 - pacda-si
 
 ---
 
-N'hésitez pas à ouvrir une issue si vous rencontrez un problème de compilation ou d'exécution.
+Feel free to open an issue if you run into any build or runtime problems.
