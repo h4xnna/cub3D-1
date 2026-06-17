@@ -1,3 +1,7 @@
+
+
+https://github.com/user-attachments/assets/65c171d1-08ca-46cb-b0f6-7413933eb371
+
 # cub3D 🏰
 
 Un moteur de rendu en pseudo-3D inspiré du jeu Wolfenstein 3D, développé en C dans le cadre du cursus 42. Le projet implémente un algorithme de **raycasting** pour afficher un environnement en 3D à partir d'une carte 2D, avec gestion des textures, des couleurs et des déplacements du joueur.
